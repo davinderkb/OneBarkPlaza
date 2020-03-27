@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'dart:ui';
 
 class PuppyDetails {
-  int _puppyId;
+  int _puppyId, _categoryId;
   String _puppyName,
       _puppyPrice,
       _shippingCost,
@@ -18,7 +18,6 @@ class PuppyDetails {
       _puppyMomWeight,
       _registry,
       _status,
-      _categoryId,
       _categoryName,
       _categoryLink;
 
@@ -63,8 +62,46 @@ class PuppyDetails {
         json['puppy_mom_weight'] as String,
         json['registry'] as String,
         json['status'] as String,
-        categoryDetails["id"],
-        categoryDetails["name"],
-        categoryDetails["link"]);
+        categoryDetails["id"] as int,
+        categoryDetails["name"] as String,
+        categoryDetails["link"] as String);
   }
+
+  get categoryLink => _categoryLink;
+
+  get categoryName => _categoryName;
+
+  get status => _status;
+
+  get registry => _registry;
+
+  get puppyMomWeight => _puppyMomWeight;
+
+  get puppyDadWeight => _puppyDadWeight;
+
+  get puppyWeight => _puppyWeight;
+
+  get color => _color;
+
+  get ageInWeeks => _ageInWeeks;
+
+  get dob => _dob;
+
+  get gender => _gender;
+
+  get gallery => _gallery;
+
+  get images => _images;
+
+  get description => _description;
+
+  get shippingCost => _shippingCost;
+
+  get puppyPrice => _puppyPrice;
+
+  String get puppyName => _puppyName;
+
+  get categoryId => _categoryId;
+
+  int get puppyId => _puppyId;
 }

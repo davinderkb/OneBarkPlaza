@@ -78,108 +78,220 @@ class MainNavigationDrawerState extends State<MainNavigationDrawer>{
   }
   @override
   Widget build(BuildContext context) {
+    final iconSize = 24.0;
+    final _width = MediaQuery.of(context).size.width;
+    final _height = MediaQuery.of(context).size.height;
+    var drawerContentColor = Color(0xff0072FF);
+    var drawerHeaderColorLightBlue = Color(0xffF3F8FF);
+    var drawerAvatarBackgroundColor = Color(0xffFEF8F5);
+    var drawerBackground = Color(0xffFFFFFF);
+    TextStyle listTileTextStyle = TextStyle(color:drawerContentColor,fontSize: 14, fontWeight:FontWeight.bold,fontFamily: 'NunitoSans');
 
-    TextStyle listTileTextStyle = TextStyle(color:Colors.white,fontSize: 15, fontWeight:FontWeight.bold,fontFamily: 'NunitoSans');
+
     return Theme(
-      data: Theme.of(context).copyWith(
-        canvasColor: Colors.orangeAccent, //This will change the drawer background to blue.
-        //other styles
-      ),
-      child: new Drawer(
-        child: ListTileTheme(
-
-          textColor: Color(0xff0072FF),
-          iconColor:  Color(0xff0072FF),
-          dense:true,
-
-
-          child: ListView(
-            // Important: Remove any padding from the ListView.
-            padding: EdgeInsets.zero,
-            children: <Widget>[
-              FutureBuilder(
-                future: user,
-                builder: (context, snapshot) {
-                  switch (snapshot.connectionState) {
-                    case ConnectionState.none:
-                    case ConnectionState.waiting:
-                    case ConnectionState.active:
-                      return Container(
-                        alignment: Alignment.center,
-                        child: SpinKitHourGlass(
-                          color: Color(0xffFFFFFF),
-                          size: 50.0,
-                        ),
-                      );
-                      break;
-                    case ConnectionState.done:
-                      if (snapshot.hasError) {
-                        // return whatever you'd do for this case, probably an error
+        data: Theme.of(context).copyWith(canvasColor: Colors.white),
+      child: Container(
+        width: _width/1.2,
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.only(bottomRight: Radius.circular(48)),
+        ),
+        child: new Drawer(
+          child: ListTileTheme(
+            textColor: drawerContentColor,
+            iconColor:  drawerContentColor,
+            dense:true,
+            child: ListView(
+              // Important: Remove any padding from the ListView.
+              padding: EdgeInsets.zero,
+              children: <Widget>[
+                FutureBuilder(
+                  future: user,
+                  builder: (context, snapshot) {
+                    switch (snapshot.connectionState) {
+                      case ConnectionState.none:
+                      case ConnectionState.waiting:
+                      case ConnectionState.active:
                         return Container(
                           alignment: Alignment.center,
-                          child: Text("Error: ${snapshot.error}"),
+                          child: SpinKitHourGlass(
+                            color: Color(0xffFFFFFF),
+                            size: 50.0,
+                          ),
                         );
-                      }
-                      var data = snapshot.data;
-                      return UserAccountsDrawerHeader(
-                        accountName: Text(data["name"],style: TextStyle(color:Color(0xffFFFFFF),fontSize: 18, fontWeight:FontWeight.bold, fontFamily: 'NunitoSans')),
-                        accountEmail: Text(data["email"],style: TextStyle(color:Color(0xffFFFFFF),fontSize: 14, fontFamily: 'NunitoSans')),
-                        decoration: BoxDecoration(color: Color(0xffEB5050), ),
+                        break;
+                      case ConnectionState.done:
+                        if (snapshot.hasError) {
+                          // return whatever you'd do for this case, probably an error
+                          return Container(
+                            alignment: Alignment.center,
+                            child: Text("Error: ${snapshot.error}"),
+                          );
+                        }
+                        var data = snapshot.data;
+                        return Stack(
+                          children: <Widget>[
+                            Container(
+                              height: _height/3,
+                              color: drawerBackground ,
+                              child: Column(
 
-                      );
-                      break;
-                  }
-                },
-              ),
-              ListTile(
-                title: Text(Constants.HOME,style: listTileTextStyle,),
-                leading: Icon(Icons.home,color:Colors.white),
-                onTap: () {
-                  // Update the state of the app
-                  // ...
-                  // Then close the drawer
-                  Navigator.of(context).push(MaterialPageRoute(
-                      builder: (BuildContext context) =>HomePage()));
-                },
-              ),
-              //new Divider(height: 1.0, color: Colors.white,),
-              ListTile(
-                title: Text(Constants.MY_REWARDS,style: listTileTextStyle,),
-                leading: Icon(Icons.card_giftcard,color:Colors.white),
-                onTap: () {
-                  Navigator.of(context).push(MaterialPageRoute(
-                      builder: (BuildContext context) =>null));
-                },
-              ),
+                                children: <Widget>[
+                                  Container(height: _height/6, color:drawerHeaderColorLightBlue),
+                                  Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    children: <Widget>[
+                                      SizedBox(height: _height/10),
+                                      Row(
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        children: <Widget>[
+                                          Text("   ",style: TextStyle(color:drawerContentColor,fontSize: 14, fontWeight:FontWeight.bold, fontFamily: 'NunitoSans')),
+                                          Text(data["name"],style: TextStyle(color:drawerContentColor,fontSize: 14, fontWeight:FontWeight.bold, fontFamily: 'NunitoSans')),
+                                          Text("   ",style: TextStyle(color:drawerContentColor,fontSize: 14, fontWeight:FontWeight.bold, fontFamily: 'NunitoSans')),
+                                          Icon(Icons.edit, color: drawerContentColor, size: 16,),
+                                        ],
+                                      ),
+                                      Text(data["email"],style: TextStyle(color:Color(0xffB7A6A6),fontSize: 14, fontFamily: 'NunitoSans')),
+                                    ],
+                                  ),
 
-              ListTile(
-                title: Text(Constants.ORGANIZATION_PROFILE,style:listTileTextStyle,),
-                leading: Icon(Icons.business,color:Colors.white),
-                onTap: () {
-                  Navigator.of(context).push(MaterialPageRoute(
-                      builder: (BuildContext context) =>null));
-                },
-              ),
-              ListTile(
-                title: Text(Constants.CHANGE_PASSWORD,style: listTileTextStyle,),
-                leading: Icon(Icons.settings,color:Colors.white),
-                onTap: () {
-                  Navigator.of(context).push(MaterialPageRoute(
-                      builder: (BuildContext context) =>null));
-                },
-              ),
-              ListTile(
-                title: Text(Constants.LOGOUT,style: listTileTextStyle,),
-                leading: Icon(Icons.launch,color:Colors.white),
-                onTap: () async {
-                  await cleanUpSharedPref();
-                  Navigator.popUntil(context, ModalRoute.withName('/'));
-                  // Navigator.pop(context,true);
-                  Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => LoginPage()),);
-                },
-              ),
+                                ],
 
-            ],
+
+
+                              ),
+                            ),
+                            Positioned(
+                                width: _width/1.2,
+                                top: MediaQuery.of(context).size.width * 0.14 ,
+                                  child: Stack(
+                                    children: <Widget>[
+                                      Center(
+                                        child: Container(
+                                          height: 100,
+                                          width: 100,
+                                          child: FadeInImage.assetNetwork(
+                                              placeholder: "assets/images/default_profile_pic.png",
+                                              image: "",
+                                          ),
+                                          decoration: new BoxDecoration(
+                                            color: drawerAvatarBackgroundColor,
+                                              shape: BoxShape.circle,
+                                            boxShadow: [
+                                              BoxShadow(
+                                                color: Colors.grey,
+                                                offset: Offset(0.0, 1.0), //(x,y)
+                                                blurRadius: 2.0,
+                                              ),
+                                            ],
+                                          )
+                                ),
+                                      ),
+                                      Positioned(
+                                        width: _width/1.2 + 90,
+                                        top: MediaQuery.of(context).size.width * 0.18 ,
+                                        child: Container(
+                                            height: 25,
+                                            width: 25,
+                                            child: Icon(Icons.edit, color: drawerContentColor,),
+                                            decoration: new BoxDecoration(
+                                              color: drawerAvatarBackgroundColor,
+                                              shape: BoxShape.circle,
+                                              boxShadow: [
+                                                BoxShadow(
+                                                  color: Colors.grey,
+                                                  offset: Offset(0.0, 1.0), //(x,y)
+                                                  blurRadius: 2.0,
+                                                ),
+                                              ],
+                                            )
+                                        ),
+                                      )
+                                    ],
+                                  ),
+
+                            )
+                          ],
+                        );
+                        break;
+                    }
+                  },
+                ),
+                SizedBox(height: 16,),
+
+                ListTile(
+                  title: Text("All Puppies",style: listTileTextStyle,),
+                  leading: Image.asset("assets/images/ic_allpuppies.png",  width: iconSize,),
+                  onTap: () {
+                    // Update the state of the app
+                    // ...
+                    // Then close the drawer
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (BuildContext context) =>HomePage()));
+                  },
+                ),
+                SizedBox(height: 4,),
+                new Divider(height: 1.0, color: drawerContentColor),
+                SizedBox(height: 4,),
+                ListTile(
+                  title: Text("Add Puppy",style: listTileTextStyle,),
+                  leading: Image.asset("assets/images/ic_addpuppy.png",  width: iconSize,),
+                  onTap: () {
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (BuildContext context) =>null));
+                  },
+                ),
+                SizedBox(height: 4,),
+                new Divider(height: 1.0, color: drawerContentColor),
+                SizedBox(height: 4,),
+                ListTile(
+                  title: Text("Orders",style:listTileTextStyle,),
+                  leading: Image.asset("assets/images/ic_orders.png",  width: iconSize),
+                  onTap: () {
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (BuildContext context) =>null));
+                  },
+                ),
+                SizedBox(height: 4,),
+                new Divider(height: 1.0, color: drawerContentColor),
+                SizedBox(height: 4,),
+                ListTile(
+                  title: Text("Payment Options",style: listTileTextStyle,),
+                  leading: Image.asset("assets/images/ic_billing.png",  width: iconSize),
+                  onTap: () {
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (BuildContext context) =>null));
+                  },
+                ),SizedBox(height: 4,),
+                new Divider(height: 1.0, color: drawerContentColor),
+                SizedBox(height: 4,),
+                ListTile(
+                  title: Text("Payment History",style: listTileTextStyle,),
+                  leading:Image.asset("assets/images/ic_payment_history.png",  width: iconSize),
+                  onTap: () async {
+                    await cleanUpSharedPref();
+                    Navigator.popUntil(context, ModalRoute.withName('/'));
+                    // Navigator.pop(context,true);
+                    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => LoginPage()),);
+                  },
+                ),
+                SizedBox(height: 4,),
+                new Divider(height: 1.0, color: drawerContentColor),
+                SizedBox(height: 4,),
+                ListTile(
+                  title: Text(Constants.LOGOUT,style: listTileTextStyle,),
+                  leading: Image.asset("assets/images/ic_logout.png",  width: iconSize),
+                  onTap: () async {
+                    await cleanUpSharedPref();
+                    Navigator.popUntil(context, ModalRoute.withName('/'));
+                    // Navigator.pop(context,true);
+                    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => LoginPage()),);
+                  },
+                ),
+
+              ],
+            ),
           ),
         ),
       ),
