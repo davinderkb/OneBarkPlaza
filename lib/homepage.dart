@@ -132,7 +132,7 @@ class HomePageState extends State<HomePage> {
               ),
               Container(
                 height: _height - 180,
-                width: _width - 30,
+                width: _width - 20,
                 child: Column(
                   children: <Widget>[
                     Expanded(
@@ -298,7 +298,7 @@ class HomePageState extends State<HomePage> {
                                                                             .bold))),
                                                         SizedBox(
                                                             width:
-                                                                _width / 2.9),
+                                                                _width / 3.2),
                                                         Image.asset(
                                                             "assets/images/ic_menuOverflow.png",
                                                             height: 16),
@@ -346,7 +346,7 @@ class HomePageState extends State<HomePage> {
                                                                     FontWeight
                                                                         .normal)),
                                                         Text(
-                                                            "Date of Birth: " +
+                                                            "Birth Date: " +
                                                                 data[index].dob,
                                                             style: TextStyle(
                                                                 fontFamily:
@@ -428,18 +428,18 @@ class HomePageState extends State<HomePage> {
                   ],
                 ),
               ),
-              Container(width: _width, height: 1, color: blueColor),
+              Container(width: _width, height: 2, color:Color(0xffF3F3F3)),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
                   Container(
-                      width: _width / 2 - 0,
+                      width: _width / 2 - 1,
                       child:Row(
                         mainAxisSize: MainAxisSize.max,
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
-                          Image.asset("assets/images/ic_sort.png",  width: 18,),
+                          Icon(Icons.sort, size: 18,color:blueColor),
                           SizedBox(width: 12,),
                           Text(
                             "Sort",
@@ -453,7 +453,12 @@ class HomePageState extends State<HomePage> {
                         ],
                       )
                   ),
-                  Container(width: 1, height: 45, color: blueColor),
+                  Column(
+                    children: <Widget>[
+                      SizedBox(height: 2,),
+                      Container(width: 2, height: 45, color: Color(0xffF3F3F3)),
+                    ],
+                  ),
                   Container(
                       width: _width / 2 - 1,
                       child: Row(

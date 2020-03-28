@@ -7,7 +7,7 @@
          FlutterApplication and put your custom class here. -->
     <application
         android:name="io.flutter.app.FlutterApplication"
-        android:label="one_bark_plaza"
+        android:label="One Bark Plaza"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"

@@ -273,7 +273,7 @@ class MainNavigationDrawerState extends State<MainNavigationDrawer>{
                     await cleanUpSharedPref();
                     Navigator.popUntil(context, ModalRoute.withName('/'));
                     // Navigator.pop(context,true);
-                    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => LoginPage()),);
+                    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => null),);
                   },
                 ),
                 SizedBox(height: 4,),
