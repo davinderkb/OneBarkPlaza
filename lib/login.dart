@@ -211,7 +211,7 @@ class LoginPage extends StatelessWidget {
   Future saveUserDetailsInSharedPref(UserData user) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setBool(Constants.SHARED_PREF_IS_LOGGED_IN, true);
-    prefs.setString(Constants.SHARED_PREF_USER_NAME, userNameController.text);
+    prefs.setString(Constants.SHARED_PREF_USER_NAME, userNameController.text.trim());
     prefs.setString(Constants.SHARED_PREF_PASSWORD, passwordController.text);
     prefs.setString(Constants.SHARED_PREF_NAME, user.name);
     prefs.setString(Constants.SHARED_PREF_USER_ID, user.id);
