@@ -192,8 +192,8 @@ class LoginPageState extends State<LoginPage>{
               child: Container(
                   alignment: Alignment.center,
                   child: SpinKitRipple(
-                    color: Color(0xff308FA4),
-                    size: 75.0,
+                    color: Color(0xffffffff),
+                    size: 200,
                   )),
             ):SizedBox()
           ],

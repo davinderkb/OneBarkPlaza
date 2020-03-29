@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:one_bark_plaza/add_puppy.dart';
 import 'package:one_bark_plaza/util/constants.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -36,7 +37,7 @@ class MainActivityState extends State<MainActivity>{
 
   void autoLogin() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    final bool isLogged = prefs.getBool(Constants.SHARED_PREF_IS_LOGGED_IN);
+    final bool isLogged = prefs.getBool(Constants.SHARED_PREF_IS_LOGGED_IN)??false;
 
     if (isLogged) {
       setState(() {
@@ -239,7 +240,7 @@ class MainNavigationDrawerState extends State<MainNavigationDrawer>{
                   leading: Image.asset("assets/images/ic_addpuppy.png",  width: iconSize,),
                   onTap: () {
                     Navigator.of(context).push(MaterialPageRoute(
-                        builder: (BuildContext context) =>null));
+                        builder: (BuildContext context) =>AddPuppy()));
                   },
                 ),
                 SizedBox(height: 4,),
@@ -284,9 +285,9 @@ class MainNavigationDrawerState extends State<MainNavigationDrawer>{
                   leading: Image.asset("assets/images/ic_logout.png",  width: iconSize),
                   onTap: () async {
                     await cleanUpSharedPref();
-                    Navigator.popUntil(context, ModalRoute.withName('/'));
-                    // Navigator.pop(context,true);
-                    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => LoginPage()),);
+                    //Navigator.popUntil(context, ModalRoute.withName('/'));
+                    Navigator.pop(context,true);
+                    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => LoginPage()));
                   },
                 ),
 

@@ -18,6 +18,7 @@ dependencies:
   flutter_email_sender : "^2.2.2"
   connectivity : "^0.4.8+1"
   pull_to_refresh: ^1.5.7
+  searchable_dropdown: "^1.1.2"
   flutter_localizations:
     sdk: flutter
 
