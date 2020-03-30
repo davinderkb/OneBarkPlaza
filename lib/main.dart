@@ -53,6 +53,7 @@ class MainActivityState extends State<MainActivity>{
       title: 'One Bark Plaza',
       theme: ThemeData(
         primarySwatch: Colors.orange,
+
       ),
       home: isLoggedIn?HomePage():LoginPage(),
     );
