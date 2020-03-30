@@ -115,7 +115,7 @@ class MainNavigationDrawerState extends State<MainNavigationDrawer>{
                       case ConnectionState.active:
                         return Container(
                           alignment: Alignment.center,
-                          child: SpinKitHourGlass(
+                          child: SpinKitFadingCircle (
                             color: Color(0xffFFFFFF),
                             size: 50.0,
                           ),

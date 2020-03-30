@@ -191,9 +191,9 @@ class LoginPageState extends State<LoginPage>{
              //top: MediaQuery.of(context).size.width * 0.5 ,
               child: Container(
                   alignment: Alignment.center,
-                  child: SpinKitRipple(
+                  child: SpinKitFadingCircle(
                     color: Color(0xffffffff),
-                    size: 200,
+                    size: 50,
                   )),
             ):SizedBox()
           ],

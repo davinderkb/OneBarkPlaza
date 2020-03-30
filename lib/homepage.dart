@@ -152,9 +152,9 @@ class HomePageState extends State<HomePage> {
                             case ConnectionState.active:
                               return Container(
                                 alignment: Alignment.center,
-                                child: SpinKitRipple(
+                                child: SpinKitFadingCircle(
                                   color: blueColor,
-                                  size: 200.0,
+                                  size: 50.0,
                                 ),
                               );
                               break;
