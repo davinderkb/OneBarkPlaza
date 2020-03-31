@@ -196,7 +196,7 @@ class ChoosBreedDailogState extends State<ChooseBreedDialog>{
                                     ),
                                   ),
                                           onTap: () {
-                                            widget.addPuppyState.isSelectedOnce(true);
+                                            widget.addPuppyState.isBreedSelectedOnce(true);
                                             widget.addPuppyState.chooseBreed(data[index].name);
                                             Navigator.pop(context);
                                           },
@@ -241,7 +241,7 @@ class ChoosBreedDailogState extends State<ChooseBreedDialog>{
                             ),
                           ),
                                 onTap: () {
-                                  widget.addPuppyState.isSelectedOnce(true);
+                                  widget.addPuppyState.isBreedSelectedOnce(true);
                                   widget.addPuppyState.chooseBreed(filteredItems[index].name);
                                   Navigator.pop(context);
                                 },

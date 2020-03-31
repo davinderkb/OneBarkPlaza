@@ -1,6 +1,9 @@
+import 'dart:io';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_multiple_image_picker/flutter_multiple_image_picker.dart';
+import 'package:multi_image_picker/multi_image_picker.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:intl/intl.dart';
 import 'dart:convert';
@@ -24,10 +27,51 @@ class AddPuppyState extends State<AddPuppy> {
   DateTime dateOfBirth = DateTime.now();
   String dateOfBirthString = 'Click here to choose ...';
   String _chooseBreed = 'Choose';
-  bool _isSelectedOnce = false;
+  bool _isBreedSelectedOnce = false;
+  List<Asset> images = List<Asset>();
+  String _error = 'No Error Dectected';
+  String _platformMessage = 'No Error';
+  List images2;
+  int maxImageNo = 10;
+  bool selectSingleImage = false;
+  int imagesInGridRow = 3;
+  int thumbnailSize = 100;
 
-  isSelectedOnce(bool value) {
-    _isSelectedOnce = value;
+  ChooseBreedDialog chooseBreedDialog = null;
+  Widget buildGridView() {
+    return GridView.count(
+      crossAxisCount: imagesInGridRow,
+      children: List.generate(images.length, (index) {
+        Asset asset = images[index];
+        return  Padding(
+          padding: const EdgeInsets.all(2.0),
+          child: Container(
+              height:100,
+              width: 100,
+              decoration: BoxDecoration(
+                color: Color(0xffFEF8F5),
+                borderRadius:BorderRadius.all(Radius.circular(16)),
+                border: Border.all(color: Colors.black12),
+              ),
+              child: ClipRRect(
+                borderRadius:
+                BorderRadius.circular(16.0),
+                child:Padding(
+                  padding: const EdgeInsets.all(4.0),
+                  child: AssetThumb(
+                    asset: asset,
+                    width: thumbnailSize,
+                    height: thumbnailSize,
+                  ),
+                ),
+              )),
+        );
+      }),
+    );
+  }
+
+  isBreedSelectedOnce(bool value) {
+    _isBreedSelectedOnce = value;
   }
 
   BuildContext context;
@@ -48,6 +92,63 @@ class AddPuppyState extends State<AddPuppy> {
   @override
   void initState() {
     super.initState();
+  }
+
+  Future<void> loadAssets() async {
+    List<Asset> resultList = List<Asset>();
+    String error = 'No Error Dectected';
+
+    try {
+      resultList = await MultiImagePicker.pickImages(
+        maxImages: 6,
+        enableCamera: true,
+
+        selectedAssets: images,
+        cupertinoOptions: CupertinoOptions(takePhotoIcon: "chat"),
+        materialOptions: MaterialOptions(
+          actionBarColor: "#000000",
+          actionBarTitle: "One Bark Plaza App",
+          allViewTitle: "Select Photos",
+          useDetailsView: true,
+          selectCircleStrokeColor: "#ffffff",
+
+        ),
+      );
+    } on Exception catch (e) {
+      error = e.toString();
+    }
+
+    // If the widget was removed from the tree while the asynchronous platform
+    // message was in flight, we want to discard the reply rather than calling
+    // setState to update our non-existent appearance.
+    if (!mounted) return;
+
+    setState(() {
+      images = resultList;
+      _error = error;
+    });
+  }
+
+  initMultiPickUp() async {
+    setState(() {
+      images2 = null;
+      _platformMessage = 'No Error';
+    });
+    List resultList;
+    String error;
+    try {
+      resultList = await FlutterMultipleImagePicker.pickMultiImages(
+          maxImageNo, selectSingleImage);
+    } on Exception catch (e) {
+      error = e.toString();
+    }
+
+    if (!mounted) return;
+
+    setState(() {
+      images2 = resultList;
+      if (error == null) _platformMessage = 'No Error Dectected';
+    });
   }
 
   @override
@@ -118,11 +219,19 @@ class AddPuppyState extends State<AddPuppy> {
                         Center(
                           child: InkWell(
                             onTap: () {
+                              chooseBreedDialog == null?
                               showDialog(
                                 context: context,
                                 builder: (BuildContext context) => BackdropFilter(
                                   filter: ImageFilter.blur(sigmaX:2.0,sigmaY:2.0),
-                                  child: ChooseBreedDialog(widget.addPuppyState),
+                                  child: chooseBreedDialog = ChooseBreedDialog(widget.addPuppyState),
+                                ),
+                              ) :
+                              showDialog(
+                                context: context,
+                                builder: (BuildContext context) => BackdropFilter(
+                                  filter: ImageFilter.blur(sigmaX:2.0,sigmaY:2.0),
+                                  child: chooseBreedDialog,
                                 ),
                               );
                             },
@@ -176,7 +285,7 @@ class AddPuppyState extends State<AddPuppy> {
                                         child: Container(
                                           height: 40,
                                           width: 40,
-                                          child: _isSelectedOnce?Icon(Icons.check, color: Colors.green):Icon(Icons.format_list_bulleted, color: hintColor),
+                                          child: _isBreedSelectedOnce?Icon(Icons.check, color: Colors.green):Icon(Icons.format_list_bulleted, color: hintColor),
                                         )),
                                   ],
                                 ),
@@ -184,6 +293,84 @@ class AddPuppyState extends State<AddPuppy> {
                             ),
                           ),
                         ),
+                        SizedBox(height: 16,),
+                        new Container(
+                          alignment: Alignment.center,
+                          child: new Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: <Widget>[
+                              images.length == 0 ?
+                              Container(
+                                width: _width,
+                                child: Column(
+                                  children: <Widget>[
+                                    Container(
+                                        height:100,
+                                        width: 100,
+                                        decoration: BoxDecoration(
+                                          color: Color(0xffFEF8F5),
+                                          borderRadius:
+                                          BorderRadius.all(Radius.circular(16)),
+                                          //border: Border.all(),
+                                        ),
+                                        child: ClipRRect(
+                                          borderRadius:
+                                          BorderRadius.circular(4.0),
+                                          child:Padding(
+                                            padding: const EdgeInsets.fromLTRB(16,8,8,8),
+                                            child: Image.asset("assets/images/ic_dp.png"),
+                                          ),
+                                        )),
+                                    SizedBox(height:4),
+                                    new Text('You can add upto 6 photos',
+                                      style: TextStyle(fontFamily:"NunitoSans",color: Color(0xff707070), fontSize: 12,fontWeight: FontWeight.bold),
+                                    ),
+                                    new Text('First photo of your selection will be cover photo',
+                                      style: TextStyle(fontFamily:"NunitoSans",color: Color(0xff707070), fontSize: 12,fontWeight: FontWeight.normal),
+                                    ),
+                                  ],
+
+                                ),
+
+                              ):
+                              Container(
+                                  height: calculateGridHeight(),
+                                  width: _width -60,
+                                  child: Expanded(child: Container(child: buildGridView()),)
+                              ),
+
+                              Padding(
+                                padding: const EdgeInsets.fromLTRB(0,0,0,0),
+                                child: new RaisedButton.icon(
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius: new BorderRadius.circular(12.0),
+                                        side: BorderSide(color: Colors.white)
+                                    ),
+                                    onPressed: loadAssets,
+                                    color: greenColor,
+                                    icon: new Icon(Icons.image, color:Colors.white),
+                                    label: new Text("Add Images", style: TextStyle(color:Colors.white,fontFamily:"NunitoSans", fontWeight: FontWeight.bold, fontSize: 13),)),
+                              ),
+                            ],
+                          ),
+                        ),
+                        /*Container(
+                          height: 300,
+                          width: 300,
+                          child: Column(
+                            children: <Widget>[
+                              Center(child: Text('Error: $_error')),
+                              RaisedButton(
+                                child: Text("Pick images"),
+                                onPressed: loadAssets,
+                              ),
+                              Expanded(
+                                child: buildGridView(),
+                              )
+                            ],
+                          ),
+                        ),*/
                         SizedBox(height: 16,),
                         Center(
                           child: Container(
@@ -619,6 +806,12 @@ class AddPuppyState extends State<AddPuppy> {
           ],
         )));
   }
+
+  double calculateGridHeight() {
+    double numRowsReq = images.length==1? 1 :  ((images.length -1)  / imagesInGridRow) +1;
+    return thumbnailSize * numRowsReq.toInt() + 16.0;
+  }
+
 
   Future<Null> _selectDateOfBirth(BuildContext context) async {
     final DateTime picked = await showDatePicker(
