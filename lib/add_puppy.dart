@@ -2,6 +2,8 @@ import 'dart:io';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
+
 import 'package:flutter_multiple_image_picker/flutter_multiple_image_picker.dart';
 import 'package:multi_image_picker/multi_image_picker.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -12,9 +14,16 @@ import 'package:searchable_dropdown/searchable_dropdown.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:toast/toast.dart';
 
+import 'package:flutter/foundation.dart';
+import 'package:flutter/gestures.dart';
+import 'package:flutter/rendering.dart';
+import 'package:flutter/widgets.dart';
+import 'package:flutter/services.dart';
+
 import 'breeds.dart';
 import 'customdialog.dart';
-final greenColor = Color(0xff7FA432);//Color(0xff4C8BF5);
+final greenColor = Color(0xff7FA432);
+final blueColor = Color(0xff4C8BF5);
 class AddPuppy extends StatefulWidget {
   AddPuppyState addPuppyState;
   @override
@@ -36,8 +45,15 @@ class AddPuppyState extends State<AddPuppy> {
   bool selectSingleImage = false;
   int imagesInGridRow = 3;
   int thumbnailSize = 100;
+  bool isChampionBloodline = false;
+  bool isFamilyRaised = false;
+  bool isKidFriendly = false;
+  bool isMicrochipped = false;
+  bool isSocialized = false;
 
   ChooseBreedDialog chooseBreedDialog = null;
+
+  bool isFemale = false;
   Widget buildGridView() {
     return GridView.count(
       crossAxisCount: imagesInGridRow,
@@ -158,10 +174,23 @@ class AddPuppyState extends State<AddPuppy> {
     final _height = MediaQuery.of(context).size.height;
     final borderRadius = 12.0;
     const leftPadding = 12.0;
-
-
     final hintColor = Color(0xffA9A9A9);
-   
+
+    final finishButton = Material(
+      borderRadius: BorderRadius.circular(30.0),
+
+      color: Colors.teal,
+      child: MaterialButton(
+        minWidth: _width - 60,
+        padding: EdgeInsets.fromLTRB(18.0, 20.0, 18.0, 20.0),
+        onPressed: () {
+          FocusScope.of(context).unfocus();
+        },
+        child: Text("Finish",
+            textAlign: TextAlign.center,
+            style: TextStyle(fontFamily: 'NunitoSans',color: Colors.white, fontSize: 14)),
+      ),
+    );
 
     TextStyle style = TextStyle(
         fontFamily: 'NunitoSans', fontSize: 14.0, color: Color(0xff707070));
@@ -219,24 +248,26 @@ class AddPuppyState extends State<AddPuppy> {
                         Center(
                           child: InkWell(
                             onTap: () {
-                              chooseBreedDialog == null?
+                              chooseBreedDialog != null && chooseBreedDialog.allDuplicateItems.length!=0?
+                              showDialog(
+                                context: context,
+                                child:  BackdropFilter(
+                                  filter: ImageFilter.blur(sigmaX:2.0,sigmaY:2.0),
+                                  child: chooseBreedDialog,
+                                ),
+                              )
+                              :
                               showDialog(
                                 context: context,
                                 builder: (BuildContext context) => BackdropFilter(
                                   filter: ImageFilter.blur(sigmaX:2.0,sigmaY:2.0),
                                   child: chooseBreedDialog = ChooseBreedDialog(widget.addPuppyState),
                                 ),
-                              ) :
-                              showDialog(
-                                context: context,
-                                builder: (BuildContext context) => BackdropFilter(
-                                  filter: ImageFilter.blur(sigmaX:2.0,sigmaY:2.0),
-                                  child: chooseBreedDialog,
-                                ),
-                              );
+                              )
+                              ;
                             },
                             child: Container(
-                              width: _width - 60,
+                              width: _width,
                               height: 60,
                               decoration: BoxDecoration(
                                 color: Color(0xffF3F8FF),
@@ -355,26 +386,10 @@ class AddPuppyState extends State<AddPuppy> {
                             ],
                           ),
                         ),
-                        /*Container(
-                          height: 300,
-                          width: 300,
-                          child: Column(
-                            children: <Widget>[
-                              Center(child: Text('Error: $_error')),
-                              RaisedButton(
-                                child: Text("Pick images"),
-                                onPressed: loadAssets,
-                              ),
-                              Expanded(
-                                child: buildGridView(),
-                              )
-                            ],
-                          ),
-                        ),*/
                         SizedBox(height: 16,),
                         Center(
                           child: Container(
-                            width: _width - 60,
+                            width: _width,
                             height: 60,
                             decoration: BoxDecoration(
                                 color: Color(0xffFEF8F5),
@@ -408,12 +423,69 @@ class AddPuppyState extends State<AddPuppy> {
                         ),
                         SizedBox(height: 16,),
                         Center(
+                          child: Padding(
+                            padding: const EdgeInsets.fromLTRB(0.0, 0 ,0,0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: <Widget>[
+                                Container(
+                                  width: (_width - 44)/ 2,
+                                  height: 60,
+                                  decoration: BoxDecoration(
+                                      color: Color(0xffFEF8F5),
+                                      borderRadius:  new BorderRadius.circular(borderRadius)
+                                  ),
+
+
+                                  child: RaisedButton.icon(
+
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius: new BorderRadius.circular(12.0),
+                                          side: BorderSide(color: Colors.white)
+                                      ),
+                                      onPressed: isFemale?toggleState:null,
+                                      color:Color(0xffEBEBE4),
+                                      disabledColor: Colors.amber,
+                                      disabledElevation: 3.0,
+                                      elevation: 0,
+                                      icon: !isFemale? Icon(Icons.check_box, color: Colors.white, size:14): Icon(null, size:0),
+                                      label: new Text("Male", style: TextStyle(color:Colors.white,fontFamily:"NunitoSans", fontWeight: FontWeight.bold, fontSize: 13),)),
+                                ),
+                                Container(
+                                  width: (_width - 44)/ 2,
+                                  height: 60,
+                                  decoration: BoxDecoration(
+                                      color: Color(0xffFEF8F5),
+                                      borderRadius:  new BorderRadius.circular(borderRadius)
+                                  ),
+
+
+                                  child: RaisedButton.icon(
+
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius: new BorderRadius.circular(12.0),
+                                          side: BorderSide(color: Colors.white)
+                                      ),
+                                      onPressed: !isFemale?toggleState:null,
+                                      color:Color(0xffEBEBE4),
+                                      disabledColor: Colors.amber,
+                                      disabledElevation: 3.0,
+                                      elevation: 0,
+                                      icon: isFemale? Icon(Icons.check_box, color: Colors.white, size:14): Icon(null, size:0),
+                                      label: new Text("Female", style: TextStyle(color:Colors.white,fontFamily:"NunitoSans", fontWeight: FontWeight.bold, fontSize: 13),)),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        SizedBox(height: 16,),
+                        Center(
                           child: InkWell(
                             onTap: () {
                               _selectDateOfBirth(context);
                             },
                             child: Container(
-                              width: _width - 60,
+                              width: _width,
                               height: 60,
                               decoration: BoxDecoration(
                                   color: Color(0xffF3F8FF),
@@ -473,12 +545,12 @@ class AddPuppyState extends State<AddPuppy> {
                         SizedBox(height: 16,),
                         Center(
                           child: Padding(
-                            padding: const EdgeInsets.fromLTRB(16.0, 0 ,16,0),
+                            padding: const EdgeInsets.fromLTRB(0.0, 0 ,0,0),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: <Widget>[
                                 Container(
-                                  width: (_width - 84)/ 2,
+                                  width: (_width - 44)/ 2,
                                   height: 60,
                                   decoration: BoxDecoration(
                                       color: Color(0xffFEF8F5),
@@ -510,7 +582,7 @@ class AddPuppyState extends State<AddPuppy> {
                                   ),
                                 ),
                                 Container(
-                                  width: (_width - 84)/ 2,
+                                  width: (_width - 44)/ 2,
                                   height: 60,
                                   decoration: BoxDecoration(
                                       color: Color(0xffFEF8F5),
@@ -548,7 +620,7 @@ class AddPuppyState extends State<AddPuppy> {
                         SizedBox(height: 16,),
                         Center(
                           child: Container(
-                            width: _width - 60,
+                            width: _width,
                             height: 80,
                             decoration: BoxDecoration(
                                 color: Color(0xffFEF8F5),
@@ -584,12 +656,12 @@ class AddPuppyState extends State<AddPuppy> {
                         SizedBox(height: 16,),
                         Center(
                           child: Padding(
-                            padding: const EdgeInsets.fromLTRB(16.0, 0 ,16,0),
+                            padding: const EdgeInsets.fromLTRB(0.0, 0 ,0,0),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: <Widget>[
                                 Container(
-                                  width: (_width - 84)/ 2,
+                                  width: (_width - 44)/ 2,
                                   height: 60,
                                   decoration: BoxDecoration(
                                       color: Color(0xffFEF8F5),
@@ -621,7 +693,7 @@ class AddPuppyState extends State<AddPuppy> {
                                   ),
                                 ),
                                 Container(
-                                  width: (_width - 84)/ 2,
+                                  width: (_width - 44)/ 2,
                                   height: 60,
                                   decoration: BoxDecoration(
                                       color: Color(0xffFEF8F5),
@@ -659,7 +731,7 @@ class AddPuppyState extends State<AddPuppy> {
                         SizedBox(height: 16,),
                         Center(
                           child: Container(
-                            width: _width - 60,
+                            width: _width,
                             height: 60,
                             decoration: BoxDecoration(
                                 color: Color(0xffFEF8F5),
@@ -694,7 +766,7 @@ class AddPuppyState extends State<AddPuppy> {
                         SizedBox(height: 16,),
                         Center(
                           child: Container(
-                            width: _width - 60,
+                            width: _width,
                             height: 60,
                             decoration: BoxDecoration(
                                 color: Color(0xffFEF8F5),
@@ -729,7 +801,7 @@ class AddPuppyState extends State<AddPuppy> {
                         SizedBox(height: 16,),
                         Center(
                           child: Container(
-                            width: _width - 60,
+                            width: _width,
                             height: 60,
                             decoration: BoxDecoration(
                                 color: Color(0xffFEF8F5),
@@ -764,7 +836,7 @@ class AddPuppyState extends State<AddPuppy> {
                         SizedBox(height: 16,),
                         Center(
                           child: Container(
-                            width: _width - 60,
+                            width: _width,
                             height: 60,
                             decoration: BoxDecoration(
                                 color: Color(0xffFEF8F5),
@@ -796,6 +868,143 @@ class AddPuppyState extends State<AddPuppy> {
                             ),
                           ),
                         ),
+                        SizedBox(height: 16,),
+                        Center(
+                          child: Container(
+                            width: _width,
+
+                            decoration: BoxDecoration(
+                                color: Color(0xffFEF8F5),
+                                borderRadius:  new BorderRadius.circular(borderRadius)
+                            ),
+
+
+                            child: InputDecorator(
+                              decoration: new InputDecoration(
+                                labelText: 'Puppy Badges',
+                                labelStyle: labelStyle,
+                                border: OutlineInputBorder(),
+                                enabledBorder: OutlineInputBorder(borderRadius:  new BorderRadius.circular(borderRadius), borderSide: BorderSide(color: greenColor) ),
+                              ),
+                              child: Column(
+                                children: <Widget>[
+                                  MergeSemantics(
+                                    child: ListTile(
+                                      title: Text('Champion Bloodline', style: TextStyle(fontSize: 14, fontFamily: "Nunito Sans", color:  isChampionBloodline?greenColor : Color(0xffEBEDD9),fontWeight:FontWeight.bold),),
+                                      trailing: Transform.scale(
+                                        scale: 1,
+                                        child: CupertinoSwitch(
+                                          value: isChampionBloodline,
+                                          onChanged: (bool value) {
+                                            setState(() {
+                                              isChampionBloodline = value;
+                                            }
+                                            );
+                                          },
+                                        ),
+                                      ),
+                                      onTap: () {
+                                        setState(() {
+                                          isChampionBloodline = !isChampionBloodline;
+                                        });
+                                      },
+                                    ),
+                                  ),
+                                  MergeSemantics(
+                                    child: ListTile(
+                                      title: Text('Family Raised', style: TextStyle(fontSize: 14, fontFamily: "Nunito Sans", color:  isFamilyRaised?greenColor : Color(0xffEBEDD9),fontWeight:FontWeight.bold),),
+                                      trailing: Transform.scale(
+                                        scale: 1,
+                                        child: CupertinoSwitch(
+                                          value: isFamilyRaised,
+                                          onChanged: (bool value) {
+                                            setState(() {
+                                              isFamilyRaised = value;
+                                            }
+                                            );
+                                          },
+                                        ),
+                                      ),
+                                      onTap: () {
+                                        setState(() {
+                                          isFamilyRaised = !isFamilyRaised;
+                                        });
+                                      },
+                                    ),
+                                  ),
+                                  MergeSemantics(
+                                    child: ListTile(
+                                      title: Text('Kid Friendly', style: TextStyle(fontSize: 14, fontFamily: "Nunito Sans", color:  isKidFriendly?greenColor : Color(0xffEBEDD9),fontWeight:FontWeight.bold),),
+                                      trailing: Transform.scale(
+                                        scale: 1,
+                                        child: CupertinoSwitch(
+                                          value: isKidFriendly,
+                                          onChanged: (bool value) {
+                                            setState(() {
+                                              isKidFriendly = value;
+                                            }
+                                            );
+                                          },
+                                        ),
+                                      ),
+                                      onTap: () {
+                                        setState(() {
+                                          isKidFriendly = !isKidFriendly;
+                                        });
+                                      },
+                                    ),
+                                  ),
+                                  MergeSemantics(
+                                    child: ListTile(
+                                      title: Text('Microchipped', style: TextStyle(fontSize: 14, fontFamily: "Nunito Sans", color:  isMicrochipped?greenColor : Color(0xffEBEDD9),fontWeight:FontWeight.bold),),
+                                      trailing: Transform.scale(
+                                        scale: 1,
+                                        child: CupertinoSwitch(
+                                          value: isMicrochipped,
+                                          onChanged: (bool value) {
+                                            setState(() {
+                                              isMicrochipped = value;
+                                            }
+                                            );
+                                          },
+                                        ),
+                                      ),
+                                      onTap: () {
+                                        setState(() {
+                                          isMicrochipped = !isMicrochipped;
+                                        });
+                                      },
+                                    ),
+                                  ),
+                                  MergeSemantics(
+                                    child: ListTile(
+                                      title: Text('Socialized', style: TextStyle(fontSize: 14, fontFamily: "Nunito Sans", color:  isSocialized?greenColor : Color(0xffEBEDD9),fontWeight:FontWeight.bold),),
+                                      trailing: Transform.scale(
+                                        scale: 1,
+                                        child: CupertinoSwitch(
+                                          value: isSocialized,
+                                          onChanged: (bool value) {
+                                            setState(() {
+                                              isSocialized = value;
+                                            }
+                                            );
+                                          },
+                                        ),
+                                      ),
+                                      onTap: () {
+                                        setState(() {
+                                          isSocialized = !isSocialized;
+                                        });
+                                      },
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                        SizedBox(height: 16,),
+                        Center(child: finishButton)
                       ],
                     ),
                   ),
@@ -845,5 +1054,9 @@ class AddPuppyState extends State<AddPuppy> {
   }
 
 
-
+  void toggleState() {
+    setState(() {
+      isFemale = !isFemale ;
+    });
+  }
 }

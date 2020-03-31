@@ -7,17 +7,19 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:one_bark_plaza/add_puppy.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:toast/toast.dart';
-
+import 'package:flutter/scheduler.dart';
 import 'breeds.dart';
 class ChooseBreedDialog extends StatefulWidget {
   AddPuppyState addPuppyState;
+  Set<Breed> allDuplicateItems  = Set<Breed>();
+  bool isLoadedOnce = false;
   ChooseBreedDialog(AddPuppyState addPuppyState){
         this.addPuppyState = addPuppyState;
   }
 
   @override
   ChoosBreedDailogState createState() {
-    return ChoosBreedDailogState();
+        return  ChoosBreedDailogState();
   }
 
 }
@@ -26,19 +28,28 @@ class ChoosBreedDailogState extends State<ChooseBreedDialog>{
   Future<List<Breed>> futureListOfCategories;
   TextEditingController searchTextController = new TextEditingController();
   TextStyle style = TextStyle(fontFamily: 'NunitoSans', fontSize: 15.0, color: Color(0xff707070));
-  Set<Breed> allDuplicateItems  = Set<Breed>();
+
   List<Breed> filteredItems = List<Breed>();
   @override
   void initState() {
     super.initState();
-    allDuplicateItems.clear();
-    futureListOfCategories = getAllBreeds(context);
+    if(!widget.isLoadedOnce) {
+      widget.allDuplicateItems.clear();
+      futureListOfCategories = getAllBreeds(context);
+    } else{
+      filteredItems.clear();
+      filteredItems.addAll(widget.allDuplicateItems);
+    }
+    if (SchedulerBinding.instance.schedulerPhase == SchedulerPhase.persistentCallbacks) {
+      SchedulerBinding.instance.addPostFrameCallback((_) => widget.isLoadedOnce = true);
+    }
   }
 
   @override
   Widget build(BuildContext context) {
 
-    return Dialog(
+    return
+      Dialog(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(Consts.padding),
       ),
@@ -46,6 +57,7 @@ class ChoosBreedDailogState extends State<ChooseBreedDialog>{
       backgroundColor: Colors.transparent,
       child: dialogContent(context),
     );
+
   }
 
   dialogContent(BuildContext context) {
@@ -124,7 +136,7 @@ class ChoosBreedDailogState extends State<ChooseBreedDialog>{
                       ),
                       Container(height: 2.5, color:Colors.amber),
                       SizedBox(height: 8.0),
-                      searchTextController.text =="" ?
+                      !widget.isLoadedOnce && searchTextController.text =="" ?
                       Expanded(
                         child: FutureBuilder(
                           future: futureListOfCategories,
@@ -163,7 +175,7 @@ class ChoosBreedDailogState extends State<ChooseBreedDialog>{
                                   );
                                 }
                                 var data = snapshot.data;
-                                allDuplicateItems.addAll(data);
+                                widget.allDuplicateItems.addAll(data);
                                 return new ListView.builder(
                                   reverse: false,
                                   scrollDirection: Axis.vertical,
@@ -203,6 +215,7 @@ class ChoosBreedDailogState extends State<ChooseBreedDialog>{
                                       ),
 
                                 );
+
                                 break;
                             }
                           },
@@ -290,7 +303,7 @@ class ChoosBreedDailogState extends State<ChooseBreedDialog>{
 
   void filterSearchResults(String query) {
     Set<Breed> dummySearchList = Set<Breed>();
-    dummySearchList.addAll(allDuplicateItems);
+    dummySearchList.addAll(widget.allDuplicateItems);
     if(query.isNotEmpty) {
       Set<Breed> dummyListData = Set<Breed>();
       dummySearchList.forEach((item) {
@@ -306,7 +319,7 @@ class ChoosBreedDailogState extends State<ChooseBreedDialog>{
     } else {
       setState(() {
         filteredItems.clear();
-        filteredItems.addAll(allDuplicateItems);
+        filteredItems.addAll(widget.allDuplicateItems);
       });
     }
 
