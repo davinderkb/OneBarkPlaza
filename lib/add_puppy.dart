@@ -1,26 +1,14 @@
-import 'dart:io';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-
-import 'package:flutter_multiple_image_picker/flutter_multiple_image_picker.dart';
 import 'package:multi_image_picker/multi_image_picker.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:intl/intl.dart';
-import 'dart:convert';
-import 'package:dio/dio.dart';
-import 'package:searchable_dropdown/searchable_dropdown.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:toast/toast.dart';
-
-import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter/services.dart';
+import 'package:toast/toast.dart';
 
-import 'breeds.dart';
 import 'customdialog.dart';
 final greenColor = Color(0xff7FA432);
 final blueColor = Color(0xff4C8BF5);
@@ -145,52 +133,17 @@ class AddPuppyState extends State<AddPuppy> {
     });
   }
 
-  initMultiPickUp() async {
-    setState(() {
-      images2 = null;
-      _platformMessage = 'No Error';
-    });
-    List resultList;
-    String error;
-    try {
-      resultList = await FlutterMultipleImagePicker.pickMultiImages(
-          maxImageNo, selectSingleImage);
-    } on Exception catch (e) {
-      error = e.toString();
-    }
 
-    if (!mounted) return;
-
-    setState(() {
-      images2 = resultList;
-      if (error == null) _platformMessage = 'No Error Dectected';
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
     this.context = context;
     final _width = MediaQuery.of(context).size.width;
     final _height = MediaQuery.of(context).size.height;
-    final borderRadius = 12.0;
+    final borderRadius = 14.0;
     const leftPadding = 12.0;
     final hintColor = Color(0xffA9A9A9);
 
-    final finishButton = Material(
-      borderRadius: BorderRadius.circular(30.0),
-
-      color: Colors.teal,
-      child: MaterialButton(
-        minWidth: _width - 60,
-        padding: EdgeInsets.fromLTRB(18.0, 20.0, 18.0, 20.0),
-        onPressed: () {
-          FocusScope.of(context).unfocus();
-        },
-        child: Text("Finish",
-            textAlign: TextAlign.center,
-            style: TextStyle(fontFamily: 'NunitoSans',color: Colors.white, fontSize: 14)),
-      ),
-    );
 
     TextStyle style = TextStyle(
         fontFamily: 'NunitoSans', fontSize: 14.0, color: Color(0xff707070));
@@ -198,6 +151,8 @@ class AddPuppyState extends State<AddPuppy> {
         fontFamily: 'NunitoSans', fontSize: 14.0, color: hintColor);
     TextStyle labelStyle = TextStyle(
         fontFamily: 'NunitoSans', color: greenColor);
+    var maleColor = Color(0xff5cbaed);
+    var femaleColor = Color(0xfff25fa3);
     return Scaffold(
         key: globalKey,
         backgroundColor: Colors.transparent,
@@ -375,8 +330,8 @@ class AddPuppyState extends State<AddPuppy> {
                                 padding: const EdgeInsets.fromLTRB(0,0,0,0),
                                 child: new RaisedButton.icon(
                                     shape: RoundedRectangleBorder(
-                                        borderRadius: new BorderRadius.circular(12.0),
-                                        side: BorderSide(color: Colors.white)
+                                        borderRadius: new BorderRadius.circular(30.0),
+                                        side: BorderSide(color: Color(0xffEBEBEB))
                                     ),
                                     onPressed: loadAssets,
                                     color: greenColor,
@@ -421,64 +376,7 @@ class AddPuppyState extends State<AddPuppy> {
                             ),
                           ),
                         ),
-                        SizedBox(height: 16,),
-                        Center(
-                          child: Padding(
-                            padding: const EdgeInsets.fromLTRB(0.0, 0 ,0,0),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: <Widget>[
-                                Container(
-                                  width: (_width - 44)/ 2,
-                                  height: 60,
-                                  decoration: BoxDecoration(
-                                      color: Color(0xffFEF8F5),
-                                      borderRadius:  new BorderRadius.circular(borderRadius)
-                                  ),
-
-
-                                  child: RaisedButton.icon(
-
-                                      shape: RoundedRectangleBorder(
-                                          borderRadius: new BorderRadius.circular(12.0),
-                                          side: BorderSide(color: Colors.white)
-                                      ),
-                                      onPressed: isFemale?toggleState:null,
-                                      color:Color(0xffEBEBE4),
-                                      disabledColor: Colors.amber,
-                                      disabledElevation: 3.0,
-                                      elevation: 0,
-                                      icon: !isFemale? Icon(Icons.check_box, color: Colors.white, size:14): Icon(null, size:0),
-                                      label: new Text("Male", style: TextStyle(color:Colors.white,fontFamily:"NunitoSans", fontWeight: FontWeight.bold, fontSize: 13),)),
-                                ),
-                                Container(
-                                  width: (_width - 44)/ 2,
-                                  height: 60,
-                                  decoration: BoxDecoration(
-                                      color: Color(0xffFEF8F5),
-                                      borderRadius:  new BorderRadius.circular(borderRadius)
-                                  ),
-
-
-                                  child: RaisedButton.icon(
-
-                                      shape: RoundedRectangleBorder(
-                                          borderRadius: new BorderRadius.circular(12.0),
-                                          side: BorderSide(color: Colors.white)
-                                      ),
-                                      onPressed: !isFemale?toggleState:null,
-                                      color:Color(0xffEBEBE4),
-                                      disabledColor: Colors.amber,
-                                      disabledElevation: 3.0,
-                                      elevation: 0,
-                                      icon: isFemale? Icon(Icons.check_box, color: Colors.white, size:14): Icon(null, size:0),
-                                      label: new Text("Female", style: TextStyle(color:Colors.white,fontFamily:"NunitoSans", fontWeight: FontWeight.bold, fontSize: 13),)),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                        SizedBox(height: 16,),
+                        SizedBox(height: 18,),
                         Center(
                           child: InkWell(
                             onTap: () {
@@ -488,18 +386,18 @@ class AddPuppyState extends State<AddPuppy> {
                               width: _width,
                               height: 60,
                               decoration: BoxDecoration(
-                                  color: Color(0xffF3F8FF),
-                                  borderRadius:  new BorderRadius.circular(borderRadius),
+                                color: Color(0xffF3F8FF),
+                                borderRadius:  new BorderRadius.circular(borderRadius),
                                 boxShadow: [
-                                BoxShadow(
-                                color: Colors.grey,
-                                blurRadius: 3.0, // soften the shadow
-                                offset: Offset(
-                                  1.0, // Move to right 10  horizontally
-                                  1.0, // Move to bottom 10 Vertically
-                                ),
-                              )
-                              ],
+                                  BoxShadow(
+                                    color: Colors.grey,
+                                    blurRadius: 3.0, // soften the shadow
+                                    offset: Offset(
+                                      1.0, // Move to right 10  horizontally
+                                      1.0, // Move to bottom 10 Vertically
+                                    ),
+                                  )
+                                ],
                               ),
 
 
@@ -537,6 +435,101 @@ class AddPuppyState extends State<AddPuppy> {
                                           child: Icon(Icons.calendar_today, color: hintColor),
                                         )),
                                   ],
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                        SizedBox(height: 16,),
+                        Center(
+                          child: Padding(
+                            padding: const EdgeInsets.fromLTRB(0.0, 0 ,0,0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: <Widget>[
+                                Container(
+                                  width: (_width - 44)/ 2,
+                                  height: 60,
+                                  decoration: BoxDecoration(
+                                      color: Color(0xffFEF8F5),
+                                      borderRadius:  new BorderRadius.circular(30)
+                                  ),
+
+
+                                  child: RaisedButton.icon(
+
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius: new BorderRadius.circular(30.0),
+
+
+                                      ),
+
+                                      onPressed: isFemale?toggleState:null,
+                                      color:Color(0xffEBEBE4),
+                                      disabledColor: maleColor,
+                                      disabledElevation: 3.0,
+                                      elevation: 0,
+                                      icon: !isFemale? Icon(Icons.check_box, color: Colors.white, size:14): Icon(null, size:0),
+                                      label: new Text("Male", style: TextStyle(color:Colors.white,fontFamily:"NunitoSans", fontWeight: FontWeight.bold, fontSize: 13),)),
+                                ),
+                                Container(
+                                  width: (_width - 44)/ 2,
+                                  height: 60,
+                                  decoration: BoxDecoration(
+                                      color: Color(0xffFEF8F5),
+                                      borderRadius:  new BorderRadius.circular(30)
+
+                                  ),
+
+
+                                  child: RaisedButton.icon(
+
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius: new BorderRadius.circular(30.0),
+                                      ),
+                                      onPressed: !isFemale?toggleState:null,
+                                      color:Color(0xffEBEBE4),
+                                      disabledColor: femaleColor,
+                                      disabledElevation: 3.0,
+                                      elevation: 0,
+                                      icon: isFemale? Icon(Icons.check_box, color: Colors.white, size:14): Icon(null, size:0),
+                                      label: new Text("Female", style: TextStyle(color:Colors.white,fontFamily:"NunitoSans", fontWeight: FontWeight.bold, fontSize: 13),)),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        SizedBox(height: 16,),
+                        Center(
+                          child: Container(
+                            width: _width,
+                            height: 80,
+                            decoration: BoxDecoration(
+                                color: Color(0xffFEF8F5),
+                                borderRadius:  new BorderRadius.circular(borderRadius)
+                            ),
+
+
+                            child: InputDecorator(
+                              decoration: new InputDecoration(
+                                labelText: 'Description',
+                                labelStyle: labelStyle,
+                                border: OutlineInputBorder(),
+                                enabledBorder: OutlineInputBorder(borderRadius:  new BorderRadius.circular(borderRadius), borderSide: BorderSide(color: greenColor) ),
+                              ),
+                              child: Padding(
+                                padding:
+                                const EdgeInsets.fromLTRB(
+                                    leftPadding, 0, 0, 0),
+                                child: TextField(
+                                  textAlign: TextAlign.start,
+                                  controller: puppyDescriptionText,
+                                  style: style,
+                                  maxLines: 4,
+                                  decoration: InputDecoration(
+                                    border: InputBorder.none,
+                                    contentPadding: EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 14.0),
+                                  ),
                                 ),
                               ),
                             ),
@@ -617,42 +610,7 @@ class AddPuppyState extends State<AddPuppy> {
                             ),
                           ),
                         ),
-                        SizedBox(height: 16,),
-                        Center(
-                          child: Container(
-                            width: _width,
-                            height: 80,
-                            decoration: BoxDecoration(
-                                color: Color(0xffFEF8F5),
-                                borderRadius:  new BorderRadius.circular(borderRadius)
-                            ),
 
-
-                            child: InputDecorator(
-                              decoration: new InputDecoration(
-                                labelText: 'Description',
-                                labelStyle: labelStyle,
-                                border: OutlineInputBorder(),
-                                enabledBorder: OutlineInputBorder(borderRadius:  new BorderRadius.circular(borderRadius), borderSide: BorderSide(color: greenColor) ),
-                              ),
-                              child: Padding(
-                                padding:
-                                const EdgeInsets.fromLTRB(
-                                    leftPadding, 0, 0, 0),
-                                child: TextField(
-                                  textAlign: TextAlign.start,
-                                  controller: puppyDescriptionText,
-                                  style: style,
-                                  maxLines: 4,
-                                  decoration: InputDecoration(
-                                    border: InputBorder.none,
-                                    contentPadding: EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 14.0),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
                         SizedBox(height: 16,),
                         Center(
                           child: Padding(
@@ -890,7 +848,7 @@ class AddPuppyState extends State<AddPuppy> {
                                 children: <Widget>[
                                   MergeSemantics(
                                     child: ListTile(
-                                      title: Text('Champion Bloodline', style: TextStyle(fontSize: 14, fontFamily: "Nunito Sans", color:  isChampionBloodline?greenColor : Color(0xffEBEDD9),fontWeight:FontWeight.bold),),
+                                      title: Text('Champion Bloodline', style: TextStyle(fontSize: 13,  color:  isChampionBloodline?greenColor : Color(0xffA9A9A9)),),
                                       trailing: Transform.scale(
                                         scale: 1,
                                         child: CupertinoSwitch(
@@ -912,7 +870,7 @@ class AddPuppyState extends State<AddPuppy> {
                                   ),
                                   MergeSemantics(
                                     child: ListTile(
-                                      title: Text('Family Raised', style: TextStyle(fontSize: 14, fontFamily: "Nunito Sans", color:  isFamilyRaised?greenColor : Color(0xffEBEDD9),fontWeight:FontWeight.bold),),
+                                      title: Text('Family Raised', style: TextStyle(fontSize: 13,  color:  isFamilyRaised?greenColor : Color(0xffA9A9A9)),),
                                       trailing: Transform.scale(
                                         scale: 1,
                                         child: CupertinoSwitch(
@@ -934,7 +892,7 @@ class AddPuppyState extends State<AddPuppy> {
                                   ),
                                   MergeSemantics(
                                     child: ListTile(
-                                      title: Text('Kid Friendly', style: TextStyle(fontSize: 14, fontFamily: "Nunito Sans", color:  isKidFriendly?greenColor : Color(0xffEBEDD9),fontWeight:FontWeight.bold),),
+                                      title: Text('Kid Friendly', style: TextStyle(fontSize: 13,  color:  isKidFriendly?greenColor : Color(0xffA9A9A9)),),
                                       trailing: Transform.scale(
                                         scale: 1,
                                         child: CupertinoSwitch(
@@ -956,7 +914,7 @@ class AddPuppyState extends State<AddPuppy> {
                                   ),
                                   MergeSemantics(
                                     child: ListTile(
-                                      title: Text('Microchipped', style: TextStyle(fontSize: 14, fontFamily: "Nunito Sans", color:  isMicrochipped?greenColor : Color(0xffEBEDD9),fontWeight:FontWeight.bold),),
+                                      title: Text('Microchipped', style: TextStyle(fontSize: 13,  color:  isMicrochipped?greenColor : Color(0xffA9A9A9)),),
                                       trailing: Transform.scale(
                                         scale: 1,
                                         child: CupertinoSwitch(
@@ -978,7 +936,7 @@ class AddPuppyState extends State<AddPuppy> {
                                   ),
                                   MergeSemantics(
                                     child: ListTile(
-                                      title: Text('Socialized', style: TextStyle(fontSize: 14, fontFamily: "Nunito Sans", color:  isSocialized?greenColor : Color(0xffEBEDD9),fontWeight:FontWeight.bold),),
+                                      title: Text('Socialized', style: TextStyle(fontSize: 13,  color:  isSocialized?greenColor : Color(0xffA9A9A9)),),
                                       trailing: Transform.scale(
                                         scale: 1,
                                         child: CupertinoSwitch(
@@ -1004,7 +962,21 @@ class AddPuppyState extends State<AddPuppy> {
                           ),
                         ),
                         SizedBox(height: 16,),
-                        Center(child: finishButton)
+                        Center(child:
+                        InkWell(
+                          onTap: (){
+                            onFinishClick(context);
+                            },
+
+                          child: Container(
+                            height: 64,
+                            width: _width,
+                            child: FittedBox(
+                              child: Image.asset("assets/images/finishButton.png"),
+                              fit: BoxFit.fill,
+                            ),
+                          ),
+                        ))
                       ],
                     ),
                   ),
@@ -1014,6 +986,15 @@ class AddPuppyState extends State<AddPuppy> {
 
           ],
         )));
+  }
+
+  void onFinishClick(BuildContext context) {
+    Toast.show("Finish clicked. To-Do", context,
+                                  textColor: Colors.white,
+                                  duration: Toast.LENGTH_LONG,
+                                  gravity: Toast.BOTTOM,
+                                  backgroundColor: Color(0xffeb5050),
+                                  backgroundRadius: 16);
   }
 
   double calculateGridHeight() {

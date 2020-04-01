@@ -157,13 +157,13 @@ class LoginPageState extends State<LoginPage>{
                     ),
                     Positioned(
                       width: 485 ,
-                      top: MediaQuery.of(context).size.width * 0.05 ,
+                      top: MediaQuery.of(context).size.width * 0.035 ,
                       child: GestureDetector(
                         onTapDown: inContact,
                         onTapUp: outContact,
                         child: Icon(
                           Icons.remove_red_eye,
-                          color: Colors.orangeAccent,
+                          color: Colors.orangeAccent, size:35
                         ),
                       ),
                     ),
