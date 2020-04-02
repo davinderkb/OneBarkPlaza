@@ -13,10 +13,12 @@ import 'package:http/http.dart' as http;
 import 'dart:async';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:one_bark_plaza/view_puppy.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:toast/toast.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:one_bark_plaza/main.dart';
+import 'package:one_bark_plaza/util/utility.dart';
 TextStyle style = TextStyle(
     fontFamily: 'NunitoSans', fontSize: 14.0, color: Color(0xff707070));
 class HomePage extends StatefulWidget {
@@ -56,6 +58,8 @@ class HomePageState extends State<HomePage> {
   var isSortAgeHighToLow = false;
   var isSortAgeLowToHigh = false;
 
+  final greenColor = Color(0xff7FA432);
+
 
 
   @override
@@ -67,7 +71,8 @@ class HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     final _width = MediaQuery.of(context).size.width;
     final _height = MediaQuery.of(context).size.height;
-    final puppyDetailsFontSize = 12.0;
+    final puppyDetailsFontSize = 11.0;
+    final greenColor = Color(0xff7FA432);
     final blueColor = Color(0xff4C8BF5);
     return Scaffold(
         backgroundColor: Colors.white,
@@ -84,7 +89,7 @@ class HomePageState extends State<HomePage> {
                 //Icon(Icons.home, size: 40,color: blueColor,),
                 SizedBox(
                   height: 42,
-                  width: _width / 3,
+                  width: _width / 2.5,
                   child: FlatButton(
                     child: Text(
                       'Add Puppy',
@@ -240,69 +245,66 @@ class HomePageState extends State<HomePage> {
                                     borderRadius:
                                         new BorderRadius.circular(8.0),
                                   ),
-                                  child: Column(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.start,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    mainAxisSize: MainAxisSize.max,
-                                    children: <Widget>[
-                                      Padding(
-                                        padding: const EdgeInsets.fromLTRB(
-                                            0.0, 12.0, 0, 12),
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.start,
-                                          children: <Widget>[
-                                            Container(
-                                                height: _height/9,
-                                                width: _width/5,
-                                                decoration: BoxDecoration(
-                                                  color: Color(0xffFEF8F5),
-                                                  borderRadius:
-                                                      BorderRadius.all(
-                                                          Radius.circular(
-                                                              16)),
-                                                  //border: Border.all()
-                                                  //color: Colors.green,
-                                                ),
-                                                child: ClipRRect(
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          4.0),
-                                                  child: CachedNetworkImage(
-                                                    imageUrl:
-                                                        data[index].images,
-                                                    placeholder:
-                                                        (context, url) =>
-                                                            SpinKitCircle(
-                                                      color: blueColor,
-                                                      size: 30.0,
+                                  child: Container(
+                                    width: _width - 60 ,
+                                    child: Center(
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+
+                                        children: <Widget>[
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.start,
+                                            children: <Widget>[
+                                              Padding(
+                                                padding: const EdgeInsets.fromLTRB(0,8,0,8),
+                                                child: Container(
+                                                    height: _height/6,
+                                                    width: _width/3.5,
+                                                    decoration: BoxDecoration(
+                                                      color: Color(0xffFEF8F5),
+                                                      borderRadius:
+                                                          BorderRadius.all(
+                                                              Radius.circular(
+                                                                  24)),
+                                                      //border: Border.all()
+                                                      //color: Colors.green,
                                                     ),
-                                                    errorWidget: (context,
-                                                            url, error) =>
-                                                        Image.asset(
-                                                      "",
-                                                    ),
-                                                  ),
-                                                )),
-                                            Padding(
-                                              padding:
-                                                  const EdgeInsets.fromLTRB(
-                                                      12, 0, 0, 0),
-                                              child: Column(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.center,
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: <Widget>[
-                                                  Row(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .spaceBetween,
-                                                    children: <Widget>[
-                                                      Container(
-                                                          width: _width / 3,
+                                                    child: ClipRRect(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              24.0),
+                                                      child: CachedNetworkImage(
+                                                        imageUrl:
+                                                            data[index].images,
+                                                        placeholder:
+                                                            (context, url) =>
+                                                                SpinKitCircle(
+                                                          color: blueColor,
+                                                          size: 30.0,
+                                                        ),
+                                                        errorWidget: (context,
+                                                                url, error) =>
+                                                            Image.asset(
+                                                          "assets/images/bulldog"+(index+1).toString()+".jpg", fit: BoxFit.cover,
+                                                        ),
+                                                      ),
+                                                    )),
+                                              ),
+                                              SizedBox(width: 12,),
+                                              Expanded(
+                                                child: Column(
+                                                  mainAxisSize: MainAxisSize.max,
+                                                  crossAxisAlignment:CrossAxisAlignment.start,
+                                                  mainAxisAlignment:MainAxisAlignment.start,
+                                                  children: <Widget>[
+                                                    Row(
+                                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                      children: <Widget>[
+                                                        Container(
                                                           child: Text(
                                                               data[index]
                                                                   .puppyName,
@@ -315,179 +317,174 @@ class HomePageState extends State<HomePage> {
                                                                       blueColor,
                                                                   fontWeight:
                                                                       FontWeight
-                                                                          .bold))),
-                                                      SizedBox(
-                                                          width:
-                                                          (_width / 3) - (_width/10)),
-                                                      PopupMenuButton<String>(
-                                                        color: Color(0xfffff3e0),
-                                                        shape: RoundedRectangleBorder(
-                                                            borderRadius: new BorderRadius.only(
-                                                              bottomLeft: Radius.circular(12.0),
-                                                              topRight: Radius.circular(0.0),
-                                                              topLeft: Radius.circular(12.0),
-                                                              bottomRight: Radius.circular(12.0),
-                                                            ),
-                                                            side: BorderSide(
-                                                              color: greenColor,
-                                                            )),
-                                                        // ignore: missing_return
-                                                        onSelected: (String value) {
-                                                          if(value == "Delete"){
-
-                                                          } else {
-
-                                                          }
-                                                          setState(() {
-                                                            //_selection = value;
-                                                          });
-                                                        },
-                                                        child: Container(
-                                                          padding: const EdgeInsets.fromLTRB(12, 12, 12, 12),
-                                                          decoration: BoxDecoration(
-                                                            color: Color(0xffF3F8FF),
-                                                            //color: Color(0xffFFFFFF),
-                                                            borderRadius:
-                                                            BorderRadius.all(Radius.circular(16)),
-                                                          ),
-                                                          width: _width/10,
-                                                          height: _width/10,
-                                                          child: Image.asset(
-                                                            "assets/images/ic_menuOverflow.png",
-                                                            height: 16, ),
+                                                                          .bold)),
                                                         ),
-                                                        itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
-                                                          PopupMenuItem<String>(
-                                                            height: 24,
-                                                            value: 'Edit',
-                                                            child: Row(
-                                                              children: <Widget>[
-                                                                Icon(Icons.edit, color: const Color(0xff7FA432), size: 15),
-                                                                SizedBox(width: 12,),
-                                                                Text('Edit', style: const TextStyle(fontFamily: "NunitoSans", fontSize: 12, color: const Color(0xff7FA432), fontWeight: FontWeight.bold)),
-                                                              ]
+                                                        Container(
+                                                          child: PopupMenuButton<String>(
+                                                            color: Color(0xfffff3e0),
+                                                            shape: RoundedRectangleBorder(
+                                                                borderRadius: new BorderRadius.only(
+                                                                  bottomLeft: Radius.circular(12.0),
+                                                                  topRight: Radius.circular(0.0),
+                                                                  topLeft: Radius.circular(12.0),
+                                                                  bottomRight: Radius.circular(12.0),
+                                                                ),
+                                                                side: BorderSide(
+                                                                  color: greenColor,
+                                                                )),
+                                                            // ignore: missing_return
+                                                            onSelected: (String value) {
+                                                              if(value == "Delete"){
+                                                                showDialog<void>(
+                                                                  context: context,
+                                                                  barrierDismissible: false, // user must tap button!
+                                                                  builder: (BuildContext context) {
+                                                                    return CupertinoAlertDialog(
+                                                                      title: Text('Are you sure?'),
+                                                                      content: Text('\nYou want to delete this puppy?'),
+                                                                      actions: <Widget>[
+                                                                        CupertinoDialogAction(
+                                                                          child: Text('No'),
+                                                                          onPressed: () {
+                                                                            Navigator.of(context).pop();
+                                                                          },
+                                                                        ),
+                                                                        CupertinoDialogAction(
+                                                                          child: Text('Yes'),
+                                                                          onPressed: () {
+                                                                            Navigator.of(context).pop();
+                                                                          },
+                                                                        ),
+                                                                      ],
+                                                                    );
+                                                                  },
+                                                                );
+                                                              } else {
+
+                                                              }
+                                                              setState(() {
+                                                                //_selection = value;
+                                                              });
+                                                            },
+                                                            child: Container(
+                                                              padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
+                                                              decoration: BoxDecoration(
+                                                                color: Colors.transparent,
+                                                                //color: Color(0xffFFFFFF),
+                                                                borderRadius:
+                                                                BorderRadius.all(Radius.circular(16)),
+                                                              ),
+                                                              width: _width/10,
+                                                              height: _width/10,
+                                                              child: Image.asset(
+                                                                "assets/images/ic_menuOverflow.png",
+                                                                height: 16, color: blueColor,),
                                                             ),
+                                                            itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
+                                                              PopupMenuItem<String>(
+                                                                height: 24,
+                                                                value: 'Edit',
+                                                                child: Row(
+                                                                  children: <Widget>[
+                                                                    Icon(Icons.edit, color: const Color(0xff7FA432), size: 15),
+                                                                    SizedBox(width: 12,),
+                                                                    Text('Edit', style: const TextStyle(fontFamily: "NunitoSans", fontSize: 12, color: const Color(0xff7FA432), fontWeight: FontWeight.bold)),
+                                                                  ]
+                                                                ),
+                                                              ),
+                                                              PopupMenuDivider(),
+                                                              PopupMenuItem<String>(
+                                                                height: 24,
+                                                                value: 'Delete',
+                                                                child: Row(
+                                                                    children: <Widget>[
+                                                                      Icon(Icons.delete, color: Colors.redAccent, size: 15),
+                                                                      SizedBox(width: 12,),
+                                                                      Text('Delete', style: const TextStyle(fontFamily: "NunitoSans", fontSize: 12, color: Colors.redAccent,fontWeight: FontWeight.bold)),
+                                                                    ]
+                                                                ),
+                                                              ),
+                                                            ],
                                                           ),
-                                                          PopupMenuDivider(),
-                                                          PopupMenuItem<String>(
-                                                            height: 24,
-                                                            value: 'Delete',
-                                                            child: Row(
-                                                                children: <Widget>[
-                                                                  Icon(Icons.delete, color: Colors.redAccent, size: 15),
-                                                                  SizedBox(width: 12,),
-                                                                  Text('Delete', style: const TextStyle(fontFamily: "NunitoSans", fontSize: 12, color: Colors.redAccent,fontWeight: FontWeight.bold)),
-                                                                ]
-                                                            ),
-                                                          ),
-                                                        ],
+                                                        ),
+                                                      ],
+                                                    ),
+                                                    Text(
+                                                        data[index]
+                                                                .categoryName,
+                                                        style: TextStyle(
+                                                            fontFamily:
+                                                                'NunitoSans',
+                                                            fontSize:
+                                                                13,
+                                                            color: blueColor,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .normal)),
+                                                    Row(
+                                                      children: <Widget>[
+                                                        Text(
+                                                    Utility.capitalize(data[index].gender)+"  |  "+data[index].ageInWeeks + " weeks Old",
+                                                            style: TextStyle(
+                                                                fontFamily:
+                                                                    'NunitoSans',
+                                                                fontSize:
+                                                                    puppyDetailsFontSize,
+                                                                color:
+                                                                Color(0xff707070),
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .normal)),
+
+                                                      ],
+                                                    ),
+                                                    Row(
+                                                      children: <Widget>[
+                                                        Text(
+                                                            "\$ " +
+                                                                double.parse(data[index].puppyPrice).toString(),
+                                                            style: TextStyle(
+                                                                fontFamily:
+                                                                    'NunitoSans',
+                                                                fontSize:
+                                                                    puppyDetailsFontSize,
+                                                                color:
+                                                                    Color(0xff707070),
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .normal)),
+
+                                                      ],
+                                                    ),
+                                                    FlatButton(
+                                                      padding: EdgeInsets.fromLTRB(40,0,40,0),
+                                                      child: Text(
+                                                        'Preview',
+                                                        textAlign: TextAlign.start,
+                                                        style: TextStyle(fontFamily:"NunitoSans",fontSize: 10, color: Colors.white),
                                                       ),
-                                                    ],
-                                                  ),
-                                                  Text(
-                                                      "Breed: " +
-                                                          data[index]
-                                                              .categoryName,
-                                                      style: TextStyle(
-                                                          fontFamily:
-                                                              'NunitoSans',
-                                                          fontSize:
-                                                              puppyDetailsFontSize,
-                                                          color: blueColor,
-                                                          fontWeight:
-                                                              FontWeight
-                                                                  .normal)),
-                                                  Row(
-                                                    children: <Widget>[
-                                                      Text(
-                                                          "Age: " +
-                                                              data[index]
-                                                                  .ageInWeeks +
-                                                              " weeks",
-                                                          style: TextStyle(
-                                                              fontFamily:
-                                                                  'NunitoSans',
-                                                              fontSize:
-                                                                  puppyDetailsFontSize,
-                                                              color:
-                                                                  blueColor,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .normal)),
-                                                      Text("  |  ",
-                                                          style: TextStyle(
-                                                              fontFamily:
-                                                                  'NunitoSans',
-                                                              fontSize:
-                                                                  puppyDetailsFontSize,
-                                                              color:
-                                                                  blueColor,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .normal)),
-                                                      Text(
-                                                          "Birth Date: " +
-                                                              data[index].dob,
-                                                          style: TextStyle(
-                                                              fontFamily:
-                                                                  'NunitoSans',
-                                                              fontSize:
-                                                                  puppyDetailsFontSize,
-                                                              color:
-                                                                  blueColor,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .normal)),
-                                                    ],
-                                                  ),
-                                                  Row(
-                                                    children: <Widget>[
-                                                      Text(
-                                                          "Price: " +
-                                                              data[index]
-                                                                  .puppyPrice,
-                                                          style: TextStyle(
-                                                              fontFamily:
-                                                                  'NunitoSans',
-                                                              fontSize:
-                                                                  puppyDetailsFontSize,
-                                                              color:
-                                                                  blueColor,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .normal)),
-                                                      Text("  |  ",
-                                                          style: TextStyle(
-                                                              fontFamily:
-                                                                  'NunitoSans',
-                                                              fontSize:
-                                                                  puppyDetailsFontSize,
-                                                              color:
-                                                                  blueColor,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .normal)),
-                                                      Text(
-                                                          "Availability: In stock",
-                                                          style: TextStyle(
-                                                              fontFamily:
-                                                                  'NunitoSans',
-                                                              fontSize:
-                                                                  puppyDetailsFontSize,
-                                                              color:
-                                                                  blueColor,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .normal)),
-                                                    ],
-                                                  ),
-                                                ],
+                                                      onPressed: () {
+                                                        Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext context) =>ViewPuppy(data[index])));
+                                                      },
+                                                      disabledColor: blueColor,
+                                                      color: blueColor,
+                                                      shape: RoundedRectangleBorder(
+                                                          borderRadius: new BorderRadius.only(
+                                                            bottomLeft: Radius.circular(40.0),
+                                                            topRight: Radius.circular(40.0),
+                                                            topLeft: Radius.circular(40.0),
+                                                            bottomRight: Radius.circular(40.0),
+                                                          ),
+                                                          ),
+                                                    )
+                                                  ],
+                                                ),
                                               ),
-                                            ),
-                                          ],
-                                        ),
+                                            ],
+                                          ),
+                                        ],
                                       ),
-                                    ],
+                                    ),
                                   ),
                                 ),
                               );
@@ -547,7 +544,7 @@ class HomePageState extends State<HomePage> {
                           mainAxisSize: MainAxisSize.max,
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: <Widget>[
-                            Image.asset("assets/images/ic_filter.png",  width: 18,),
+                            Image.asset("assets/images/ic_filter.png", color: blueColor, width: 18,),
                             SizedBox(width: 12,),
                             Text(
                               "Filter",
@@ -571,12 +568,14 @@ class HomePageState extends State<HomePage> {
 
   void onSortClick(BuildContext context) {
       final act = CupertinoActionSheet(
+
           title: Container(alignment:Alignment.topLeft,child: Text('SORT BY', style: TextStyle( fontFamily: "NunitoSans", fontWeight: FontWeight.bold, fontSize: 12), textAlign: TextAlign.left,)),
           actions: <Widget>[
             CupertinoActionSheetAction(
+
               child: Padding(
                 padding: const EdgeInsets.fromLTRB(30,0,0,0),
-                child: Container(alignment:Alignment.topLeft,child: Text('Price - high to low', style:style,textAlign: TextAlign.left,)),
+                child: Container(alignment:Alignment.topLeft,child: Text('Price - high to low', style:style.copyWith(fontWeight: isSortPriceHighToLow ? FontWeight.bold:FontWeight.normal),textAlign: TextAlign.left, )),
               ),
               onPressed: () {
                 Navigator.pop(context);
@@ -589,7 +588,7 @@ class HomePageState extends State<HomePage> {
             CupertinoActionSheetAction(
               child: Padding(
                 padding: const EdgeInsets.fromLTRB(30,0,0,0),
-                child: Container(alignment:Alignment.topLeft,child: Text('Price - low to high', style:style,textAlign: TextAlign.left)),
+                child: Container(alignment:Alignment.topLeft,child: Text('Price - low to high', style:style.copyWith(fontWeight: isSortPriceLowToHigh ? FontWeight.bold:FontWeight.normal),textAlign: TextAlign.left)),
               ),
               onPressed: () {
                 Navigator.pop(context);
@@ -602,7 +601,7 @@ class HomePageState extends State<HomePage> {
             CupertinoActionSheetAction(
               child: Padding(
                 padding: const EdgeInsets.fromLTRB(30,0,0,0),
-                child: Container(alignment:Alignment.topLeft,child: Text('Age - high to low', style:style,textAlign: TextAlign.left)),
+                child: Container(alignment:Alignment.topLeft,child: Text('Age - high to low', style:style.copyWith(fontWeight: isSortAgeHighToLow ? FontWeight.bold:FontWeight.normal),textAlign: TextAlign.left)),
               ),
               onPressed: () {
                 Navigator.pop(context);
@@ -615,7 +614,7 @@ class HomePageState extends State<HomePage> {
             CupertinoActionSheetAction(
               child: Padding(
                 padding: const EdgeInsets.fromLTRB(30,0,0,0),
-                child: Container(alignment:Alignment.topLeft,child: Text('Age - low to high', style:style,textAlign: TextAlign.left)),
+                child: Container(alignment:Alignment.topLeft,child: Text('Age - low to high', style:style.copyWith(fontWeight: isSortAgeLowToHigh ? FontWeight.bold:FontWeight.normal),textAlign: TextAlign.left)),
               ),
               onPressed: () {
                 Navigator.pop(context);
@@ -628,6 +627,7 @@ class HomePageState extends State<HomePage> {
           ],
         );
       showCupertinoModalPopup(
+
           context: context,
           builder: (BuildContext context) => act);
   }

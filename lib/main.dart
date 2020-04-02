@@ -84,7 +84,7 @@ class MainNavigationDrawerState extends State<MainNavigationDrawer>{
     final _width = MediaQuery.of(context).size.width;
     final _height = MediaQuery.of(context).size.height;
     var drawerContentColor = Color(0xff0072FF);
-    var drawerHeaderColorLightBlue = Color(0xffF3F8FF);
+    var drawerHeaderColorLightBlue = Color(0xffFFFFFF);
     var drawerAvatarBackgroundColor = Color(0xffFEF8F5);
     var drawerBackground = Color(0xffFFFFFF);
     TextStyle listTileTextStyle = TextStyle(color:drawerContentColor,fontSize: 14, fontWeight:FontWeight.bold,fontFamily: 'NunitoSans');
@@ -144,17 +144,17 @@ class MainNavigationDrawerState extends State<MainNavigationDrawer>{
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     crossAxisAlignment: CrossAxisAlignment.center,
                                     children: <Widget>[
-                                      SizedBox(height: _height/10),
+                                      SizedBox(height: _height/18),
                                       Row(
                                         mainAxisAlignment: MainAxisAlignment.center,
                                         children: <Widget>[
-                                          Text("   ",style: TextStyle(color:drawerContentColor,fontSize: 14, fontWeight:FontWeight.bold, fontFamily: 'NunitoSans')),
-                                          Text(data["name"],style: TextStyle(color:drawerContentColor,fontSize: 14, fontWeight:FontWeight.bold, fontFamily: 'NunitoSans')),
+                                          Text("   ",style: TextStyle(color:Colors.black,fontSize: 20, fontWeight:FontWeight.bold, fontFamily: 'NunitoSans')),
+                                          Text(data["name"],style: TextStyle(color:Colors.black,fontSize: 15, fontWeight:FontWeight.bold, fontFamily: 'NunitoSans')),
                                           Text("   ",style: TextStyle(color:drawerContentColor,fontSize: 14, fontWeight:FontWeight.bold, fontFamily: 'NunitoSans')),
                                           Icon(Icons.edit, color: drawerContentColor, size: 16,),
                                         ],
                                       ),
-                                      Text(data["email"],style: TextStyle(color:Color(0xffB7A6A6),fontSize: 14, fontFamily: 'NunitoSans')),
+                                      Text(data["email"],style: TextStyle(color:Colors.grey,fontSize: 12, fontFamily: 'NunitoSans')),
                                     ],
                                   ),
 
@@ -234,7 +234,7 @@ class MainNavigationDrawerState extends State<MainNavigationDrawer>{
                   },
                 ),
                 SizedBox(height: 4,),
-                new Divider(height: 1.0, color: drawerContentColor),
+                new Divider(height: 1.0, color: Colors.grey),
                 SizedBox(height: 4,),
                 ListTile(
                   title: Text("Add Puppy",style: listTileTextStyle,),
@@ -245,7 +245,7 @@ class MainNavigationDrawerState extends State<MainNavigationDrawer>{
                   },
                 ),
                 SizedBox(height: 4,),
-                new Divider(height: 1.0, color: drawerContentColor),
+                new Divider(height: 1.0, color: Colors.grey),
                 SizedBox(height: 4,),
                 ListTile(
                   title: Text("Orders",style:listTileTextStyle,),
@@ -256,7 +256,7 @@ class MainNavigationDrawerState extends State<MainNavigationDrawer>{
                   },
                 ),
                 SizedBox(height: 4,),
-                new Divider(height: 1.0, color: drawerContentColor),
+                new Divider(height: 1.0, color: Colors.grey),
                 SizedBox(height: 4,),
                 ListTile(
                   title: Text("Payment Options",style: listTileTextStyle,),
@@ -266,7 +266,7 @@ class MainNavigationDrawerState extends State<MainNavigationDrawer>{
                         builder: (BuildContext context) =>null));
                   },
                 ),SizedBox(height: 4,),
-                new Divider(height: 1.0, color: drawerContentColor),
+                new Divider(height: 1.0, color: Colors.grey),
                 SizedBox(height: 4,),
                 ListTile(
                   title: Text("Payment History",style: listTileTextStyle,),
@@ -279,7 +279,7 @@ class MainNavigationDrawerState extends State<MainNavigationDrawer>{
                   },
                 ),
                 SizedBox(height: 4,),
-                new Divider(height: 1.0, color: drawerContentColor),
+                new Divider(height: 1.0, color: Colors.grey),
                 SizedBox(height: 4,),
                 ListTile(
                   title: Text(Constants.LOGOUT,style: listTileTextStyle,),
