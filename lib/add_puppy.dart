@@ -22,8 +22,8 @@ class AddPuppy extends StatefulWidget {
 
 class AddPuppyState extends State<AddPuppy> {
   DateTime dateOfBirth = DateTime.now();
-  String dateOfBirthString = 'Choose';
-  String _chooseBreed = 'Choose';
+  String dateOfBirthString = '';
+  String _chooseBreed = '';
   bool _isBreedSelectedOnce = false;
   List<Asset> images = List<Asset>();
   String _error = 'No Error Dectected';
@@ -53,7 +53,7 @@ class AddPuppyState extends State<AddPuppy> {
               height:100,
               width: 100,
               decoration: BoxDecoration(
-                color: Color(0xffFEF8F5),
+                color: Color(0xffffffff),
                 borderRadius:BorderRadius.all(Radius.circular(16)),
                 border: Border.all(color: Colors.black12),
               ),
@@ -62,10 +62,13 @@ class AddPuppyState extends State<AddPuppy> {
                 BorderRadius.circular(16.0),
                 child:Padding(
                   padding: const EdgeInsets.all(0.0),
-                  child: AssetThumb(
-                    asset: asset,
-                    width: thumbnailSize,
-                    height: thumbnailSize,
+                  child: FittedBox(
+                    child: AssetThumb(
+                      asset: asset,
+                      width: thumbnailSize,
+                      height: thumbnailSize
+                    ),
+                    fit: BoxFit.cover,
                   ),
                 ),
               )),
@@ -140,17 +143,15 @@ class AddPuppyState extends State<AddPuppy> {
     this.context = context;
     final _width = MediaQuery.of(context).size.width;
     final _height = MediaQuery.of(context).size.height;
-    final borderRadius = 14.0;
-    const leftPadding = 12.0;
+    final borderRadius = 30.0;
     final hintColor = Color(0xffA9A9A9);
 
 
-    TextStyle style = TextStyle(
-        fontFamily: 'NunitoSans', fontSize: 14.0, color: Color(0xff707070));
+    TextStyle style = TextStyle(fontFamily: 'NunitoSans', fontSize: 14.0, color: Color(0xff707070));
     TextStyle hintStyle = TextStyle(
         fontFamily: 'NunitoSans', fontSize: 14.0, color: hintColor);
     TextStyle labelStyle = TextStyle(
-        fontFamily: 'NunitoSans', color: greenColor);
+        fontFamily: 'NunitoSans', color: greenColor, fontSize: 12,);
     var maleColor = Color(0xff5cbaed);
     var femaleColor = Color(0xfff25fa3);
     return Scaffold(
@@ -179,7 +180,7 @@ class AddPuppyState extends State<AddPuppy> {
               ]),
           centerTitle: false,
           elevation: 0.0,
-          backgroundColor: Colors.white,
+          backgroundColor: Color(0xffffffff),
         ),
         body: SingleChildScrollView(
             child: Stack(
@@ -187,7 +188,7 @@ class AddPuppyState extends State<AddPuppy> {
               alignment: AlignmentDirectional.center,
               children: <Widget>[
                 Container(
-                  color: Colors.white,
+                  color: Color(0xffffffff),
 
                   child: new Column(
                     mainAxisAlignment: MainAxisAlignment.start,
@@ -218,14 +219,14 @@ class AddPuppyState extends State<AddPuppy> {
                                               height:120,
                                               width: 115,
                                               decoration: BoxDecoration(
-                                                color: Color(0xffFEF8F5),
+                                                color: Color(0xffffffff),
                                                 borderRadius:
                                                 BorderRadius.all(Radius.circular(24)),
-                                                border: Border.all(color:greenColor),
+                                                border: Border.all(color:greenColor, width: 3.0, ),
                                                 boxShadow: [
                                                   BoxShadow(
                                                     color: Colors.grey,
-                                                    blurRadius: 5.0, // soften the shadow
+                                                    blurRadius: 3.0, // soften the shadow
                                                     offset: Offset(
                                                       1.0, // Move to right 10  horizontally
                                                       1.0, // Move to bottom 10 Vertically
@@ -265,19 +266,55 @@ class AddPuppyState extends State<AddPuppy> {
                                         padding: const EdgeInsets.fromLTRB(0,0,0,0),
                                         child: new RaisedButton.icon(
                                             shape: RoundedRectangleBorder(
-                                              borderRadius: new BorderRadius.circular(10.0),
-                                              // side: BorderSide(color: Colors.grey)
+                                              borderRadius: new BorderRadius.circular(30.0),
+                                              side: BorderSide(color: greenColor, width: 2.0)
                                             ),
                                             onPressed: loadAssets,
-                                            color: greenColor,
-                                            icon: new Icon(Icons.image, color:Colors.white, size:16),
-                                            label: new Text("Add / Preview", style: TextStyle(color:Colors.white,fontFamily:"NunitoSans", fontWeight: FontWeight.bold, fontSize: 13),)),
+                                            color: Color(0xffffffff),
+                                            icon: new Icon(Icons.image, color:greenColor, size:16),
+                                            label: new Text("Add / Preview", style: TextStyle(color:greenColor,fontFamily:"NunitoSans", fontWeight: FontWeight.bold, fontSize: 13),)),
                                       ),
                                     ],
                                   ),
 
 
                                 ],
+                              ),
+                            ),
+                            SizedBox(height: 24,),
+
+                            Center(
+                              child: Container(
+                                width: _width,
+                                height: 60,
+                                decoration: BoxDecoration(
+                                    color: Color(0xffffffff),
+                                    borderRadius:  new BorderRadius.circular(borderRadius)
+                                ),
+
+
+                                child: TextField(
+                                  textAlign: TextAlign.start,
+                                  controller: puppyNameText,
+                                  style: style,
+                                  decoration: InputDecoration(
+                                      contentPadding: EdgeInsets.all(20),
+                                      labelText: 'Puppy Name',
+                                      labelStyle: labelStyle,
+                                      focusedBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(color: greenColor, width: 3.0),
+                                        borderRadius: BorderRadius.circular(borderRadius),
+                                      ),
+                                      enabledBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(color: greenColor, width: 2.0),
+                                        borderRadius: BorderRadius.circular(borderRadius),
+                                      ),
+                                      border: OutlineInputBorder(
+                                        borderSide: BorderSide(color: greenColor, width: 2.0),
+                                        borderRadius: BorderRadius.circular(borderRadius),
+                                      )
+                                  ),
+                                ),
                               ),
                             ),
                             SizedBox(height: 24,),
@@ -306,12 +343,12 @@ class AddPuppyState extends State<AddPuppy> {
                                   width: _width,
                                   height: 60,
                                   decoration: BoxDecoration(
-                                    color: Color(0xffFEF8F5),
-                                    borderRadius:  new BorderRadius.circular(borderRadius),
+                                    color: Color(0xffffffff),
+                                    borderRadius:  new BorderRadius.circular(30),
                                     boxShadow: [
                                       BoxShadow(
                                         color: Colors.grey,
-                                        blurRadius: 3.0, // soften the shadow
+                                        blurRadius: 1.0, // soften the shadow
                                         offset: Offset(
                                           1.0, // Move to right 10  horizontally
                                           1.0, // Move to bottom 10 Vertically
@@ -323,27 +360,24 @@ class AddPuppyState extends State<AddPuppy> {
 
                                   child: InputDecorator(
                                     decoration: new InputDecoration(
+                                      contentPadding: EdgeInsets.all(20),
                                       labelText: 'Breed',
                                       labelStyle: labelStyle,
                                       border: OutlineInputBorder(),
-                                      enabledBorder: OutlineInputBorder(borderRadius:  new BorderRadius.circular(borderRadius), borderSide: BorderSide(color: greenColor) ),
+                                      enabledBorder: OutlineInputBorder(borderRadius:  new BorderRadius.circular(30), borderSide: BorderSide(width: 2.0, color: greenColor) ),
                                     ),
                                     child: Row(
                                       mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
                                       children: <Widget>[
 
-                                        Padding(
-                                          padding:
-                                          const EdgeInsets.fromLTRB(
-                                              leftPadding, 0, 0, 0),
-                                          child: Text(
-                                            "${_chooseBreed}",
-                                            textAlign: TextAlign.start,
-                                            style: TextStyle(
-                                                fontSize: 14,
-                                                color: hintColor),
-                                          ),
+                                        Text(
+                                          "${_chooseBreed}",
+                                          textAlign: TextAlign.start,
+                                          style: TextStyle(
+                                              fontFamily: "NunitoSans",
+                                              fontSize: 14,
+                                              color: greenColor),
                                         ),
                                         Padding(
                                             padding:
@@ -352,7 +386,7 @@ class AddPuppyState extends State<AddPuppy> {
                                             child: Container(
                                               height: 40,
                                               width: 40,
-                                              child: _isBreedSelectedOnce?Icon(Icons.check, color: Colors.green):Icon(Icons.format_list_bulleted, color: hintColor),
+                                              child: _isBreedSelectedOnce?Icon(Icons.check, color: Colors.green):Icon(Icons.format_list_bulleted, color: greenColor),
                                             )),
                                       ],
                                     ),
@@ -360,42 +394,8 @@ class AddPuppyState extends State<AddPuppy> {
                                 ),
                               ),
                             ),
-                            SizedBox(height: 24,),
-                            Center(
-                              child: Container(
-                                width: _width,
-                                height: 60,
-                                decoration: BoxDecoration(
-                                    color: Color(0xffFEF8F5),
-                                    borderRadius:  new BorderRadius.circular(borderRadius)
-                                ),
 
-
-                                child: InputDecorator(
-                                  decoration: new InputDecoration(
-                                    labelText: 'Puppy Name',
-                                    labelStyle: labelStyle,
-                                    border: OutlineInputBorder(),
-                                    enabledBorder: OutlineInputBorder(borderRadius:  new BorderRadius.circular(borderRadius), borderSide: BorderSide(color: greenColor) ),
-                                  ),
-                                  child: Padding(
-                                    padding:
-                                    const EdgeInsets.fromLTRB(
-                                        leftPadding, 0, 0, 0),
-                                    child: TextField(
-                                      textAlign: TextAlign.start,
-                                      controller: puppyNameText,
-                                      style: style,
-                                      decoration: InputDecoration(
-                                        border: InputBorder.none,
-                                        contentPadding: EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 14.0),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                            SizedBox(height: 24,),
+                           SizedBox(height: 24,),
                             Center(
                               child: InkWell(
                                 onTap: () {
@@ -405,12 +405,12 @@ class AddPuppyState extends State<AddPuppy> {
                                   width: _width,
                                   height: 64,
                                   decoration: BoxDecoration(
-                                    color: Color(0xffFEF8F5),
-                                    borderRadius:  new BorderRadius.circular(borderRadius),
+                                    color: Color(0xffffffff),
+                                    borderRadius:  new BorderRadius.circular(30),
                                     boxShadow: [
                                       BoxShadow(
                                         color: Colors.grey,
-                                        blurRadius: 3.0, // soften the shadow
+                                        blurRadius: 1.0, // soften the shadow
                                         offset: Offset(
                                           1.0, // Move to right 10  horizontally
                                           1.0, // Move to bottom 10 Vertically
@@ -421,28 +421,26 @@ class AddPuppyState extends State<AddPuppy> {
 
 
                                   child: InputDecorator(
+
                                     decoration: new InputDecoration(
+                                      contentPadding: EdgeInsets.all(20),
                                       labelText: 'Date of Birth',
                                       labelStyle: labelStyle,
                                       border: OutlineInputBorder(),
-                                      enabledBorder: OutlineInputBorder(borderRadius:  new BorderRadius.circular(borderRadius), borderSide: BorderSide(color: greenColor) ),
+                                      enabledBorder: OutlineInputBorder(borderRadius:  new BorderRadius.circular(30), borderSide: BorderSide(width: 2.0, color: greenColor)),
                                     ),
                                     child: Row(
                                       mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
                                       children: <Widget>[
 
-                                        Padding(
-                                          padding:
-                                          const EdgeInsets.fromLTRB(
-                                              leftPadding, 0, 0, 0),
-                                          child: Text(
-                                            "${dateOfBirthString}",
-                                            textAlign: TextAlign.start,
-                                            style: TextStyle(
-                                                fontSize: 14,
-                                                color: hintColor),
-                                          ),
+                                        Text(
+                                          "${dateOfBirthString}",
+                                          textAlign: TextAlign.start,
+                                          style: TextStyle(
+                                            fontFamily: "NunitoSans",
+                                              fontSize: 14,
+                                              color: greenColor),
                                         ),
                                         Padding(
                                             padding:
@@ -451,7 +449,7 @@ class AddPuppyState extends State<AddPuppy> {
                                             child: Container(
                                               height: 40,
                                               width: 40,
-                                              child: Icon(Icons.calendar_today, color: hintColor),
+                                              child: Icon(Icons.calendar_today, color: greenColor),
                                             )),
                                       ],
                                     ),
@@ -470,15 +468,15 @@ class AddPuppyState extends State<AddPuppy> {
                                       width: (_width - 44)/ 2,
                                       height: 60,
                                       decoration: BoxDecoration(
-                                          color: Color(0xffFEF8F5),
-                                          borderRadius:  new BorderRadius.circular(20.0)
+                                          color: Color(0xffffffff),
+                                          borderRadius:  new BorderRadius.circular(30.0)
                                       ),
 
 
                                       child: RaisedButton.icon(
 
                                           shape: RoundedRectangleBorder(
-                                            borderRadius: new BorderRadius.circular(20.0),
+                                            borderRadius: new BorderRadius.circular(30.0),
 
 
                                           ),
@@ -495,8 +493,8 @@ class AddPuppyState extends State<AddPuppy> {
                                       width: (_width - 44)/ 2,
                                       height: 60,
                                       decoration: BoxDecoration(
-                                          color: Color(0xffFEF8F5),
-                                          borderRadius:  new BorderRadius.circular(20.0)
+                                          color: Color(0xffffffff),
+                                          borderRadius:  new BorderRadius.circular(30.0)
 
                                       ),
 
@@ -504,7 +502,7 @@ class AddPuppyState extends State<AddPuppy> {
                                       child: RaisedButton.icon(
 
                                           shape: RoundedRectangleBorder(
-                                            borderRadius: new BorderRadius.circular(20.0),
+                                            borderRadius: new BorderRadius.circular(30.0),
                                           ),
                                           onPressed: !isFemale?toggleState:null,
                                           color:Color(0xffEBEBE4),
@@ -524,32 +522,32 @@ class AddPuppyState extends State<AddPuppy> {
                                 width: _width,
                                 height: 80,
                                 decoration: BoxDecoration(
-                                    color: Color(0xffFEF8F5),
+                                    color: Color(0xffffffff),
                                     borderRadius:  new BorderRadius.circular(borderRadius)
                                 ),
 
 
-                                child: InputDecorator(
-                                  decoration: new InputDecoration(
-                                    labelText: 'Description',
-                                    labelStyle: labelStyle,
-                                    border: OutlineInputBorder(),
-                                    enabledBorder: OutlineInputBorder(borderRadius:  new BorderRadius.circular(borderRadius), borderSide: BorderSide(color: greenColor) ),
-                                  ),
-                                  child: Padding(
-                                    padding:
-                                    const EdgeInsets.fromLTRB(
-                                        leftPadding, 0, 0, 0),
-                                    child: TextField(
-                                      textAlign: TextAlign.start,
-                                      controller: puppyDescriptionText,
-                                      style: style,
-                                      maxLines: 4,
-                                      decoration: InputDecoration(
-                                        border: InputBorder.none,
-                                        contentPadding: EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 14.0),
+                                child: TextField(
+                                  textAlign: TextAlign.start,
+                                  controller: puppyDescriptionText,
+                                  style: style,
+                                  maxLines: 4,
+                                  decoration: InputDecoration(
+                                      contentPadding: EdgeInsets.all(20),
+                                      labelText: 'Description',
+                                      labelStyle: labelStyle,
+                                      focusedBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(color: greenColor, width: 3.0),
+                                        borderRadius: BorderRadius.circular(borderRadius),
                                       ),
-                                    ),
+                                      enabledBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(color: greenColor, width: 2.0),
+                                        borderRadius: BorderRadius.circular(borderRadius),
+                                      ),
+                                      border: OutlineInputBorder(
+                                        borderSide: BorderSide(color: greenColor, width: 2.0),
+                                        borderRadius: BorderRadius.circular(borderRadius),
+                                      )
                                   ),
                                 ),
                               ),
@@ -565,31 +563,31 @@ class AddPuppyState extends State<AddPuppy> {
                                       width: (_width - 44)/ 2,
                                       height: 60,
                                       decoration: BoxDecoration(
-                                          color: Color(0xffFEF8F5),
+                                          color: Color(0xffffffff),
                                           borderRadius:  new BorderRadius.circular(borderRadius)
                                       ),
 
 
-                                      child: InputDecorator(
-                                        decoration: new InputDecoration(
-                                          labelText: 'Color',
-                                          labelStyle: labelStyle,
-                                          border: OutlineInputBorder(),
-                                          enabledBorder: OutlineInputBorder(borderRadius:  new BorderRadius.circular(borderRadius), borderSide: BorderSide(color: greenColor) ),
-                                        ),
-                                        child: Padding(
-                                          padding:
-                                          const EdgeInsets.fromLTRB(
-                                              leftPadding, 0, 0, 0),
-                                          child: TextField(
-                                            textAlign: TextAlign.start,
-                                            controller: puppyColorText,
-                                            style: style,
-                                            decoration: InputDecoration(
-                                              border: InputBorder.none,
-                                              contentPadding: EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 14.0),
+                                      child: TextField(
+                                        textAlign: TextAlign.start,
+                                        controller: puppyColorText,
+                                        style: style,
+                                        decoration: InputDecoration(
+                                            contentPadding: EdgeInsets.all(20),
+                                            labelText: 'Color',
+                                            labelStyle: labelStyle,
+                                            focusedBorder: OutlineInputBorder(
+                                              borderSide: BorderSide(color: greenColor, width: 3.0),
+                                              borderRadius: BorderRadius.circular(borderRadius),
                                             ),
-                                          ),
+                                            enabledBorder: OutlineInputBorder(
+                                              borderSide: BorderSide(color: greenColor, width: 2.0),
+                                              borderRadius: BorderRadius.circular(borderRadius),
+                                            ),
+                                            border: OutlineInputBorder(
+                                              borderSide: BorderSide(color: greenColor, width: 2.0),
+                                              borderRadius: BorderRadius.circular(borderRadius),
+                                            )
                                         ),
                                       ),
                                     ),
@@ -597,31 +595,30 @@ class AddPuppyState extends State<AddPuppy> {
                                       width: (_width - 44)/ 2,
                                       height: 60,
                                       decoration: BoxDecoration(
-                                          color: Color(0xffFEF8F5),
+                                          color: Color(0xffffffff),
                                           borderRadius:  new BorderRadius.circular(borderRadius)
                                       ),
 
-
-                                      child: InputDecorator(
-                                        decoration: new InputDecoration(
-                                          labelText: 'Weight',
-                                          labelStyle: labelStyle,
-                                          border: OutlineInputBorder(),
-                                          enabledBorder: OutlineInputBorder(borderRadius:  new BorderRadius.circular(borderRadius), borderSide: BorderSide(color: greenColor) ),
-                                        ),
-                                        child: Padding(
-                                          padding:
-                                          const EdgeInsets.fromLTRB(
-                                              leftPadding, 0, 0, 0),
-                                          child: TextField(
-                                            textAlign: TextAlign.start,
-                                            controller: puppyWeightText,
-                                            style: style,
-                                            decoration: InputDecoration(
-                                              border: InputBorder.none,
-                                              contentPadding: EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 14.0),
+                                      child: TextField(
+                                        textAlign: TextAlign.start,
+                                        controller: puppyWeightText,
+                                        style: style,
+                                        decoration: InputDecoration(
+                                            contentPadding: EdgeInsets.all(20),
+                                            labelText: 'Weight',
+                                            labelStyle: labelStyle,
+                                            focusedBorder: OutlineInputBorder(
+                                              borderSide: BorderSide(color: greenColor, width: 3.0),
+                                              borderRadius: BorderRadius.circular(borderRadius),
                                             ),
-                                          ),
+                                            enabledBorder: OutlineInputBorder(
+                                              borderSide: BorderSide(color: greenColor, width: 2.0),
+                                              borderRadius: BorderRadius.circular(borderRadius),
+                                            ),
+                                            border: OutlineInputBorder(
+                                              borderSide: BorderSide(color: greenColor, width: 2.0),
+                                              borderRadius: BorderRadius.circular(borderRadius),
+                                            )
                                         ),
                                       ),
                                     ),
@@ -641,31 +638,31 @@ class AddPuppyState extends State<AddPuppy> {
                                       width: (_width - 44)/ 2,
                                       height: 60,
                                       decoration: BoxDecoration(
-                                          color: Color(0xffFEF8F5),
+                                          color: Color(0xffffffff),
                                           borderRadius:  new BorderRadius.circular(borderRadius)
                                       ),
 
 
-                                      child: InputDecorator(
-                                        decoration: new InputDecoration(
-                                          labelText: "Dad's Weight",
-                                          labelStyle: labelStyle,
-                                          border: OutlineInputBorder(),
-                                          enabledBorder: OutlineInputBorder(borderRadius:  new BorderRadius.circular(borderRadius), borderSide: BorderSide(color: greenColor) ),
-                                        ),
-                                        child: Padding(
-                                          padding:
-                                          const EdgeInsets.fromLTRB(
-                                              leftPadding, 0, 0, 0),
-                                          child: TextField(
-                                            textAlign: TextAlign.start,
-                                            controller: puppyDadWeightText,
-                                            style: style,
-                                            decoration: InputDecoration(
-                                              border: InputBorder.none,
-                                              contentPadding: EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 14.0),
+                                      child: TextField(
+                                        textAlign: TextAlign.start,
+                                        controller: puppyDadWeightText,
+                                        style: style,
+                                        decoration: InputDecoration(
+                                            contentPadding: EdgeInsets.all(20),
+                                            labelText: "Dad's Weight",
+                                            labelStyle: labelStyle,
+                                            focusedBorder: OutlineInputBorder(
+                                              borderSide: BorderSide(color: greenColor, width: 3.0),
+                                              borderRadius: BorderRadius.circular(borderRadius),
                                             ),
-                                          ),
+                                            enabledBorder: OutlineInputBorder(
+                                              borderSide: BorderSide(color: greenColor, width: 2.0),
+                                              borderRadius: BorderRadius.circular(borderRadius),
+                                            ),
+                                            border: OutlineInputBorder(
+                                              borderSide: BorderSide(color: greenColor, width: 2.0),
+                                              borderRadius: BorderRadius.circular(borderRadius),
+                                            )
                                         ),
                                       ),
                                     ),
@@ -673,31 +670,31 @@ class AddPuppyState extends State<AddPuppy> {
                                       width: (_width - 44)/ 2,
                                       height: 60,
                                       decoration: BoxDecoration(
-                                          color: Color(0xffFEF8F5),
+                                          color: Color(0xffffffff),
                                           borderRadius:  new BorderRadius.circular(borderRadius)
                                       ),
 
 
-                                      child: InputDecorator(
-                                        decoration: new InputDecoration(
-                                          labelText: "Mom's Weight",
-                                          labelStyle: labelStyle,
-                                          border: OutlineInputBorder(),
-                                          enabledBorder: OutlineInputBorder(borderRadius:  new BorderRadius.circular(borderRadius), borderSide: BorderSide(color: greenColor) ),
-                                        ),
-                                        child: Padding(
-                                          padding:
-                                          const EdgeInsets.fromLTRB(
-                                              leftPadding, 0, 0, 0),
-                                          child: TextField(
-                                            textAlign: TextAlign.start,
-                                            controller: puppyMomWeightText,
-                                            style: style,
-                                            decoration: InputDecoration(
-                                              border: InputBorder.none,
-                                              contentPadding: EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 14.0),
+                                      child: TextField(
+                                        textAlign: TextAlign.start,
+                                        controller: puppyMomWeightText,
+                                        style: style,
+                                        decoration: InputDecoration(
+                                            contentPadding: EdgeInsets.all(20),
+                                            labelText: "Mom's Weight",
+                                            labelStyle: labelStyle,
+                                            focusedBorder: OutlineInputBorder(
+                                              borderSide: BorderSide(color: greenColor, width: 3.0),
+                                              borderRadius: BorderRadius.circular(borderRadius),
                                             ),
-                                          ),
+                                            enabledBorder: OutlineInputBorder(
+                                              borderSide: BorderSide(color: greenColor, width: 2.0),
+                                              borderRadius: BorderRadius.circular(borderRadius),
+                                            ),
+                                            border: OutlineInputBorder(
+                                              borderSide: BorderSide(color: greenColor, width: 2.0),
+                                              borderRadius: BorderRadius.circular(borderRadius),
+                                            )
                                         ),
                                       ),
                                     ),
@@ -711,31 +708,31 @@ class AddPuppyState extends State<AddPuppy> {
                                 width: _width,
                                 height: 60,
                                 decoration: BoxDecoration(
-                                    color: Color(0xffFEF8F5),
+                                    color: Color(0xffffffff),
                                     borderRadius:  new BorderRadius.circular(borderRadius)
                                 ),
 
 
-                                child: InputDecorator(
-                                  decoration: new InputDecoration(
-                                    labelText: 'Asking Price',
-                                    labelStyle: labelStyle,
-                                    border: OutlineInputBorder(),
-                                    enabledBorder: OutlineInputBorder(borderRadius:  new BorderRadius.circular(borderRadius), borderSide: BorderSide(color: greenColor) ),
-                                  ),
-                                  child: Padding(
-                                    padding:
-                                    const EdgeInsets.fromLTRB(
-                                        leftPadding, 0, 0, 0),
-                                    child: TextField(
-                                      textAlign: TextAlign.start,
-                                      controller: askingPriceText,
-                                      style: style,
-                                      decoration: InputDecoration(
-                                        border: InputBorder.none,
-                                        contentPadding: EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 14.0),
+                                child: TextField(
+                                  textAlign: TextAlign.start,
+                                  controller: askingPriceText,
+                                  style: style,
+                                  decoration: InputDecoration(
+                                      contentPadding: EdgeInsets.all(20),
+                                      labelText: 'Asking Price',
+                                      labelStyle: labelStyle,
+                                      focusedBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(color: greenColor, width: 3.0),
+                                        borderRadius: BorderRadius.circular(borderRadius),
                                       ),
-                                    ),
+                                      enabledBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(color: greenColor, width: 2.0),
+                                        borderRadius: BorderRadius.circular(borderRadius),
+                                      ),
+                                      border: OutlineInputBorder(
+                                        borderSide: BorderSide(color: greenColor, width: 2.0),
+                                        borderRadius: BorderRadius.circular(borderRadius),
+                                      )
                                   ),
                                 ),
                               ),
@@ -746,31 +743,31 @@ class AddPuppyState extends State<AddPuppy> {
                                 width: _width,
                                 height: 60,
                                 decoration: BoxDecoration(
-                                    color: Color(0xffFEF8F5),
+                                    color: Color(0xffffffff),
                                     borderRadius:  new BorderRadius.circular(borderRadius)
                                 ),
 
 
-                                child: InputDecorator(
-                                  decoration: new InputDecoration(
-                                    labelText: 'Shipping Cost',
-                                    labelStyle: labelStyle,
-                                    border: OutlineInputBorder(),
-                                    enabledBorder: OutlineInputBorder(borderRadius:  new BorderRadius.circular(borderRadius), borderSide: BorderSide(color: greenColor) ),
-                                  ),
-                                  child: Padding(
-                                    padding:
-                                    const EdgeInsets.fromLTRB(
-                                        leftPadding, 0, 0, 0),
-                                    child: TextField(
-                                      textAlign: TextAlign.start,
-                                      controller: shippingCostText,
-                                      style: style,
-                                      decoration: InputDecoration(
-                                        border: InputBorder.none,
-                                        contentPadding: EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 14.0),
+                                child: TextField(
+                                  textAlign: TextAlign.start,
+                                  controller: shippingCostText,
+                                  style: style,
+                                  decoration: InputDecoration(
+                                      contentPadding: EdgeInsets.all(20),
+                                      labelText: 'Shipping Cost',
+                                      labelStyle: labelStyle,
+                                      focusedBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(color: greenColor, width: 3.0),
+                                        borderRadius: BorderRadius.circular(borderRadius),
                                       ),
-                                    ),
+                                      enabledBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(color: greenColor, width: 2.0),
+                                        borderRadius: BorderRadius.circular(borderRadius),
+                                      ),
+                                      border: OutlineInputBorder(
+                                        borderSide: BorderSide(color: greenColor, width: 2.0),
+                                        borderRadius: BorderRadius.circular(borderRadius),
+                                      )
                                   ),
                                 ),
                               ),
@@ -781,31 +778,30 @@ class AddPuppyState extends State<AddPuppy> {
                                 width: _width,
                                 height: 60,
                                 decoration: BoxDecoration(
-                                    color: Color(0xffFEF8F5),
+                                    color: Color(0xffffffff),
                                     borderRadius:  new BorderRadius.circular(borderRadius)
                                 ),
 
-
-                                child: InputDecorator(
-                                  decoration: new InputDecoration(
-                                    labelText: 'Vet Name',
-                                    labelStyle: labelStyle,
-                                    border: OutlineInputBorder(),
-                                    enabledBorder: OutlineInputBorder(borderRadius:  new BorderRadius.circular(borderRadius), borderSide: BorderSide(color: greenColor) ),
-                                  ),
-                                  child: Padding(
-                                    padding:
-                                    const EdgeInsets.fromLTRB(
-                                        leftPadding, 0, 0, 0),
-                                    child: TextField(
-                                      textAlign: TextAlign.start,
-                                      controller: vetNameText,
-                                      style: style,
-                                      decoration: InputDecoration(
-                                        border: InputBorder.none,
-                                        contentPadding: EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 14.0),
+                                child: TextField(
+                                  textAlign: TextAlign.start,
+                                  controller: vetNameText,
+                                  style: style,
+                                  decoration: InputDecoration(
+                                      contentPadding: EdgeInsets.all(20),
+                                      labelText: 'Vet Name',
+                                      labelStyle: labelStyle,
+                                      focusedBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(color: greenColor, width: 3.0),
+                                        borderRadius: BorderRadius.circular(borderRadius),
                                       ),
-                                    ),
+                                      enabledBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(color: greenColor, width: 2.0),
+                                        borderRadius: BorderRadius.circular(borderRadius),
+                                      ),
+                                      border: OutlineInputBorder(
+                                        borderSide: BorderSide(color: greenColor, width: 2.0),
+                                        borderRadius: BorderRadius.circular(borderRadius),
+                                      )
                                   ),
                                 ),
                               ),
@@ -816,31 +812,31 @@ class AddPuppyState extends State<AddPuppy> {
                                 width: _width,
                                 height: 60,
                                 decoration: BoxDecoration(
-                                    color: Color(0xffFEF8F5),
+                                    color: Color(0xffffffff),
                                     borderRadius:  new BorderRadius.circular(borderRadius)
                                 ),
 
 
-                                child: InputDecorator(
-                                  decoration: new InputDecoration(
-                                    labelText: 'Vet Address',
-                                    labelStyle: labelStyle,
-                                    border: OutlineInputBorder(),
-                                    enabledBorder: OutlineInputBorder(borderRadius:  new BorderRadius.circular(borderRadius), borderSide: BorderSide(color: greenColor) ),
-                                  ),
-                                  child: Padding(
-                                    padding:
-                                    const EdgeInsets.fromLTRB(
-                                        leftPadding, 0, 0, 0),
-                                    child: TextField(
-                                      textAlign: TextAlign.start,
-                                      controller: vetAddressText,
-                                      style: style,
-                                      decoration: InputDecoration(
-                                        border: InputBorder.none,
-                                        contentPadding: EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 14.0),
+                                child: TextField(
+                                  textAlign: TextAlign.start,
+                                  controller: vetAddressText,
+                                  style: style,
+                                  decoration: InputDecoration(
+                                      contentPadding: EdgeInsets.all(20),
+                                      labelText: 'Vet Address',
+                                      labelStyle: labelStyle,
+                                      focusedBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(color: greenColor, width: 3.0),
+                                        borderRadius: BorderRadius.circular(borderRadius),
                                       ),
-                                    ),
+                                      enabledBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(color: greenColor, width: 2.0),
+                                        borderRadius: BorderRadius.circular(borderRadius),
+                                      ),
+                                      border: OutlineInputBorder(
+                                        borderSide: BorderSide(color: greenColor, width: 2.0),
+                                        borderRadius: BorderRadius.circular(borderRadius),
+                                      )
                                   ),
                                 ),
                               ),
@@ -851,144 +847,136 @@ class AddPuppyState extends State<AddPuppy> {
                                 width: _width,
 
                                 decoration: BoxDecoration(
-                                    color: Color(0xffFEF8F5),
+                                    color: Color(0xffffffff),
                                     borderRadius:  new BorderRadius.circular(borderRadius)
                                 ),
 
 
-                                child: InputDecorator(
-                                  decoration: new InputDecoration(
-                                    labelText: 'Puppy Badges',
-                                    labelStyle: labelStyle,
-                                    border: OutlineInputBorder(),
-                                    enabledBorder: OutlineInputBorder(borderRadius:  new BorderRadius.circular(borderRadius), borderSide: BorderSide(color: greenColor) ),
-                                  ),
-                                  child: Column(
-                                    children: <Widget>[
-                                      MergeSemantics(
-                                        child: ListTile(
-                                          dense: true,
-                                          title: Text('Champion Bloodline', style: TextStyle(fontSize: 13,  color:  isChampionBloodline?greenColor : Color(0xffA9A9A9)),),
-                                          trailing: Transform.scale(
-                                            scale: 0.75,
-                                            child: CupertinoSwitch(
-                                              value: isChampionBloodline,
-                                              onChanged: (bool value) {
-                                                setState(() {
-                                                  isChampionBloodline = value;
-                                                }
-                                                );
-                                              },
-                                            ),
+                                child: Column(
+                                  children: <Widget>[
+                                    MergeSemantics(
+                                      child: ListTile(
+                                        dense: true,
+                                        title: Text('Champion Bloodline', style: TextStyle(fontSize: 13,  color:  isChampionBloodline?greenColor : Color(0xffA9A9A9)),),
+                                        trailing: Transform.scale(
+                                          scale: 0.75,
+                                          child: CupertinoSwitch(
+                                            value: isChampionBloodline,
+                                            onChanged: (bool value) {
+                                              setState(() {
+                                                isChampionBloodline = value;
+                                              }
+                                              );
+                                            },
                                           ),
-                                          onTap: () {
-                                            setState(() {
-                                              isChampionBloodline = !isChampionBloodline;
-                                            });
-                                          },
                                         ),
+                                        onTap: () {
+                                          setState(() {
+                                            isChampionBloodline = !isChampionBloodline;
+                                          });
+                                        },
                                       ),
-                                      MergeSemantics(
-                                        child: ListTile(
-                                          dense: true,
-                                          title: Text('Family Raised', style: TextStyle(fontSize: 13,  color:  isFamilyRaised?greenColor : Color(0xffA9A9A9)),),
-                                          trailing: Transform.scale(
-                                            scale: 0.75,
-                                            child: CupertinoSwitch(
-                                              value: isFamilyRaised,
-                                              onChanged: (bool value) {
-                                                setState(() {
-                                                  isFamilyRaised = value;
-                                                }
-                                                );
-                                              },
-                                            ),
+                                    ),
+                                    MergeSemantics(
+                                      child: ListTile(
+                                        dense: true,
+                                        title: Text('Family Raised', style: TextStyle(fontSize: 13,  color:  isFamilyRaised?greenColor : Color(0xffA9A9A9)),),
+                                        trailing: Transform.scale(
+                                          scale: 0.75,
+                                          child: CupertinoSwitch(
+                                            value: isFamilyRaised,
+                                            onChanged: (bool value) {
+                                              setState(() {
+                                                isFamilyRaised = value;
+                                              }
+                                              );
+                                            },
                                           ),
-                                          onTap: () {
-                                            setState(() {
-                                              isFamilyRaised = !isFamilyRaised;
-                                            });
-                                          },
                                         ),
+                                        onTap: () {
+                                          setState(() {
+                                            isFamilyRaised = !isFamilyRaised;
+                                          });
+                                        },
                                       ),
-                                      MergeSemantics(
-                                        child: ListTile(
-                                          dense: true,
-                                          title: Text('Kid Friendly', style: TextStyle(fontSize: 13,  color:  isKidFriendly?greenColor : Color(0xffA9A9A9)),),
-                                          trailing: Transform.scale(
-                                            scale: 0.75,
-                                            child: CupertinoSwitch(
-                                              value: isKidFriendly,
-                                              onChanged: (bool value) {
-                                                setState(() {
-                                                  isKidFriendly = value;
-                                                }
-                                                );
-                                              },
-                                            ),
+                                    ),
+                                    MergeSemantics(
+                                      child: ListTile(
+                                        dense: true,
+                                        title: Text('Kid Friendly', style: TextStyle(fontSize: 13,  color:  isKidFriendly?greenColor : Color(0xffA9A9A9)),),
+                                        trailing: Transform.scale(
+                                          scale: 0.75,
+                                          child: CupertinoSwitch(
+                                            value: isKidFriendly,
+                                            onChanged: (bool value) {
+                                              setState(() {
+                                                isKidFriendly = value;
+                                              }
+                                              );
+                                            },
                                           ),
-                                          onTap: () {
-                                            setState(() {
-                                              isKidFriendly = !isKidFriendly;
-                                            });
-                                          },
                                         ),
+                                        onTap: () {
+                                          setState(() {
+                                            isKidFriendly = !isKidFriendly;
+                                          });
+                                        },
                                       ),
-                                      MergeSemantics(
-                                        child: ListTile(
-                                          dense: true,
-                                          title: Text('Microchipped', style: TextStyle(fontSize: 13,  color:  isMicrochipped?greenColor : Color(0xffA9A9A9)),),
-                                          trailing: Transform.scale(
-                                            scale: 0.75,
-                                            child: CupertinoSwitch(
-                                              value: isMicrochipped,
-                                              onChanged: (bool value) {
-                                                setState(() {
-                                                  isMicrochipped = value;
-                                                }
-                                                );
-                                              },
-                                            ),
+                                    ),
+                                    MergeSemantics(
+                                      child: ListTile(
+                                        dense: true,
+                                        title: Text('Microchipped', style: TextStyle(fontSize: 13,  color:  isMicrochipped?greenColor : Color(0xffA9A9A9)),),
+                                        trailing: Transform.scale(
+                                          scale: 0.75,
+                                          child: CupertinoSwitch(
+                                            value: isMicrochipped,
+                                            onChanged: (bool value) {
+                                              setState(() {
+                                                isMicrochipped = value;
+                                              }
+                                              );
+                                            },
                                           ),
-                                          onTap: () {
-                                            setState(() {
-                                              isMicrochipped = !isMicrochipped;
-                                            });
-                                          },
                                         ),
+                                        onTap: () {
+                                          setState(() {
+                                            isMicrochipped = !isMicrochipped;
+                                          });
+                                        },
                                       ),
-                                      MergeSemantics(
-                                        child: ListTile(
-                                          dense: true,
-                                          title: Text('Socialized', style: TextStyle(fontSize: 13,  color:  isSocialized?greenColor : Color(0xffA9A9A9)),),
-                                          trailing: Transform.scale(
-                                            scale: 0.75,
-                                            child: CupertinoSwitch(
-                                              value: isSocialized,
-                                              onChanged: (bool value) {
-                                                setState(() {
-                                                  isSocialized = value;
-                                                }
-                                                );
-                                              },
-                                            ),
+                                    ),
+                                    MergeSemantics(
+                                      child: ListTile(
+                                        dense: true,
+                                        title: Text('Socialized', style: TextStyle(fontSize: 13,  color:  isSocialized?greenColor : Color(0xffA9A9A9)),),
+                                        trailing: Transform.scale(
+                                          scale: 0.75,
+                                          child: CupertinoSwitch(
+                                            value: isSocialized,
+                                            onChanged: (bool value) {
+                                              setState(() {
+                                                isSocialized = value;
+                                              }
+                                              );
+                                            },
                                           ),
-                                          onTap: () {
-                                            setState(() {
-                                              isSocialized = !isSocialized;
-                                            });
-                                          },
                                         ),
+                                        onTap: () {
+                                          setState(() {
+                                            isSocialized = !isSocialized;
+                                          });
+                                        },
                                       ),
-                                    ],
-                                  ),
+                                    ),
+                                  ],
                                 ),
                               ),
                             ),
                             SizedBox(height: 30,),
                             Center(
                               child:  CupertinoButton(
-                                color: Color(0xffEB5050),
+                                color: maleColor,
                                 borderRadius: BorderRadius.circular(100),
                                 padding: EdgeInsets.fromLTRB(120.0, 24.0, 120.0,24.0),
                                 onPressed: () {

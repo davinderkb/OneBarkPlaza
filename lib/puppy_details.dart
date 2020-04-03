@@ -21,6 +21,10 @@ class PuppyDetails {
       _categoryName,
       _categoryLink;
 
+  set puppyId(int value) {
+    _puppyId = value;
+  }
+
   PuppyDetails(
       this._puppyId,
       this._puppyName,
@@ -54,7 +58,8 @@ class PuppyDetails {
         json['images'] as String,
         json['gallery'] as String,
         json['gender'] as String,
-        json['date_of_birth'] as String,
+        /*json['date_of_birth'] as String,*/
+        "Feb 23, 2020",
         json['age_in_weeks'] as String,
         json['color'] as String,
         json['puppy_weight'] as String,
@@ -104,4 +109,76 @@ class PuppyDetails {
   get categoryId => _categoryId;
 
   int get puppyId => _puppyId;
+
+  set categoryId(value) {
+    _categoryId = value;
+  }
+
+  set categoryLink(value) {
+    _categoryLink = value;
+  }
+
+  set categoryName(value) {
+    _categoryName = value;
+  }
+
+  set status(value) {
+    _status = value;
+  }
+
+  set registry(value) {
+    _registry = value;
+  }
+
+  set puppyMomWeight(value) {
+    _puppyMomWeight = value;
+  }
+
+  set puppyDadWeight(value) {
+    _puppyDadWeight = value;
+  }
+
+  set puppyWeight(value) {
+    _puppyWeight = value;
+  }
+
+  set color(value) {
+    _color = value;
+  }
+
+  set ageInWeeks(value) {
+    _ageInWeeks = value;
+  }
+
+  set dob(value) {
+    _dob = value;
+  }
+
+  set gender(value) {
+    _gender = value;
+  }
+
+  set gallery(value) {
+    _gallery = value;
+  }
+
+  set images(value) {
+    _images = value;
+  }
+
+  set description(value) {
+    _description = value;
+  }
+
+  set shippingCost(value) {
+    _shippingCost = value;
+  }
+
+  set puppyPrice(value) {
+    _puppyPrice = value;
+  }
+
+  set puppyName(String value) {
+    _puppyName = value;
+  }
 }

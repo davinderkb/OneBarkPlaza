@@ -19,6 +19,8 @@ import 'package:toast/toast.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:one_bark_plaza/main.dart';
 import 'package:one_bark_plaza/util/utility.dart';
+
+import 'edit_puppy.dart';
 TextStyle style = TextStyle(
     fontFamily: 'NunitoSans', fontSize: 14.0, color: Color(0xff707070));
 class HomePage extends StatefulWidget {
@@ -360,7 +362,7 @@ class HomePageState extends State<HomePage> {
                                                                   },
                                                                 );
                                                               } else {
-
+                                                                Navigator.push(context, MaterialPageRoute(builder: (context) => EditPuppy(data[index])));
                                                               }
                                                               setState(() {
                                                                 //_selection = value;

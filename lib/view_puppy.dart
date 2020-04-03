@@ -6,6 +6,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:multi_image_picker/multi_image_picker.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
+import 'package:one_bark_plaza/edit_puppy.dart';
 import 'package:one_bark_plaza/puppy_details.dart';
 import 'package:toast/toast.dart';
 import 'package:one_bark_plaza/util/utility.dart';
@@ -71,7 +72,7 @@ class ViewPuppyState extends State<ViewPuppy> {
                       style: TextStyle(fontFamily:"NunitoSans",fontSize: 14, color: Colors.white),
                     ),
                     onPressed: () {
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => null));
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => EditPuppy(widget.puppyDetails)));
                     },
                     icon: Icon(Icons.edit, color: Colors.white, size: 14,),
                     disabledColor: greenColor,
