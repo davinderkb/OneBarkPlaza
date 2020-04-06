@@ -214,117 +214,7 @@ class EditPuppyState extends State<EditPuppy> {
                         SizedBox(
                           height: 8,
                         ),
-                        new Container(
-                          alignment: Alignment.center,
-                          child: new Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: <Widget>[
-                              images.length == 0
-                                  ? Container(
-                                      width: _width,
-                                      child: Column(
-                                        children: <Widget>[
-                                          InkWell(
-                                            onTap: loadAssets,
-                                            child: Container(
-                                                height: 120,
-                                                width: 115,
-                                                decoration: BoxDecoration(
-                                                    color: Color(0xffffffff),
-                                                    borderRadius:
-                                                        BorderRadius.all(
-                                                            Radius.circular(
-                                                                24)),
-                                                    border: Border.all(
-                                                      color: greenColor,
-                                                      width: 3.0,
-                                                    ),
-                                                    boxShadow: [
-                                                      BoxShadow(
-                                                        color: Colors.grey,
-                                                        blurRadius:
-                                                            3.0, // soften the shadow
-                                                        offset: Offset(
-                                                          1.0, // Move to right 10  horizontally
-                                                          1.0, // Move to bottom 10 Vertically
-                                                        ),
-                                                      )
-                                                    ]),
-                                                child: ClipRRect(
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          24.0),
-                                                  child: Padding(
-                                                    padding: const EdgeInsets
-                                                            .fromLTRB(
-                                                        35, 27, 27, 27),
-                                                    child: Image.asset(
-                                                      "assets/images/ic_dp.png",
-                                                      color: greenColor,
-                                                    ),
-                                                  ),
-                                                )),
-                                          ),
-                                          SizedBox(height: 12),
-                                          new Text(
-                                            'You can add upto 6 photos',
-                                            style: TextStyle(
-                                                fontFamily: "NunitoSans",
-                                                color: Color(0xff707070),
-                                                fontSize: 12,
-                                                fontWeight: FontWeight.bold),
-                                          ),
-                                          new Text(
-                                            'First photo of your selection will be cover photo',
-                                            style: TextStyle(
-                                                fontFamily: "NunitoSans",
-                                                color: Color(0xff707070),
-                                                fontSize: 12,
-                                                fontWeight: FontWeight.normal),
-                                          ),
-                                          SizedBox(height: 12),
-                                        ],
-                                      ),
-                                    )
-                                  : Column(
-                                      children: <Widget>[
-                                        Container(
-                                            height: calculateGridHeight(),
-                                            width: _width - 60,
-                                            child: Expanded(
-                                              child: Container(
-                                                  child: buildGridView()),
-                                            )),
-                                        Padding(
-                                          padding: const EdgeInsets.fromLTRB(
-                                              0, 0, 0, 0),
-                                          child: new RaisedButton.icon(
-                                              shape: RoundedRectangleBorder(
-                                                  borderRadius:
-                                                      new BorderRadius.circular(
-                                                          30.0),
-                                                  side: BorderSide(
-                                                      color: greenColor,
-                                                      width: 2.0)),
-                                              onPressed: loadAssets,
-                                              color: Color(0xffffffff),
-                                              icon: new Icon(Icons.image,
-                                                  color: greenColor, size: 16),
-                                              label: new Text(
-                                                "Add / Preview",
-                                                style: TextStyle(
-                                                    color: greenColor,
-                                                    fontFamily: "NunitoSans",
-                                                    fontWeight: FontWeight.bold,
-                                                    fontSize: 13),
-                                              )),
-                                        ),
-                                      ],
-                                    ),
-                            ],
-                          ),
-                        ),
+
                         SizedBox(
                           height: 24,
                         ),
@@ -1191,12 +1081,7 @@ class EditPuppyState extends State<EditPuppy> {
   }
 
   void onSave(BuildContext context) {
-    Toast.show("Save clicked. To-Do", context,
-        textColor: Colors.white,
-        duration: Toast.LENGTH_LONG,
-        gravity: Toast.BOTTOM,
-        backgroundColor: Color(0xffeb5050),
-        backgroundRadius: 16);
+    Toast.show("Save, to-do", context);
   }
 
   double calculateGridHeight() {

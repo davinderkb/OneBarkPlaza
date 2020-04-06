@@ -251,8 +251,8 @@ class MainNavigationDrawerState extends State<MainNavigationDrawer>{
                   title: Text("Orders",style:listTileTextStyle,),
                   leading: Image.asset("assets/images/ic_orders.png",  width: iconSize),
                   onTap: () {
-                    Navigator.of(context).push(MaterialPageRoute(
-                        builder: (BuildContext context) =>null));
+                    Toast.show("Orders, to-do", context);
+
                   },
                 ),
                 SizedBox(height: 4,),
@@ -262,8 +262,8 @@ class MainNavigationDrawerState extends State<MainNavigationDrawer>{
                   title: Text("Payment Options",style: listTileTextStyle,),
                   leading: Image.asset("assets/images/ic_billing.png",  width: iconSize),
                   onTap: () {
-                    Navigator.of(context).push(MaterialPageRoute(
-                        builder: (BuildContext context) =>null));
+                    Toast.show("Payment Options, to-do", context);
+                    ;
                   },
                 ),SizedBox(height: 4,),
                 new Divider(height: 1.0, color: Colors.grey),
@@ -272,10 +272,8 @@ class MainNavigationDrawerState extends State<MainNavigationDrawer>{
                   title: Text("Payment History",style: listTileTextStyle,),
                   leading:Image.asset("assets/images/ic_payment_history.png",  width: iconSize),
                   onTap: () async {
-                    await cleanUpSharedPref();
-                    Navigator.popUntil(context, ModalRoute.withName('/'));
-                    // Navigator.pop(context,true);
-                    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => null),);
+                    Toast.show("Paymnet History, to-do", context);
+
                   },
                 ),
                 SizedBox(height: 4,),

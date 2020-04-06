@@ -122,7 +122,7 @@ class AddPuppyState extends State<AddPuppy> {
         ),
       );
     } on Exception catch (e) {
-      error = e.toString();
+      print (e);
     }
 
     // If the widget was removed from the tree while the asynchronous platform
@@ -260,7 +260,7 @@ class AddPuppyState extends State<AddPuppy> {
                                       Container(
                                           height: calculateGridHeight(),
                                           width: _width -60,
-                                          child: Expanded(child: Container(child: buildGridView()),)
+                                          child: Container(child: buildGridView())
                                       ),
                                       Padding(
                                         padding: const EdgeInsets.fromLTRB(0,0,0,0),
@@ -1002,12 +1002,7 @@ class AddPuppyState extends State<AddPuppy> {
   }
 
   void onFinishClick(BuildContext context) {
-    Toast.show("Finish clicked. To-Do", context,
-                                  textColor: Colors.white,
-                                  duration: Toast.LENGTH_LONG,
-                                  gravity: Toast.BOTTOM,
-                                  backgroundColor: Color(0xffeb5050),
-                                  backgroundRadius: 16);
+    Toast.show("Finish clicked. To-Do", context);
   }
 
   double calculateGridHeight() {
