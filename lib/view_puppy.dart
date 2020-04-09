@@ -107,7 +107,7 @@ class ViewPuppyState extends State<ViewPuppy> {
                 children: <Widget>[
                   SizedBox(height:16),
                   CarouselSlider(
-                    height:_height/3,
+                    height:_height>_width?_height/3: _width/2,
                     viewportFraction: 0.85,
                     items: images.map((i) {
                       return Builder(

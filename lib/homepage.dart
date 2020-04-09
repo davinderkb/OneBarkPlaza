@@ -19,8 +19,11 @@ import 'package:toast/toast.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:one_bark_plaza/main.dart';
 import 'package:one_bark_plaza/util/utility.dart';
+import 'package:vertical_tabs/vertical_tabs.dart';
 
 import 'edit_puppy.dart';
+import 'filter.dart';
+final blueColor = Color(0xff4C8BF5);
 TextStyle style = TextStyle(
     fontFamily: 'NunitoSans', fontSize: 14.0, color: Color(0xff707070));
 class HomePage extends StatefulWidget {
@@ -37,7 +40,7 @@ var puppyDetailsUrl =
 Future<List<PuppyDetails>> _puppiesList() async {
   var dio = Dio();
   FormData formData = new FormData.fromMap({
-    "user_id": "125",
+    "user_id": "140",
   });
   final list = List<PuppyDetails>();
   dynamic response = await dio.post(puppyDetailsUrl, data: formData);
@@ -50,7 +53,8 @@ Future<List<PuppyDetails>> _puppiesList() async {
 
 class HomePageState extends State<HomePage> {
   Future<List<PuppyDetails>> futureListOfPuppies;
-  List<PuppyDetails> listOfPuppies;
+  Set<String> setOfPuppies = new Set<String>();
+  Set<String> filterBreedSet;
   RefreshController _refreshControllerOnErrorReload =
       RefreshController(initialRefresh: false);
   RefreshController _refreshController =
@@ -75,7 +79,7 @@ class HomePageState extends State<HomePage> {
     final _height = MediaQuery.of(context).size.height;
     final puppyDetailsFontSize = 11.0;
     final greenColor = Color(0xff7FA432);
-    final blueColor = Color(0xff4C8BF5);
+
     return Scaffold(
         backgroundColor: Colors.white,
         appBar: new AppBar(
@@ -236,6 +240,9 @@ class HomePageState extends State<HomePage> {
                                 data.sort((a, b) => int.parse(b.ageInWeeks).compareTo(int.parse(a.ageInWeeks)));
                               if(isSortAgeLowToHigh)
                                 data.sort((a, b) => int.parse(a.ageInWeeks).compareTo(int.parse(b.ageInWeeks)));
+                              for(PuppyDetails item in data){
+                                setOfPuppies.add(item.categoryName.toString());
+                              }
                               return new ListView.builder(
                                 reverse: false,
                                 scrollDirection: Axis.vertical,
@@ -264,8 +271,8 @@ class HomePageState extends State<HomePage> {
                                               Padding(
                                                 padding: const EdgeInsets.fromLTRB(0,8,0,8),
                                                 child: Container(
-                                                    height: _height/6,
-                                                    width: _width/3.5,
+                                                    height: _height>_width? _height/6 : _width/4,
+                                                    width:  _height>_width? _width/3.5 : _height/2,
                                                     decoration: BoxDecoration(
                                                       color: Color(0xffFEF8F5),
                                                       borderRadius:
@@ -376,8 +383,8 @@ class HomePageState extends State<HomePage> {
                                                                 borderRadius:
                                                                 BorderRadius.all(Radius.circular(16)),
                                                               ),
-                                                              width: _width/10,
-                                                              height: _width/10,
+                                                              width: _height>_width?_width/10 : _height/10,
+                                                              height:_height>_width?_width/10 : _height/8,
                                                               child: Image.asset(
                                                                 "assets/images/ic_menuOverflow.png",
                                                                 height: 16, color: blueColor,),
@@ -459,7 +466,7 @@ class HomePageState extends State<HomePage> {
                                                       ],
                                                     ),
                                                     FlatButton(
-                                                      padding: EdgeInsets.fromLTRB(40,0,40,0),
+                                                      padding: _height>_width?EdgeInsets.fromLTRB(40,0,40,0):EdgeInsets.fromLTRB(100,12,100,12),
                                                       child: Text(
                                                         'Preview',
                                                         textAlign: TextAlign.start,
@@ -537,7 +544,7 @@ class HomePageState extends State<HomePage> {
                   ),
                   InkWell(
                     onTap: (){
-                      onFilterClick(context);
+                      Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext context) =>Filter(setOfPuppies)));;
                     },
                     child: Container(
                         width: _width / 2 - 1,
@@ -641,13 +648,11 @@ class HomePageState extends State<HomePage> {
     isSortAgeLowToHigh = false;
   }
 
-  void onFilterClick(BuildContext context) {
-    final act = CupertinoActionSheet(
-      title: Container(alignment:Alignment.topLeft,child: Text('FILTER BY BREED', style: TextStyle( fontFamily: "NunitoSans", fontWeight: FontWeight.bold, fontSize: 12), textAlign: TextAlign.left,)),
 
-    );
-    showCupertinoModalPopup(
-        context: context,
-        builder: (BuildContext context) => act);
-  }
+
+
+
+
 }
+
+

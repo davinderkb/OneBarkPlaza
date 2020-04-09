@@ -134,17 +134,17 @@ class MainNavigationDrawerState extends State<MainNavigationDrawer>{
                         return Stack(
                           children: <Widget>[
                             Container(
-                              height: _height/3,
+                              height: _height>_width? _height/3: _width/3,
                               color: drawerBackground ,
                               child: Column(
 
                                 children: <Widget>[
-                                  Container(height: _height/6, color:drawerHeaderColorLightBlue),
+                                  Container(height:_height>_width? _height/6:_width/6, color:drawerHeaderColorLightBlue),
                                   Column(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     crossAxisAlignment: CrossAxisAlignment.center,
                                     children: <Widget>[
-                                      SizedBox(height: _height/18),
+                                      SizedBox(height: _height>_width?_height/18 : _width/18),
                                       Row(
                                         mainAxisAlignment: MainAxisAlignment.center,
                                         children: <Widget>[
@@ -166,7 +166,7 @@ class MainNavigationDrawerState extends State<MainNavigationDrawer>{
                             ),
                             Positioned(
                                 width: _width/1.2,
-                                top: MediaQuery.of(context).size.width * 0.14 ,
+                                top: _height>_width? _width * 0.14 : _height *0.14 ,
                                   child: Stack(
                                     children: <Widget>[
                                       Center(
@@ -191,8 +191,8 @@ class MainNavigationDrawerState extends State<MainNavigationDrawer>{
                                 ),
                                       ),
                                       Positioned(
-                                        width: _width/1.2 + 90,
-                                        top: MediaQuery.of(context).size.width * 0.18 ,
+                                        width: _width/1.2 + 90 ,
+                                        top: _height>_width?_width * 0.18 : _height * 0.18 ,
                                         child: Container(
                                             height: 25,
                                             width: 25,
