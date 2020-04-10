@@ -19,7 +19,6 @@ import 'package:toast/toast.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:one_bark_plaza/main.dart';
 import 'package:one_bark_plaza/util/utility.dart';
-import 'package:vertical_tabs/vertical_tabs.dart';
 
 import 'edit_puppy.dart';
 import 'filter.dart';
@@ -27,11 +26,12 @@ final blueColor = Color(0xff4C8BF5);
 TextStyle style = TextStyle(
     fontFamily: 'NunitoSans', fontSize: 14.0, color: Color(0xff707070));
 class HomePage extends StatefulWidget {
+  HomePageState homePageState;
   HomePage() {}
 
   @override
   HomePageState createState() {
-    return HomePageState();
+    return homePageState = HomePageState();
   }
 }
 
@@ -65,6 +65,8 @@ class HomePageState extends State<HomePage> {
   var isSortAgeLowToHigh = false;
 
   final greenColor = Color(0xff7FA432);
+
+  Filter filter;
 
 
 
@@ -232,6 +234,15 @@ class HomePageState extends State<HomePage> {
                                 );
                               }
                               var data = snapshot.data as List<PuppyDetails>;
+                              if(filter != null && filter.setOfBreeds.length>0){
+                                var filteredData = new List<PuppyDetails>();
+                                for(PuppyDetails item in data){
+                                    if(filter.setOfBreeds.contains(item.categoryName.toString())){
+                                      filteredData.add(item);
+                                    }
+                                }
+                                data =filteredData;
+                              }
                               if(isSortPriceHighToLow)
                                   data.sort((a, b) => b.puppyPrice.compareTo(a.puppyPrice));
                               if(isSortPriceLowToHigh)
@@ -544,7 +555,12 @@ class HomePageState extends State<HomePage> {
                   ),
                   InkWell(
                     onTap: (){
-                      Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext context) =>Filter(setOfPuppies)));;
+                      if(filter == null){
+                        Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext context) =>filter = Filter(setOfPuppies, widget.homePageState)));;
+                      }
+                      else{
+                        Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext context) =>filter));
+                      }
                     },
                     child: Container(
                         width: _width / 2 - 1,
