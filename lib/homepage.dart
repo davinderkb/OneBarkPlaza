@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:ffi';
 import 'dart:io';
 import 'dart:ui';
 import 'package:flutter/cupertino.dart';
@@ -68,6 +69,9 @@ class HomePageState extends State<HomePage> {
 
   Filter filter;
 
+  double minPrice;
+  double maxPrice;
+
 
 
   @override
@@ -81,6 +85,9 @@ class HomePageState extends State<HomePage> {
     final _height = MediaQuery.of(context).size.height;
     final puppyDetailsFontSize = 11.0;
     final greenColor = Color(0xff7FA432);
+    minPrice = 0.0;
+    maxPrice = 10000.0;
+
 
     return Scaffold(
         backgroundColor: Colors.white,
@@ -234,15 +241,27 @@ class HomePageState extends State<HomePage> {
                                 );
                               }
                               var data = snapshot.data as List<PuppyDetails>;
-                              if(filter != null && filter.setOfBreeds.length>0){
+                              getMinMaxPrice(data);
+                              if(filter != null && filter.selectedSetOfBreeds.length>0 ){
                                 var filteredData = new List<PuppyDetails>();
                                 for(PuppyDetails item in data){
-                                    if(filter.setOfBreeds.contains(item.categoryName.toString())){
-                                      filteredData.add(item);
-                                    }
+                                  if(filter.selectedSetOfBreeds.contains(item.categoryName.toString())){
+                                    filteredData.add(item);
+                                  }
                                 }
                                 data =filteredData;
                               }
+
+                              if(filter != null && filter.selectedGender.length>0 ){
+                                var filteredData = new List<PuppyDetails>();
+                                for(PuppyDetails item in data){
+                                  if(filter.selectedGender.contains(Utility.capitalize(item.gender.toString()))){
+                                    filteredData.add(item);
+                                  }
+                                }
+                                data =filteredData;
+                              }
+
                               if(isSortPriceHighToLow)
                                   data.sort((a, b) => b.puppyPrice.compareTo(a.puppyPrice));
                               if(isSortPriceLowToHigh)
@@ -251,6 +270,17 @@ class HomePageState extends State<HomePage> {
                                 data.sort((a, b) => int.parse(b.ageInWeeks).compareTo(int.parse(a.ageInWeeks)));
                               if(isSortAgeLowToHigh)
                                 data.sort((a, b) => int.parse(a.ageInWeeks).compareTo(int.parse(b.ageInWeeks)));
+
+                              if(filter!=null && (filter.chosenMinPrice!=minPrice || filter.chosenMaxPrice != maxPrice)){
+                                var filteredData = new List<PuppyDetails>();
+                                 for(PuppyDetails item in data){
+                                    if(double.parse(item.puppyPrice)>= filter.priceRangeFilter.changedMinValue && double.parse(item.puppyPrice)<= filter.priceRangeFilter.changedMaxValue){
+                                          filteredData.add(item);
+                                    }
+                                 }
+                                 data = filteredData;
+
+                              }
                               for(PuppyDetails item in data){
                                 setOfPuppies.add(item.categoryName.toString());
                               }
@@ -556,7 +586,7 @@ class HomePageState extends State<HomePage> {
                   InkWell(
                     onTap: (){
                       if(filter == null){
-                        Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext context) =>filter = Filter(setOfPuppies, widget.homePageState)));;
+                        Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext context) =>filter = Filter(setOfPuppies, widget.homePageState, minPrice, maxPrice)));;
                       }
                       else{
                         Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext context) =>filter));
@@ -662,6 +692,16 @@ class HomePageState extends State<HomePage> {
     isSortPriceLowToHigh = false;
     isSortAgeHighToLow = false;
     isSortAgeLowToHigh = false;
+  }
+
+  void getMinMaxPrice(List<PuppyDetails> data) {
+    Set<double> priceSet = new Set<double>();
+    for (PuppyDetails item in data){
+      priceSet.add( double.parse(item.puppyPrice.toString()));
+    }
+    minPrice = priceSet.reduce((curr, next) => curr < next? curr: next);
+    maxPrice = priceSet.reduce((curr, next) => curr > next? curr: next);
+
   }
 
 
