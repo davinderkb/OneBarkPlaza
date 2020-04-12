@@ -20,7 +20,7 @@ class LoginPage extends StatefulWidget {
 }
 
 class LoginPageState extends State<LoginPage>{
-  TextStyle style = TextStyle(fontFamily: 'NunitoSans', fontSize: 14.0,color: Colors.white);
+  TextStyle style = TextStyle(fontFamily: 'NunitoSans', fontSize: 15.0,color: Colors.white);
   TextEditingController passwordController = new TextEditingController();
   TextEditingController userNameController = new TextEditingController();
 
@@ -84,7 +84,7 @@ class LoginPageState extends State<LoginPage>{
     final forgotPassword = Text(
       'Forgot Password?',
       textAlign: TextAlign.right,
-      style: TextStyle(fontSize: 12, color: Color(0xffEEEEEE)),
+      style: TextStyle(fontSize: 13, color: Color(0xffEEEEEE)),
     );
     final forgotPasswordLink = Text(
       'Click here',
@@ -105,7 +105,7 @@ class LoginPageState extends State<LoginPage>{
         },
         child: Text("Login",
             textAlign: TextAlign.center,
-            style: style.copyWith(color: Colors.white, fontSize: 14)),
+            style: style.copyWith(color: Colors.white, fontSize: 15)),
       ),
     );
     return Scaffold(
@@ -126,7 +126,7 @@ class LoginPageState extends State<LoginPage>{
                     width: MediaQuery.of(context).size.width,
                   ),
                   SizedBox(
-                    width: 158.0,
+                    width: _width-100,
 
                     child: Image.asset(
                       "assets/images/logo.png",
@@ -191,9 +191,10 @@ class LoginPageState extends State<LoginPage>{
              //top: MediaQuery.of(context).size.width * 0.5 ,
               child: Container(
                   alignment: Alignment.center,
-                  child: SpinKitFadingCircle(
-                    color: Color(0xffffffff),
-                    size: 50,
+                  child: SpinKitRipple(
+                    borderWidth: 100.0,
+                    color: Colors.white,
+                    size: 120,
                   )),
             ):SizedBox()
           ],

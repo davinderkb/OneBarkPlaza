@@ -50,7 +50,7 @@ class PuppyDetails {
     Map<String,dynamic> categoryDetails = (json['categories'][0] as Map<String,dynamic>);
 
     return PuppyDetails(
-        json['ID'] as int,
+        int.parse(json['ID'].toString()) as int,
         json['name'] as String,
         json['price'] as String,
         json['shipping_cost'] as String,
@@ -67,7 +67,7 @@ class PuppyDetails {
         json['puppy_mom_weight'] as String,
         json['registry'] as String,
         json['status'] as String,
-        categoryDetails["id"] as int,
+        int.parse(categoryDetails["id"].toString()) as int,
         categoryDetails["name"] as String,
         categoryDetails["link"] as String);
   }

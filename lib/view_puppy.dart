@@ -141,18 +141,23 @@ class ViewPuppyState extends State<ViewPuppy> {
                           MainAxisAlignment
                               .spaceBetween,
                           children: <Widget>[
-                            Text(
-                                widget.puppyDetails.categoryName,
-                                style: TextStyle(
-                                    fontFamily:
-                                    'NunitoSans',
-                                    fontSize:
-                                    18,
-                                    color:
-                                    greenColor,
-                                    fontWeight:
-                                    FontWeight
-                                        .normal)),
+                            Container(
+                              width:_width/2,
+                              child: Text(
+                                  widget.puppyDetails.categoryName,
+                                  maxLines: 2,
+
+                                  style: TextStyle(
+                                      fontFamily:
+                                      'NunitoSans',
+                                      fontSize:
+                                      18,
+                                      color:
+                                      greenColor,
+                                      fontWeight:
+                                      FontWeight
+                                          .normal)),
+                            ),
                             Text(
                                 "\$ "+double.parse(widget.puppyDetails.puppyPrice).toString(),
                                 style: TextStyle(

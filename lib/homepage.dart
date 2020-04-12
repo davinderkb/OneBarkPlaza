@@ -14,8 +14,10 @@ import 'package:http/http.dart' as http;
 import 'dart:async';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:one_bark_plaza/util/constants.dart';
 import 'package:one_bark_plaza/view_puppy.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:toast/toast.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:one_bark_plaza/main.dart';
@@ -38,18 +40,25 @@ class HomePage extends StatefulWidget {
 
 var puppyDetailsUrl =
     'https://obpdevstage.wpengine.com/wp-json/obp-api/products/';
-Future<List<PuppyDetails>> _puppiesList() async {
+Future<List<PuppyDetails>> _puppiesList(BuildContext context) async {
   var dio = Dio();
-  FormData formData = new FormData.fromMap({
-    "user_id": "140",
-  });
-  final list = List<PuppyDetails>();
-  dynamic response = await dio.post(puppyDetailsUrl, data: formData);
-  Map<String, dynamic> responseList = jsonDecode(response.toString());
-  for (dynamic item in responseList["breeder_puppies"]) {
-    list.add(PuppyDetails.fromJson(item));
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  String userId =  prefs.getString(Constants.SHARED_PREF_USER_ID);
+  if(userId!=null && userId!=''){
+    FormData formData = new FormData.fromMap({
+      "user_id": userId,
+    });
+    final list = List<PuppyDetails>();
+    dynamic response = await dio.post(puppyDetailsUrl, data: formData);
+    Map<String, dynamic> responseList = jsonDecode(response.toString());
+    for (dynamic item in responseList["breeder_puppies"]) {
+      list.add(PuppyDetails.fromJson(item));
+    }
+    return list;
+  } else{
+    Toast.show("Something went wrong, Try logout and re-login", context);
   }
-  return list;
+
 }
 
 class HomePageState extends State<HomePage> {
@@ -77,7 +86,7 @@ class HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    futureListOfPuppies = _puppiesList();
+    futureListOfPuppies = _puppiesList(context);
   }
   @override
   Widget build(BuildContext context) {
@@ -192,95 +201,50 @@ class HomePageState extends State<HomePage> {
                               if (snapshot.hasError) {
                                 // return whatever you'd do for this case, probably an error
                                 return SmartRefresher(
-                                  child: Column(
-                                    children: <Widget>[
-                                      Container(
-                                        //height: _height/2 - 80,
-                                        alignment: Alignment.topCenter,
-                                        width: _width,
-                                      ),
-                                      SizedBox(
-                                        height: 8,
-                                      ),
-                                      Text(
-                                        "Pull Down To Refresh",
-                                        style: TextStyle(
-                                            fontFamily: 'NunitoSans',
-                                            fontSize: 13,
-                                            color: Colors.blue,
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                    ],
+                                  child:Container(
+                                    width: _width,
+
+                                    child: Column(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      crossAxisAlignment: CrossAxisAlignment.center,
+                                      children: <Widget>[
+                                        Image.asset("assets/images/ic_noInternet.png", height: 60,width:70, color: Color(0xffebebeb),),
+                                        SizedBox(height: 24),
+                                        Text("You're offline", style: TextStyle(fontFamily: 'NunitoSans', fontWeight: FontWeight.bold, fontSize: 16.0, color:  Color(0xff707070))),
+                                        SizedBox(height: 12),
+                                        Text("Connect to the internet and try again", style: TextStyle(fontFamily: 'NunitoSans', fontSize: 14.0, color: Color(0xff707070))),
+                                        SizedBox(height: 36,),
+                                        new RaisedButton(
+                                            shape: RoundedRectangleBorder(
+                                                borderRadius: new BorderRadius.circular(30.0),
+                                                side: BorderSide(color: greenColor, width: 2.0)
+                                            ),
+                                            onPressed: () async { checkConnectivityAndRefresh(context);},
+                                            color:Colors.white,
+                                            disabledColor: Colors.white,
+                                            child: Padding(
+                                              padding: const EdgeInsets.fromLTRB(8.0,0,8,0),
+                                              child: new Text("Try Again", style: TextStyle(color:greenColor,fontFamily:"NunitoSans", fontWeight: FontWeight.bold, fontSize: 13),),
+                                            )),
+                                        SizedBox(height: 60),
+                                      ],
+                                    ),
                                   ),
                                   controller: _refreshControllerOnErrorReload,
-                                  onRefresh: () async {
-                                    var connectivityResult =
-                                        await (Connectivity()
-                                            .checkConnectivity());
-                                    if (connectivityResult ==
-                                            ConnectivityResult.mobile ||
-                                        connectivityResult ==
-                                            ConnectivityResult.wifi) {
-                                      Navigator.of(context).pushReplacement(
-                                          MaterialPageRoute(
-                                              builder: (BuildContext context) =>
-                                                  HomePage()));
-                                    } else {
-                                      Toast.show(
-                                          "Internet is still not up yet.. Try again",
-                                          context,
-                                          textColor: Colors.white,
-                                          duration: Toast.LENGTH_LONG,
-                                          gravity: Toast.BOTTOM,
-                                          backgroundColor: Colors.blue,
-                                          backgroundRadius: 16);
-                                    }
-                                    _refreshControllerOnErrorReload
-                                        .refreshCompleted();
-                                  },
+                              onRefresh: ()async{
+                                                await checkConnectivityAndRefresh(context);
+                                                _refreshControllerOnErrorReload.refreshCompleted();
+                                                }
+
                                 );
                               }
                               var data = snapshot.data as List<PuppyDetails>;
                               getMinMaxPrice(data);
-                              if(filter != null && filter.selectedSetOfBreeds.length>0 ){
-                                var filteredData = new List<PuppyDetails>();
-                                for(PuppyDetails item in data){
-                                  if(filter.selectedSetOfBreeds.contains(item.categoryName.toString())){
-                                    filteredData.add(item);
-                                  }
-                                }
-                                data =filteredData;
-                              }
+                              data = applyBreedFilter(data);
+                              data = applyGenderFilter(data);
+                              data = applyPriceRangeFilter(data);
+                              applySorting(data);
 
-                              if(filter != null && filter.selectedGender.length>0 ){
-                                var filteredData = new List<PuppyDetails>();
-                                for(PuppyDetails item in data){
-                                  if(filter.selectedGender.contains(Utility.capitalize(item.gender.toString()))){
-                                    filteredData.add(item);
-                                  }
-                                }
-                                data =filteredData;
-                              }
-
-                              if(isSortPriceHighToLow)
-                                  data.sort((a, b) => b.puppyPrice.compareTo(a.puppyPrice));
-                              if(isSortPriceLowToHigh)
-                                data.sort((a, b) => a.puppyPrice.compareTo(b.puppyPrice));
-                              if(isSortAgeHighToLow)
-                                data.sort((a, b) => int.parse(b.ageInWeeks).compareTo(int.parse(a.ageInWeeks)));
-                              if(isSortAgeLowToHigh)
-                                data.sort((a, b) => int.parse(a.ageInWeeks).compareTo(int.parse(b.ageInWeeks)));
-
-                              if(filter!=null && (filter.chosenMinPrice!=minPrice || filter.chosenMaxPrice != maxPrice)){
-                                var filteredData = new List<PuppyDetails>();
-                                 for(PuppyDetails item in data){
-                                    if(double.parse(item.puppyPrice)>= filter.priceRangeFilter.changedMinValue && double.parse(item.puppyPrice)<= filter.priceRangeFilter.changedMaxValue){
-                                          filteredData.add(item);
-                                    }
-                                 }
-                                 data = filteredData;
-
-                              }
                               for(PuppyDetails item in data){
                                 setOfPuppies.add(item.categoryName.toString());
                               }
@@ -619,6 +583,67 @@ class HomePageState extends State<HomePage> {
             ],
           ),
         ));
+  }
+
+  Future checkConnectivityAndRefresh(BuildContext context) async {
+    var connectivityResult = await (Connectivity().checkConnectivity());
+    if (connectivityResult == ConnectivityResult.mobile || connectivityResult == ConnectivityResult.wifi) {
+        Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (BuildContext context) =>HomePage()));
+    }
+    else {
+        Toast.show("Internet is still down.. Keep trying", context);
+    }
+  }
+
+  void applySorting(List<PuppyDetails> data) {
+    if(isSortPriceHighToLow)
+        data.sort((a, b) => double.parse(b.puppyPrice).compareTo(double.parse(a.puppyPrice)));
+    if(isSortPriceLowToHigh)
+      data.sort((a, b) => double.parse(a.puppyPrice).compareTo(double.parse(b.puppyPrice)));
+    if(isSortAgeHighToLow)
+      data.sort((a, b) => int.parse(b.ageInWeeks).compareTo(int.parse(a.ageInWeeks)));
+    if(isSortAgeLowToHigh)
+      data.sort((a, b) => int.parse(a.ageInWeeks).compareTo(int.parse(b.ageInWeeks)));
+  }
+
+  List<PuppyDetails> applyPriceRangeFilter(List<PuppyDetails> data) {
+    if(filter!=null && (filter.chosenMinPrice!=minPrice || filter.chosenMaxPrice != maxPrice)){
+      var filteredData = new List<PuppyDetails>();
+      for(PuppyDetails item in data){
+        if(double.parse(item.puppyPrice)>= filter.priceRangeFilter.changedMinValue && double.parse(item.puppyPrice)<= filter.priceRangeFilter.changedMaxValue){
+          filteredData.add(item);
+        }
+      }
+      data = filteredData;
+
+    }
+    return data;
+  }
+
+  List<PuppyDetails> applyGenderFilter(List<PuppyDetails> data) {
+    if(filter != null && filter.selectedGender.length>0 ){
+      var filteredData = new List<PuppyDetails>();
+      for(PuppyDetails item in data){
+        if(filter.selectedGender.contains(Utility.capitalize(item.gender.toString()))){
+          filteredData.add(item);
+        }
+      }
+      data =filteredData;
+    }
+    return data;
+  }
+
+  List<PuppyDetails> applyBreedFilter(List<PuppyDetails> data) {
+    if(filter != null && filter.selectedSetOfBreeds.length>0 ){
+      var filteredData = new List<PuppyDetails>();
+      for(PuppyDetails item in data){
+        if(filter.selectedSetOfBreeds.contains(item.categoryName.toString())){
+          filteredData.add(item);
+        }
+      }
+      data =filteredData;
+    }
+    return data;
   }
 
   void onSortClick(BuildContext context) {

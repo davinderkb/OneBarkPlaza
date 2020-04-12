@@ -10,7 +10,7 @@ import 'package:flutter/widgets.dart';
 import 'package:one_bark_plaza/puppy_details.dart';
 import 'package:toast/toast.dart';
 
-import 'customdialog.dart';
+import 'choose_breed_dialog.dart';
 
 final greenColor = Color(0xff7FA432);
 final blueColor = Color(0xff4C8BF5);
