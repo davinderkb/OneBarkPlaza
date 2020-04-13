@@ -120,6 +120,20 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.0.3"
+  extension:
+    dependency: transitive
+    description:
+      name: extension
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.0.5"
+  file_picker:
+    dependency: "direct main"
+    description:
+      name: file_picker
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.6.2"
   flutter:
     dependency: transitive
     description: flutter
@@ -151,6 +165,13 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  flutter_plugin_android_lifecycle:
+    dependency: transitive
+    description:
+      name: flutter_plugin_android_lifecycle
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.6"
   flutter_spinkit:
     dependency: "direct main"
     description:
@@ -217,6 +238,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.1.8"
+  mime:
+    dependency: "direct main"
+    description:
+      name: mime
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.9.6+3"
   multi_image_picker:
     dependency: "direct main"
     description:
@@ -224,6 +252,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "4.6.5+rc.1"
+  native_pdf_renderer:
+    dependency: "direct main"
+    description:
+      name: native_pdf_renderer
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.8.1"
   path:
     dependency: transitive
     description:

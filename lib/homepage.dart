@@ -62,6 +62,7 @@ Future<List<PuppyDetails>> _puppiesList(BuildContext context) async {
 }
 
 class HomePageState extends State<HomePage> {
+  bool _isLoading = false;
   Future<List<PuppyDetails>> futureListOfPuppies;
   Set<String> setOfPuppies = new Set<String>();
   Set<String> filterBreedSet;
@@ -98,7 +99,16 @@ class HomePageState extends State<HomePage> {
     maxPrice = 10000.0;
 
 
-    return Scaffold(
+    return _isLoading? Container(
+        color: Colors.white,
+        width: _width,
+        height: _height,
+        alignment: Alignment.bottomCenter,
+        child: SpinKitRipple(
+          borderWidth: 100.0,
+          color: blueColor,
+          size: 120,
+        )):Scaffold(
         backgroundColor: Colors.white,
         appBar: new AppBar(
           //iconTheme: new IconThemeData(color: Color(0xff262B31)),
@@ -365,8 +375,37 @@ class HomePageState extends State<HomePage> {
                                                                         ),
                                                                         CupertinoDialogAction(
                                                                           child: Text('Yes'),
-                                                                          onPressed: () {
+                                                                          onPressed: () async{
                                                                             Navigator.of(context).pop();
+                                                                            setState(() {
+                                                                              _isLoading = true;
+                                                                            });
+                                                                            SharedPreferences prefs = await SharedPreferences.getInstance();
+                                                                            String userId =  prefs.getString(Constants.SHARED_PREF_USER_ID);
+                                                                            var dio = Dio();
+                                                                            var deletePuppyUrl = 'https://obpdevstage.wpengine.com/wp-json/obp-api/delete_puppy';
+                                                                            FormData formData = new FormData.fromMap({
+                                                                              "user_id": userId,
+                                                                              "puppy_id": data[index].puppyId,
+                                                                            });
+                                                                            try{
+                                                                              dynamic response = await dio.post(deletePuppyUrl, data: formData);
+                                                                              dynamic responseList = jsonDecode(response.toString());
+                                                                              if (responseList.length > 0 && responseList[0] == "success"){
+                                                                                  Toast.show("Puppy Deleted Successfully", context);
+                                                                                  Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext context) =>HomePage()));
+                                                                              } else{
+                                                                                Toast.show("Request Failed. " + response.toString(), context);
+                                                                                Navigator.of(context).pop();
+                                                                              }
+                                                                            }catch(exception){
+                                                                              Toast.show("Request Failed. "+exception.toString(), context);
+                                                                              Navigator.of(context).pop();
+                                                                            }finally{
+                                                                              setState(() {
+                                                                                _isLoading = false;
+                                                                              });
+                                                                            }
                                                                           },
                                                                         ),
                                                                       ],

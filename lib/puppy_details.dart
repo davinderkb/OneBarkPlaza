@@ -52,7 +52,7 @@ class PuppyDetails {
     return PuppyDetails(
         int.parse(json['ID'].toString()) as int,
         json['name'] as String,
-        json['price'] as String,
+        json['price'].toString().trim() == "" ? "0" : json['price'].toString().trim(),
         json['shipping_cost'] as String,
         json['description'] as String,
         json['images'] as String,
@@ -175,6 +175,8 @@ class PuppyDetails {
   }
 
   set puppyPrice(value) {
+    if(_puppyPrice.trim()=="")
+      value = "0";
     _puppyPrice = value;
   }
 
