@@ -27,7 +27,7 @@ class ChooseBreedDialog extends StatefulWidget {
 class ChoosBreedDailogState extends State<ChooseBreedDialog>{
   Future<List<Breed>> futureListOfCategories;
   TextEditingController searchTextController = new TextEditingController();
-  TextStyle style = TextStyle(fontFamily: 'NunitoSans', fontWeight: FontWeight.bold, fontSize: 13.0, color: Colors.grey);
+  TextStyle style = TextStyle(fontFamily: 'NunitoSans', fontWeight: FontWeight.bold, fontSize: 13.0, color: Colors.black);
 
   List<Breed> filteredItems = List<Breed>();
   @override
@@ -277,10 +277,10 @@ class ChoosBreedDailogState extends State<ChooseBreedDialog>{
   Future<List<Breed>> getAllBreeds(BuildContext context) async{
 
     var dio = Dio();
-    var allBreedsUrl = 'https://obpdevstage.wpengine.com/wp-json/obp-api/get_categories/';
+    var allBreedsUrl = 'https://obpdevstage.wpengine.com/wp-json/obp/v1/breeds/';
     FormData formData = new FormData.fromMap({});
     final list = List<Breed>();
-    dynamic response = await dio.post(allBreedsUrl, data: formData);
+    dynamic response = await dio.get(allBreedsUrl);
     dynamic responseList = jsonDecode(response.toString());
     for (dynamic item in responseList) {
       list.add(Breed.fromJson(item));

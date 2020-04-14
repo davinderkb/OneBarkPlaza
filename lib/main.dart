@@ -109,6 +109,7 @@ class MainNavigationDrawerState extends State<MainNavigationDrawer>{
               children: <Widget>[
                 FutureBuilder(
                   future: user,
+                  // ignore: missing_return
                   builder: (context, snapshot) {
                     switch (snapshot.connectionState) {
                       case ConnectionState.none:
@@ -173,9 +174,14 @@ class MainNavigationDrawerState extends State<MainNavigationDrawer>{
                                         child: Container(
                                           height: 100,
                                           width: 100,
-                                          child: FadeInImage.assetNetwork(
-                                              placeholder: "assets/images/default_profile_pic.png",
-                                              image: "",
+                                          child: ClipRRect(
+                                            borderRadius:BorderRadius.circular(300.0),
+                                            child: FadeInImage.assetNetwork(
+                                                placeholder: data["gender"]=="Male"
+                                                    ? "assets/images/ic_profile_male.png"
+                                                    : "assets/images/ic_profile_female.png",
+                                                image: "",
+                                                fit: BoxFit.contain),
                                           ),
                                           decoration: new BoxDecoration(
                                             color: drawerAvatarBackgroundColor,
@@ -302,6 +308,7 @@ class MainNavigationDrawerState extends State<MainNavigationDrawer>{
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setBool(Constants.SHARED_PREF_IS_LOGGED_IN, false);
     prefs.setString(Constants.SHARED_PREF_USER_NAME, null);
+    prefs.setString(Constants.SHARED_PREF_GENDER, null);
     prefs.setString(Constants.SHARED_PREF_PASSWORD, null);
     prefs.setString(Constants.SHARED_PREF_NAME, null);
     prefs.setString(Constants.SHARED_PREF_USER_ID, null);
@@ -312,8 +319,10 @@ class MainNavigationDrawerState extends State<MainNavigationDrawer>{
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String email =  prefs.getString(Constants.SHARED_PREF_USER_NAME);
     String name = prefs.getString(Constants.SHARED_PREF_NAME);
-    if(email!=null && email!='' && name !=null && name !=''){
-      Map<dynamic,dynamic> user = {"email": email,"name": name,};
+    String gender = prefs.getString(Constants.SHARED_PREF_GENDER);
+
+    if(email!=null && email!='' && name !=null && name !='' && gender !=null && gender !=''){
+      Map<dynamic,dynamic> user = {"email": email,"name": name, "gender": gender,};
       return user;
     }else {
       Toast.show("Error while loading navigation header, Try again", context,

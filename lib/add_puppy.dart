@@ -16,6 +16,8 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:native_pdf_renderer/native_pdf_renderer.dart';
 import 'package:one_bark_plaza/add_puppy_success.dart';
+import 'package:one_bark_plaza/main.dart';
+import 'package:one_bark_plaza/preview.dart';
 import 'package:one_bark_plaza/util/constants.dart';
 import 'package:one_bark_plaza/util/utility.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -53,14 +55,16 @@ class AddPuppyState extends State<AddPuppy> {
   bool isMicrochipped = false;
   bool isSocialized = false;
   String _vetReportPath;
-  int fileType = Constants.FILE_TYPE_OTHER;
+  String _flightTicketPath;
+  int vetFileType = Constants.FILE_TYPE_OTHER;
+  int flightFileType = Constants.FILE_TYPE_OTHER;
   ChooseBreedDialog chooseBreedDialog = null;
 
   bool isFemale = false;
 
   Image vetReportThumbnail;
-
-  PDFPageImage pageImage;
+  PDFPageImage vetPageImage;
+  PDFPageImage flightPageImage;
   Widget buildGridView() {
     return GridView.count(
       crossAxisCount: imagesInGridRow,
@@ -157,22 +161,18 @@ class AddPuppyState extends State<AddPuppy> {
 
   void loadVetReport() async {
     try {
-      String filePath = await FilePicker.getFilePath(type: FileType.custom, allowedExtensions: ['jpg', 'jpeg', 'png', 'pdf'],);
+      String filePath = await FilePicker.getFilePath(type: FileType.custom, allowedExtensions: ['jpg', 'jpeg', 'png', 'pdf', 'doc' , 'docx'],);
       if (filePath == '') {
         return;
       }
       if(filePath.substring(filePath.lastIndexOf(".") + 1) == "pdf"){
-        fileType = Constants.FILE_TYPE_PDF;
-        final document = await PDFDocument.openFile(filePath);
-        final page = await document.getPage(1);
-        pageImage = await page.render(width: page.width, height: page.height);
-        await page.close();
+        vetFileType = Constants.FILE_TYPE_PDF;
       } else if (filePath.substring(filePath.lastIndexOf(".") + 1) == "jpg"
           || filePath.substring(filePath.lastIndexOf(".") + 1) == "jpeg"
           || filePath.substring(filePath.lastIndexOf(".") + 1) == "png" ){
-        fileType = Constants.FILE_TYPE_IMAGE;
+        vetFileType = Constants.FILE_TYPE_IMAGE;
       } else{
-        fileType = Constants.FILE_TYPE_OTHER;
+        vetFileType = Constants.FILE_TYPE_OTHER;
       }
 
       setState((){
@@ -182,6 +182,35 @@ class AddPuppyState extends State<AddPuppy> {
       print("Error while picking the file: " + e.toString());
     }
   }
+
+  void loadFlightTicket() async {
+    try {
+      String filePath = await FilePicker.getFilePath(type: FileType.custom, allowedExtensions: ['jpg', 'jpeg', 'png', 'pdf', 'doc' , 'docx'],);
+      if (filePath == '') {
+        return;
+      }
+      if(filePath.substring(filePath.lastIndexOf(".") + 1) == "pdf"){
+        flightFileType = Constants.FILE_TYPE_PDF;
+        final document = await PDFDocument.openFile(filePath);
+        final page = await document.getPage(1);
+        flightPageImage = await page.render(width: page.width, height: page.height);
+        await page.close();
+      } else if (filePath.substring(filePath.lastIndexOf(".") + 1) == "jpg"
+          || filePath.substring(filePath.lastIndexOf(".") + 1) == "jpeg"
+          || filePath.substring(filePath.lastIndexOf(".") + 1) == "png" ){
+        vetFileType = Constants.FILE_TYPE_IMAGE;
+      } else{
+        vetFileType = Constants.FILE_TYPE_OTHER;
+      }
+
+      setState((){
+        this._flightTicketPath = filePath;
+      });
+    } on Exception catch (e) {
+      print("Error while picking the file: " + e.toString());
+    }
+  }
+
 
 
   @override
@@ -200,963 +229,1168 @@ class AddPuppyState extends State<AddPuppy> {
       fontFamily: 'NunitoSans', color: greenColor, fontSize: 12,);
     var maleColor = Color(0xff5cbaed);
     var femaleColor = Color(0xfff25fa3);
-    return Scaffold(
-        key: globalKey,
-        backgroundColor: Colors.transparent,
-        appBar: new AppBar(
+    return WillPopScope(
+      onWillPop: _onBackPressed,
+      child: Scaffold(
+          key: globalKey,
+          backgroundColor: Colors.transparent,
+          appBar: new AppBar(
 
-          leading: new IconButton(
-            icon: new Icon(Icons.arrow_back, color: greenColor),
-            onPressed: () =>Navigator.of(context).maybePop(),
+            leading: new IconButton(
+              icon: new Icon(Icons.arrow_back, color: greenColor),
+              onPressed: () {
+                showDialog<void>(
+                  context: context,
+                  barrierDismissible: false, // user must tap button!
+                  builder: (BuildContext context) {
+                    return CupertinoAlertDialog(
+                      title: Text('Are you sure?'),
+                      content: Text("\nAny entries in the form would be lost. Do you want to exit this page?"),
+                      actions: <Widget>[
+                        CupertinoDialogAction(
+                          child: Text('No'),
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                        ),
+                        CupertinoDialogAction(
+                          child: Text('Yes'),
+                          onPressed: (){
+                            Navigator.of(context).pop();
+                            Navigator.of(context).pop();
+                          },
+                        ),
+                      ],
+                    );
+                  },
+                );
+              }
+            ),
+            title: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  new Text(
+                    "Add Puppy",
+                    style: new TextStyle(
+                        fontFamily: 'NunitoSans',
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: greenColor),
+                    textAlign: TextAlign.center,
+                  ),
+                ]),
+            centerTitle: false,
+            elevation: 0.0,
+            backgroundColor: Color(0xffffffff),
           ),
-          title: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                new Text(
-                  "Add Puppy",
-                  style: new TextStyle(
-                      fontFamily: 'NunitoSans',
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                      color: greenColor),
-                  textAlign: TextAlign.center,
-                ),
-              ]),
-          centerTitle: false,
-          elevation: 0.0,
-          backgroundColor: Color(0xffffffff),
-        ),
-        body: _isLoading? Container(
-            color: Colors.white,
-            width: _width,
-            height: _height,
-            alignment: Alignment.bottomCenter,
-            child: SpinKitRipple(
-              borderWidth: 100.0,
-              color: greenColor,
-              size: 120,
-            )):
-        SingleChildScrollView(
-            child: GestureDetector(
-              onTap: () {
-                FocusScope.of(context).requestFocus(new FocusNode());
-              },
-              child: Container(
-                color: Color(0xffffffff),
+          body: _isLoading? Container(
+              color: Colors.white,
+              width: _width,
+              height: _height,
+              alignment: Alignment.bottomCenter,
+              child: SpinKitRipple(
+                borderWidth: 100.0,
+                color: greenColor,
+                size: 120,
+              )):
+          SingleChildScrollView(
+              child: GestureDetector(
+                onTap: () {
+                  FocusScope.of(context).requestFocus(new FocusNode());
+                },
+                child: Container(
+                  color: Color(0xffffffff),
 
-                child: new Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.max,
-                  children: <Widget>[
-                    Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
+                  child: new Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.max,
+                    children: <Widget>[
+                      Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
 
-                          SizedBox(height: 8,),
-                          Container(
-                            alignment: Alignment.center,
-                            child: new Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: <Widget>[
-                                images.length == 0 ?
-                                Container(
-                                  width: _width,
-                                  child: Column(
-                                    children: <Widget>[
-                                      InkWell(
-                                        onTap:loadAssets,
-                                        child: Container(
-                                            height:120,
-                                            width: 115,
-                                            decoration: BoxDecoration(
-                                                color: Color(0xffffffff),
-                                                borderRadius:
-                                                BorderRadius.all(Radius.circular(24)),
-                                                border: Border.all(color:greenColor, width: 3.0, ),
-                                                boxShadow: [
-                                                  BoxShadow(
-                                                    color: Colors.grey,
-                                                    blurRadius: 3.0, // soften the shadow
-                                                    offset: Offset(
-                                                      1.0, // Move to right 10  horizontally
-                                                      1.0, // Move to bottom 10 Vertically
-                                                    ),
-                                                  )
-                                                ]
-                                            ),
-                                            child: ClipRRect(
-                                              borderRadius:
-                                              BorderRadius.circular(24.0),
-                                              child:Padding(
-                                                padding: const EdgeInsets.fromLTRB(35,27,27,27),
-                                                child: Image.asset("assets/images/ic_dp.png", color: greenColor,),
+                            SizedBox(height: 8,),
+                            Container(
+                              alignment: Alignment.center,
+                              child: new Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: <Widget>[
+                                  images.length == 0 ?
+                                  Container(
+                                    width: _width,
+                                    child: Column(
+                                      children: <Widget>[
+                                        InkWell(
+                                          onTap:loadAssets,
+                                          child: Container(
+                                              height:120,
+                                              width: 115,
+                                              decoration: BoxDecoration(
+                                                  color: Color(0xffffffff),
+                                                  borderRadius:
+                                                  BorderRadius.all(Radius.circular(24)),
+                                                  border: Border.all(color:greenColor, width: 3.0, ),
+                                                  boxShadow: [
+                                                    BoxShadow(
+                                                      color: Colors.grey,
+                                                      blurRadius: 3.0, // soften the shadow
+                                                      offset: Offset(
+                                                        1.0, // Move to right 10  horizontally
+                                                        1.0, // Move to bottom 10 Vertically
+                                                      ),
+                                                    )
+                                                  ]
                                               ),
-                                            )),
+                                              child: ClipRRect(
+                                                borderRadius:
+                                                BorderRadius.circular(24.0),
+                                                child:Padding(
+                                                  padding: const EdgeInsets.fromLTRB(35,27,27,27),
+                                                  child: Image.asset("assets/images/ic_dp.png", color: greenColor,),
+                                                ),
+                                              )),
+                                        ),
+                                        SizedBox(height:12),
+                                        new Text('You can add upto 6 photos',
+                                          style: TextStyle(fontFamily:"NunitoSans",color: Color(0xff707070), fontSize: 12,fontWeight: FontWeight.bold),
+                                        ),
+                                        new Text('First photo of your selection will be cover photo',
+                                          style: TextStyle(fontFamily:"NunitoSans",color: Color(0xff707070), fontSize: 12,fontWeight: FontWeight.normal),
+                                        ),SizedBox(height:12),
+                                      ],
+
+                                    ),
+
+                                  ):
+                                  Column(
+                                    children: <Widget>[
+                                      Container(
+                                          height: calculateGridHeight(),
+                                          width: _width -60,
+                                          child: Container(child: buildGridView())
                                       ),
-                                      SizedBox(height:12),
-                                      new Text('You can add upto 6 photos',
-                                        style: TextStyle(fontFamily:"NunitoSans",color: Color(0xff707070), fontSize: 12,fontWeight: FontWeight.bold),
+                                      Padding(
+                                        padding: const EdgeInsets.fromLTRB(0,0,0,0),
+                                        child: new RaisedButton.icon(
+                                            shape: RoundedRectangleBorder(
+                                                borderRadius: new BorderRadius.circular(30.0),
+                                                side: BorderSide(color: greenColor, width: 2.0)
+                                            ),
+                                            onPressed: loadAssets,
+                                            color: Color(0xffffffff),
+                                            icon: new Icon(Icons.image, color:greenColor, size:16),
+                                            label: new Text("Add / Preview", style: TextStyle(color:greenColor,fontFamily:"NunitoSans", fontWeight: FontWeight.bold, fontSize: 13),)),
                                       ),
-                                      new Text('First photo of your selection will be cover photo',
-                                        style: TextStyle(fontFamily:"NunitoSans",color: Color(0xff707070), fontSize: 12,fontWeight: FontWeight.normal),
-                                      ),SizedBox(height:12),
                                     ],
-
                                   ),
 
-                                ):
-                                Column(
-                                  children: <Widget>[
-                                    Container(
-                                        height: calculateGridHeight(),
-                                        width: _width -60,
-                                        child: Container(child: buildGridView())
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.fromLTRB(0,0,0,0),
-                                      child: new RaisedButton.icon(
-                                          shape: RoundedRectangleBorder(
-                                              borderRadius: new BorderRadius.circular(30.0),
-                                              side: BorderSide(color: greenColor, width: 2.0)
-                                          ),
-                                          onPressed: loadAssets,
-                                          color: Color(0xffffffff),
-                                          icon: new Icon(Icons.image, color:greenColor, size:16),
-                                          label: new Text("Add / Preview", style: TextStyle(color:greenColor,fontFamily:"NunitoSans", fontWeight: FontWeight.bold, fontSize: 13),)),
-                                    ),
-                                  ],
-                                ),
 
-
-                              ],
-                            ),
-                          ),
-                          SizedBox(height: 24,),
-
-                          Center(
-                            child: Container(
-                              width: _width,
-                              height: 60,
-                              decoration: BoxDecoration(
-                                  color: Color(0xffffffff),
-                                  borderRadius:  new BorderRadius.circular(borderRadius)
-                              ),
-
-
-                              child: TextField(
-                                textAlign: TextAlign.start,
-                                controller: puppyNameText,
-                                autofocus: false,
-                                style: style,
-                                decoration: InputDecoration(
-                                    contentPadding: EdgeInsets.all(20),
-                                    labelText: 'Puppy Name',
-                                    labelStyle: labelStyle,
-                                    focusedBorder: OutlineInputBorder(
-                                      borderSide: BorderSide(color: greenColor, width: 3.0),
-                                      borderRadius: BorderRadius.circular(borderRadius),
-                                    ),
-                                    enabledBorder: OutlineInputBorder(
-                                      borderSide: BorderSide(color: greenColor, width: 2.0),
-                                      borderRadius: BorderRadius.circular(borderRadius),
-                                    ),
-                                    border: OutlineInputBorder(
-                                      borderSide: BorderSide(color: greenColor, width: 2.0),
-                                      borderRadius: BorderRadius.circular(borderRadius),
-                                    )
-                                ),
+                                ],
                               ),
                             ),
-                          ),
-                          SizedBox(height: 24,),
-                          Center(
-                            child: InkWell(
-                              onTap: () {
-                                FocusScope.of(context).unfocus();
-                                chooseBreedDialog != null && chooseBreedDialog.allDuplicateItems.length!=0?
-                                showDialog(
-                                  context: context,
-                                  child:  BackdropFilter(
-                                    filter: ImageFilter.blur(sigmaX:2.0,sigmaY:2.0),
-                                    child: chooseBreedDialog,
+                            SizedBox(height: 24,),
+                            Center(
+                              child: InkWell(
+                                onTap: () {
+
+                                  chooseBreedDialog != null && chooseBreedDialog.allDuplicateItems.length!=0?
+                                  showDialog(
+                                    context: context,
+                                    child:  BackdropFilter(
+                                      filter: ImageFilter.blur(sigmaX:2.0,sigmaY:2.0),
+                                      child: chooseBreedDialog,
+                                    ),
+                                  )
+                                      :
+                                  showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) => BackdropFilter(
+                                      filter: ImageFilter.blur(sigmaX:2.0,sigmaY:2.0),
+                                      child: chooseBreedDialog = ChooseBreedDialog(widget.addPuppyState),
+                                    ),
+                                  )
+                                  ;
+                                },
+                                child: Container(
+                                  width: _width,
+                                  height: 60,
+                                  decoration: BoxDecoration(
+                                    color: Color(0xffffffff),
+                                    borderRadius:  new BorderRadius.circular(30),
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Colors.grey,
+                                        blurRadius: 1.0, // soften the shadow
+                                        offset: Offset(
+                                          1.0, // Move to right 10  horizontally
+                                          1.0, // Move to bottom 10 Vertically
+                                        ),
+                                      )
+                                    ],
                                   ),
-                                )
-                                    :
-                                showDialog(
-                                  context: context,
-                                  builder: (BuildContext context) => BackdropFilter(
-                                    filter: ImageFilter.blur(sigmaX:2.0,sigmaY:2.0),
-                                    child: chooseBreedDialog = ChooseBreedDialog(widget.addPuppyState),
+
+
+                                  child: InputDecorator(
+                                    decoration: new InputDecoration(
+                                      contentPadding: EdgeInsets.all(20),
+                                      labelText: 'Breed',
+                                      labelStyle: labelStyle,
+                                      border: OutlineInputBorder(),
+                                      enabledBorder: OutlineInputBorder(borderRadius:  new BorderRadius.circular(30), borderSide: BorderSide(width: 2.0, color: greenColor) ),
+                                    ),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                      children: <Widget>[
+
+                                        Text(
+                                          "${_chooseBreed}",
+                                          textAlign: TextAlign.start,
+                                          style: TextStyle(
+                                              fontFamily: "NunitoSans",
+                                              fontSize: 14,
+                                              color: greenColor),
+                                        ),
+                                        Padding(
+                                            padding:
+                                            const EdgeInsets.fromLTRB(
+                                                00, 0, 20, 0),
+                                            child: Container(
+                                              height: 40,
+                                              width: 40,
+                                              child: _isBreedSelectedOnce?Icon(Icons.check, color: Colors.green):Icon(Icons.format_list_bulleted, color: greenColor),
+                                            )),
+                                      ],
+                                    ),
                                   ),
-                                )
-                                ;
-                              },
+                                ),
+                              ),
+                            ),
+                            SizedBox(height: 24,),
+                            Center(
                               child: Container(
                                 width: _width,
                                 height: 60,
                                 decoration: BoxDecoration(
-                                  color: Color(0xffffffff),
-                                  borderRadius:  new BorderRadius.circular(30),
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: Colors.grey,
-                                      blurRadius: 1.0, // soften the shadow
-                                      offset: Offset(
-                                        1.0, // Move to right 10  horizontally
-                                        1.0, // Move to bottom 10 Vertically
-                                      ),
-                                    )
-                                  ],
+                                    color: Color(0xffffffff),
+                                    borderRadius:  new BorderRadius.circular(borderRadius)
                                 ),
 
 
-                                child: InputDecorator(
-                                  decoration: new InputDecoration(
-                                    contentPadding: EdgeInsets.all(20),
-                                    labelText: 'Breed',
-                                    labelStyle: labelStyle,
-                                    border: OutlineInputBorder(),
-                                    enabledBorder: OutlineInputBorder(borderRadius:  new BorderRadius.circular(30), borderSide: BorderSide(width: 2.0, color: greenColor) ),
-                                  ),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                    children: <Widget>[
-
-                                      Text(
-                                        "${_chooseBreed}",
-                                        textAlign: TextAlign.start,
-                                        style: TextStyle(
-                                            fontFamily: "NunitoSans",
-                                            fontSize: 14,
-                                            color: greenColor),
+                                child: TextField(
+                                  textAlign: TextAlign.start,
+                                  controller: puppyNameText,
+                                  autofocus: false,
+                                  style: style,
+                                  decoration: InputDecoration(
+                                      contentPadding: EdgeInsets.all(20),
+                                      labelText: 'Puppy Name',
+                                      labelStyle: labelStyle,
+                                      focusedBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(color: greenColor, width: 3.0),
+                                        borderRadius: BorderRadius.circular(borderRadius),
                                       ),
-                                      Padding(
-                                          padding:
-                                          const EdgeInsets.fromLTRB(
-                                              00, 0, 20, 0),
-                                          child: Container(
-                                            height: 40,
-                                            width: 40,
-                                            child: _isBreedSelectedOnce?Icon(Icons.check, color: Colors.green):Icon(Icons.format_list_bulleted, color: greenColor),
-                                          )),
-                                    ],
+                                      enabledBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(color: greenColor, width: 2.0),
+                                        borderRadius: BorderRadius.circular(borderRadius),
+                                      ),
+                                      border: OutlineInputBorder(
+                                        borderSide: BorderSide(color: greenColor, width: 2.0),
+                                        borderRadius: BorderRadius.circular(borderRadius),
+                                      )
                                   ),
                                 ),
                               ),
                             ),
-                          ),
+                            SizedBox(height: 24,),
+                            Center(
+                              child: InkWell(
+                                onTap: () {
+                                  FocusScope.of(context).unfocus();
+                                  _selectDateOfBirth(context);
+                                },
+                                child: Container(
+                                  width: _width,
+                                  height: 64,
+                                  decoration: BoxDecoration(
+                                    color: Color(0xffffffff),
+                                    borderRadius:  new BorderRadius.circular(30),
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Colors.grey,
+                                        blurRadius: 1.0, // soften the shadow
+                                        offset: Offset(
+                                          1.0, // Move to right 10  horizontally
+                                          1.0, // Move to bottom 10 Vertically
+                                        ),
+                                      )
+                                    ],
+                                  ),
 
-                          SizedBox(height: 24,),
-                          Center(
-                            child: InkWell(
-                              onTap: () {
-                                FocusScope.of(context).unfocus();
-                                _selectDateOfBirth(context);
-                              },
+
+                                  child: InputDecorator(
+
+                                    decoration: new InputDecoration(
+                                      contentPadding: EdgeInsets.all(20),
+                                      labelText: 'Date of Birth',
+                                      labelStyle: labelStyle,
+                                      border: OutlineInputBorder(),
+                                      enabledBorder: OutlineInputBorder(borderRadius:  new BorderRadius.circular(30), borderSide: BorderSide(width: 2.0, color: greenColor)),
+                                    ),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                      children: <Widget>[
+
+                                        Text(
+                                          "${dateOfBirthString}",
+                                          textAlign: TextAlign.start,
+                                          style: TextStyle(
+                                              fontFamily: "NunitoSans",
+                                              fontSize: 14,
+                                              color: greenColor),
+                                        ),
+                                        Padding(
+                                            padding:
+                                            const EdgeInsets.fromLTRB(
+                                                00, 0, 20, 0),
+                                            child: Container(
+                                              height: 40,
+                                              width: 40,
+                                              child: Icon(Icons.calendar_today, color: greenColor),
+                                            )),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            SizedBox(height: 24,),
+                            Center(
+                              child: Padding(
+                                padding: const EdgeInsets.fromLTRB(0.0, 0 ,0,0),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: <Widget>[
+                                    Container(
+                                      width: (_width - 44)/ 2,
+                                      height: 60,
+                                      decoration: BoxDecoration(
+                                          color: Color(0xffffffff),
+                                          borderRadius:  new BorderRadius.circular(30.0)
+                                      ),
+
+
+                                      child: RaisedButton.icon(
+
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius: new BorderRadius.circular(30.0),
+
+
+                                          ),
+
+                                          onPressed: isFemale?toggleState:null,
+                                          color:Color(0xffEBEBE4),
+                                          disabledColor: maleColor,
+                                          disabledElevation: 3.0,
+                                          elevation: 0,
+                                          icon: !isFemale? Icon(Icons.check_box, color: Colors.white, size:14): Icon(null, size:0),
+                                          label: new Text("Male", style: TextStyle(color:Colors.white,fontFamily:"NunitoSans", fontWeight: FontWeight.bold, fontSize: 13),)),
+                                    ),
+                                    Container(
+                                      width: (_width - 44)/ 2,
+                                      height: 60,
+                                      decoration: BoxDecoration(
+                                          color: Color(0xffffffff),
+                                          borderRadius:  new BorderRadius.circular(30.0)
+
+                                      ),
+
+
+                                      child: RaisedButton.icon(
+
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius: new BorderRadius.circular(30.0),
+                                          ),
+                                          onPressed: !isFemale?toggleState:null,
+                                          color:Color(0xffEBEBE4),
+                                          disabledColor: femaleColor,
+                                          disabledElevation: 3.0,
+                                          elevation: 0,
+                                          icon: isFemale? Icon(Icons.check_box, color: Colors.white, size:14): Icon(null, size:0),
+                                          label: new Text("Female", style: TextStyle(color:Colors.white,fontFamily:"NunitoSans", fontWeight: FontWeight.bold, fontSize: 13),)),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            SizedBox(height: 24,),
+                            Center(
                               child: Container(
                                 width: _width,
-                                height: 64,
+                                height: 80,
                                 decoration: BoxDecoration(
-                                  color: Color(0xffffffff),
-                                  borderRadius:  new BorderRadius.circular(30),
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: Colors.grey,
-                                      blurRadius: 1.0, // soften the shadow
-                                      offset: Offset(
-                                        1.0, // Move to right 10  horizontally
-                                        1.0, // Move to bottom 10 Vertically
+                                    color: Color(0xffffffff),
+                                    borderRadius:  new BorderRadius.circular(borderRadius)
+                                ),
+
+
+                                child: TextField(
+                                  textAlign: TextAlign.start,
+                                  controller: puppyDescriptionText,
+                                  style: style,
+                                  maxLines: 4,
+                                  decoration: InputDecoration(
+                                      contentPadding: EdgeInsets.all(20),
+                                      labelText: 'Description',
+                                      labelStyle: labelStyle,
+                                      focusedBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(color: greenColor, width: 3.0),
+                                        borderRadius: BorderRadius.circular(borderRadius),
                                       ),
-                                    )
+                                      enabledBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(color: greenColor, width: 2.0),
+                                        borderRadius: BorderRadius.circular(borderRadius),
+                                      ),
+                                      border: OutlineInputBorder(
+                                        borderSide: BorderSide(color: greenColor, width: 2.0),
+                                        borderRadius: BorderRadius.circular(borderRadius),
+                                      )
+                                  ),
+                                ),
+                              ),
+                            ),
+                            SizedBox(height: 24,),
+                            Center(
+                              child: Padding(
+                                padding: const EdgeInsets.fromLTRB(0.0, 0 ,0,0),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: <Widget>[
+                                    Container(
+                                      width: (_width - 44)/ 2,
+                                      height: 60,
+                                      decoration: BoxDecoration(
+                                          color: Color(0xffffffff),
+                                          borderRadius:  new BorderRadius.circular(borderRadius)
+                                      ),
+
+
+                                      child: TextField(
+                                        textAlign: TextAlign.start,
+                                        controller: puppyColorText,
+                                        style: style,
+                                        decoration: InputDecoration(
+                                            contentPadding: EdgeInsets.all(20),
+                                            labelText: 'Color',
+                                            labelStyle: labelStyle,
+                                            focusedBorder: OutlineInputBorder(
+                                              borderSide: BorderSide(color: greenColor, width: 3.0),
+                                              borderRadius: BorderRadius.circular(borderRadius),
+                                            ),
+                                            enabledBorder: OutlineInputBorder(
+                                              borderSide: BorderSide(color: greenColor, width: 2.0),
+                                              borderRadius: BorderRadius.circular(borderRadius),
+                                            ),
+                                            border: OutlineInputBorder(
+                                              borderSide: BorderSide(color: greenColor, width: 2.0),
+                                              borderRadius: BorderRadius.circular(borderRadius),
+                                            )
+                                        ),
+                                      ),
+                                    ),
+                                    Container(
+                                      width: (_width - 44)/ 2,
+                                      height: 60,
+                                      decoration: BoxDecoration(
+                                          color: Color(0xffffffff),
+                                          borderRadius:  new BorderRadius.circular(borderRadius)
+                                      ),
+
+                                      child: TextField(
+                                        textAlign: TextAlign.start,
+                                        keyboardType: TextInputType.number,
+                                        controller: puppyWeightText,
+                                        style: style,
+                                        decoration: InputDecoration(
+                                            contentPadding: EdgeInsets.all(20),
+                                            labelText: 'Weight',
+                                            labelStyle: labelStyle,
+                                            focusedBorder: OutlineInputBorder(
+                                              borderSide: BorderSide(color: greenColor, width: 3.0),
+                                              borderRadius: BorderRadius.circular(borderRadius),
+                                            ),
+                                            enabledBorder: OutlineInputBorder(
+                                              borderSide: BorderSide(color: greenColor, width: 2.0),
+                                              borderRadius: BorderRadius.circular(borderRadius),
+                                            ),
+                                            border: OutlineInputBorder(
+                                              borderSide: BorderSide(color: greenColor, width: 2.0),
+                                              borderRadius: BorderRadius.circular(borderRadius),
+                                            )
+                                        ),
+                                      ),
+                                    ),
                                   ],
                                 ),
+                              ),
+                            ),
+
+                            SizedBox(height: 24,),
+                            Center(
+                              child: Padding(
+                                padding: const EdgeInsets.fromLTRB(0.0, 0 ,0,0),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: <Widget>[
+                                    Container(
+                                      width: (_width - 44)/ 2,
+                                      height: 60,
+                                      decoration: BoxDecoration(
+                                          color: Color(0xffffffff),
+                                          borderRadius:  new BorderRadius.circular(borderRadius)
+                                      ),
 
 
-                                child: InputDecorator(
-
-                                  decoration: new InputDecoration(
-                                    contentPadding: EdgeInsets.all(20),
-                                    labelText: 'Date of Birth',
-                                    labelStyle: labelStyle,
-                                    border: OutlineInputBorder(),
-                                    enabledBorder: OutlineInputBorder(borderRadius:  new BorderRadius.circular(30), borderSide: BorderSide(width: 2.0, color: greenColor)),
-                                  ),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                    children: <Widget>[
-
-                                      Text(
-                                        "${dateOfBirthString}",
+                                      child: TextField(
                                         textAlign: TextAlign.start,
-                                        style: TextStyle(
-                                            fontFamily: "NunitoSans",
-                                            fontSize: 14,
-                                            color: greenColor),
-                                      ),
-                                      Padding(
-                                          padding:
-                                          const EdgeInsets.fromLTRB(
-                                              00, 0, 20, 0),
-                                          child: Container(
-                                            height: 40,
-                                            width: 40,
-                                            child: Icon(Icons.calendar_today, color: greenColor),
-                                          )),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                          SizedBox(height: 24,),
-                          Center(
-                            child: Padding(
-                              padding: const EdgeInsets.fromLTRB(0.0, 0 ,0,0),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: <Widget>[
-                                  Container(
-                                    width: (_width - 44)/ 2,
-                                    height: 60,
-                                    decoration: BoxDecoration(
-                                        color: Color(0xffffffff),
-                                        borderRadius:  new BorderRadius.circular(30.0)
-                                    ),
-
-
-                                    child: RaisedButton.icon(
-
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius: new BorderRadius.circular(30.0),
-
-
+                                        keyboardType: TextInputType.number,
+                                        controller: puppyDadWeightText,
+                                        style: style,
+                                        decoration: InputDecoration(
+                                            contentPadding: EdgeInsets.all(20),
+                                            labelText: "Dad's Weight",
+                                            labelStyle: labelStyle,
+                                            focusedBorder: OutlineInputBorder(
+                                              borderSide: BorderSide(color: greenColor, width: 3.0),
+                                              borderRadius: BorderRadius.circular(borderRadius),
+                                            ),
+                                            enabledBorder: OutlineInputBorder(
+                                              borderSide: BorderSide(color: greenColor, width: 2.0),
+                                              borderRadius: BorderRadius.circular(borderRadius),
+                                            ),
+                                            border: OutlineInputBorder(
+                                              borderSide: BorderSide(color: greenColor, width: 2.0),
+                                              borderRadius: BorderRadius.circular(borderRadius),
+                                            )
                                         ),
-
-                                        onPressed: isFemale?toggleState:null,
-                                        color:Color(0xffEBEBE4),
-                                        disabledColor: maleColor,
-                                        disabledElevation: 3.0,
-                                        elevation: 0,
-                                        icon: !isFemale? Icon(Icons.check_box, color: Colors.white, size:14): Icon(null, size:0),
-                                        label: new Text("Male", style: TextStyle(color:Colors.white,fontFamily:"NunitoSans", fontWeight: FontWeight.bold, fontSize: 13),)),
-                                  ),
-                                  Container(
-                                    width: (_width - 44)/ 2,
-                                    height: 60,
-                                    decoration: BoxDecoration(
-                                        color: Color(0xffffffff),
-                                        borderRadius:  new BorderRadius.circular(30.0)
-
+                                      ),
                                     ),
+                                    Container(
+                                      width: (_width - 44)/ 2,
+                                      height: 60,
+                                      decoration: BoxDecoration(
+                                          color: Color(0xffffffff),
+                                          borderRadius:  new BorderRadius.circular(borderRadius)
+                                      ),
 
 
-                                    child: RaisedButton.icon(
-
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius: new BorderRadius.circular(30.0),
+                                      child: TextField(
+                                        textAlign: TextAlign.start,
+                                        keyboardType: TextInputType.number,
+                                        controller: puppyMomWeightText,
+                                        style: style,
+                                        decoration: InputDecoration(
+                                            contentPadding: EdgeInsets.all(20),
+                                            labelText: "Mom's Weight",
+                                            labelStyle: labelStyle,
+                                            focusedBorder: OutlineInputBorder(
+                                              borderSide: BorderSide(color: greenColor, width: 3.0),
+                                              borderRadius: BorderRadius.circular(borderRadius),
+                                            ),
+                                            enabledBorder: OutlineInputBorder(
+                                              borderSide: BorderSide(color: greenColor, width: 2.0),
+                                              borderRadius: BorderRadius.circular(borderRadius),
+                                            ),
+                                            border: OutlineInputBorder(
+                                              borderSide: BorderSide(color: greenColor, width: 2.0),
+                                              borderRadius: BorderRadius.circular(borderRadius),
+                                            )
                                         ),
-                                        onPressed: !isFemale?toggleState:null,
-                                        color:Color(0xffEBEBE4),
-                                        disabledColor: femaleColor,
-                                        disabledElevation: 3.0,
-                                        elevation: 0,
-                                        icon: isFemale? Icon(Icons.check_box, color: Colors.white, size:14): Icon(null, size:0),
-                                        label: new Text("Female", style: TextStyle(color:Colors.white,fontFamily:"NunitoSans", fontWeight: FontWeight.bold, fontSize: 13),)),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                          SizedBox(height: 24,),
-                          Center(
-                            child: Container(
-                              width: _width,
-                              height: 80,
-                              decoration: BoxDecoration(
-                                  color: Color(0xffffffff),
-                                  borderRadius:  new BorderRadius.circular(borderRadius)
-                              ),
-
-
-                              child: TextField(
-                                textAlign: TextAlign.start,
-                                controller: puppyDescriptionText,
-                                style: style,
-                                maxLines: 4,
-                                decoration: InputDecoration(
-                                    contentPadding: EdgeInsets.all(20),
-                                    labelText: 'Description',
-                                    labelStyle: labelStyle,
-                                    focusedBorder: OutlineInputBorder(
-                                      borderSide: BorderSide(color: greenColor, width: 3.0),
-                                      borderRadius: BorderRadius.circular(borderRadius),
+                                      ),
                                     ),
-                                    enabledBorder: OutlineInputBorder(
-                                      borderSide: BorderSide(color: greenColor, width: 2.0),
-                                      borderRadius: BorderRadius.circular(borderRadius),
-                                    ),
-                                    border: OutlineInputBorder(
-                                      borderSide: BorderSide(color: greenColor, width: 2.0),
-                                      borderRadius: BorderRadius.circular(borderRadius),
-                                    )
+                                  ],
                                 ),
                               ),
                             ),
-                          ),
-                          SizedBox(height: 24,),
-                          Center(
-                            child: Padding(
-                              padding: const EdgeInsets.fromLTRB(0.0, 0 ,0,0),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: <Widget>[
-                                  Container(
-                                    width: (_width - 44)/ 2,
-                                    height: 60,
-                                    decoration: BoxDecoration(
-                                        color: Color(0xffffffff),
-                                        borderRadius:  new BorderRadius.circular(borderRadius)
-                                    ),
+                            SizedBox(height: 24,),
+                            Center(
+                              child: Container(
+                                width: _width,
+                                height: 60,
+                                decoration: BoxDecoration(
+                                    color: Color(0xffffffff),
+                                    borderRadius:  new BorderRadius.circular(borderRadius)
+                                ),
 
 
-                                    child: TextField(
-                                      textAlign: TextAlign.start,
-                                      controller: puppyColorText,
-                                      style: style,
-                                      decoration: InputDecoration(
-                                          contentPadding: EdgeInsets.all(20),
-                                          labelText: 'Color',
-                                          labelStyle: labelStyle,
-                                          focusedBorder: OutlineInputBorder(
-                                            borderSide: BorderSide(color: greenColor, width: 3.0),
-                                            borderRadius: BorderRadius.circular(borderRadius),
-                                          ),
-                                          enabledBorder: OutlineInputBorder(
-                                            borderSide: BorderSide(color: greenColor, width: 2.0),
-                                            borderRadius: BorderRadius.circular(borderRadius),
-                                          ),
-                                          border: OutlineInputBorder(
-                                            borderSide: BorderSide(color: greenColor, width: 2.0),
-                                            borderRadius: BorderRadius.circular(borderRadius),
-                                          )
+                                child: TextField(
+                                  textAlign: TextAlign.start,
+                                  keyboardType: TextInputType.number,
+                                  controller: askingPriceText,
+                                  style: style,
+                                  decoration: InputDecoration(
+                                      contentPadding: EdgeInsets.all(20),
+                                      labelText: 'Asking Price',
+                                      labelStyle: labelStyle,
+                                      focusedBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(color: greenColor, width: 3.0),
+                                        borderRadius: BorderRadius.circular(borderRadius),
                                       ),
-                                    ),
-                                  ),
-                                  Container(
-                                    width: (_width - 44)/ 2,
-                                    height: 60,
-                                    decoration: BoxDecoration(
-                                        color: Color(0xffffffff),
-                                        borderRadius:  new BorderRadius.circular(borderRadius)
-                                    ),
-
-                                    child: TextField(
-                                      textAlign: TextAlign.start,
-                                      keyboardType: TextInputType.number,
-                                      controller: puppyWeightText,
-                                      style: style,
-                                      decoration: InputDecoration(
-                                          contentPadding: EdgeInsets.all(20),
-                                          labelText: 'Weight',
-                                          labelStyle: labelStyle,
-                                          focusedBorder: OutlineInputBorder(
-                                            borderSide: BorderSide(color: greenColor, width: 3.0),
-                                            borderRadius: BorderRadius.circular(borderRadius),
-                                          ),
-                                          enabledBorder: OutlineInputBorder(
-                                            borderSide: BorderSide(color: greenColor, width: 2.0),
-                                            borderRadius: BorderRadius.circular(borderRadius),
-                                          ),
-                                          border: OutlineInputBorder(
-                                            borderSide: BorderSide(color: greenColor, width: 2.0),
-                                            borderRadius: BorderRadius.circular(borderRadius),
-                                          )
+                                      enabledBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(color: greenColor, width: 2.0),
+                                        borderRadius: BorderRadius.circular(borderRadius),
                                       ),
-                                    ),
+                                      border: OutlineInputBorder(
+                                        borderSide: BorderSide(color: greenColor, width: 2.0),
+                                        borderRadius: BorderRadius.circular(borderRadius),
+                                      )
                                   ),
-                                ],
-                              ),
-                            ),
-                          ),
-
-                          SizedBox(height: 24,),
-                          Center(
-                            child: Padding(
-                              padding: const EdgeInsets.fromLTRB(0.0, 0 ,0,0),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: <Widget>[
-                                  Container(
-                                    width: (_width - 44)/ 2,
-                                    height: 60,
-                                    decoration: BoxDecoration(
-                                        color: Color(0xffffffff),
-                                        borderRadius:  new BorderRadius.circular(borderRadius)
-                                    ),
-
-
-                                    child: TextField(
-                                      textAlign: TextAlign.start,
-                                      keyboardType: TextInputType.number,
-                                      controller: puppyDadWeightText,
-                                      style: style,
-                                      decoration: InputDecoration(
-                                          contentPadding: EdgeInsets.all(20),
-                                          labelText: "Dad's Weight",
-                                          labelStyle: labelStyle,
-                                          focusedBorder: OutlineInputBorder(
-                                            borderSide: BorderSide(color: greenColor, width: 3.0),
-                                            borderRadius: BorderRadius.circular(borderRadius),
-                                          ),
-                                          enabledBorder: OutlineInputBorder(
-                                            borderSide: BorderSide(color: greenColor, width: 2.0),
-                                            borderRadius: BorderRadius.circular(borderRadius),
-                                          ),
-                                          border: OutlineInputBorder(
-                                            borderSide: BorderSide(color: greenColor, width: 2.0),
-                                            borderRadius: BorderRadius.circular(borderRadius),
-                                          )
-                                      ),
-                                    ),
-                                  ),
-                                  Container(
-                                    width: (_width - 44)/ 2,
-                                    height: 60,
-                                    decoration: BoxDecoration(
-                                        color: Color(0xffffffff),
-                                        borderRadius:  new BorderRadius.circular(borderRadius)
-                                    ),
-
-
-                                    child: TextField(
-                                      textAlign: TextAlign.start,
-                                      keyboardType: TextInputType.number,
-                                      controller: puppyMomWeightText,
-                                      style: style,
-                                      decoration: InputDecoration(
-                                          contentPadding: EdgeInsets.all(20),
-                                          labelText: "Mom's Weight",
-                                          labelStyle: labelStyle,
-                                          focusedBorder: OutlineInputBorder(
-                                            borderSide: BorderSide(color: greenColor, width: 3.0),
-                                            borderRadius: BorderRadius.circular(borderRadius),
-                                          ),
-                                          enabledBorder: OutlineInputBorder(
-                                            borderSide: BorderSide(color: greenColor, width: 2.0),
-                                            borderRadius: BorderRadius.circular(borderRadius),
-                                          ),
-                                          border: OutlineInputBorder(
-                                            borderSide: BorderSide(color: greenColor, width: 2.0),
-                                            borderRadius: BorderRadius.circular(borderRadius),
-                                          )
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                          SizedBox(height: 24,),
-                          Center(
-                            child: Container(
-                              width: _width,
-                              height: 60,
-                              decoration: BoxDecoration(
-                                  color: Color(0xffffffff),
-                                  borderRadius:  new BorderRadius.circular(borderRadius)
-                              ),
-
-
-                              child: TextField(
-                                textAlign: TextAlign.start,
-                                keyboardType: TextInputType.number,
-                                controller: askingPriceText,
-                                style: style,
-                                decoration: InputDecoration(
-                                    contentPadding: EdgeInsets.all(20),
-                                    labelText: 'Asking Price',
-                                    labelStyle: labelStyle,
-                                    focusedBorder: OutlineInputBorder(
-                                      borderSide: BorderSide(color: greenColor, width: 3.0),
-                                      borderRadius: BorderRadius.circular(borderRadius),
-                                    ),
-                                    enabledBorder: OutlineInputBorder(
-                                      borderSide: BorderSide(color: greenColor, width: 2.0),
-                                      borderRadius: BorderRadius.circular(borderRadius),
-                                    ),
-                                    border: OutlineInputBorder(
-                                      borderSide: BorderSide(color: greenColor, width: 2.0),
-                                      borderRadius: BorderRadius.circular(borderRadius),
-                                    )
                                 ),
                               ),
                             ),
-                          ),
-                          SizedBox(height: 24,),
-                          Center(
-                            child: Container(
-                              width: _width,
-                              height: 60,
-                              decoration: BoxDecoration(
-                                  color: Color(0xffffffff),
-                                  borderRadius:  new BorderRadius.circular(borderRadius)
-                              ),
+                            SizedBox(height: 24,),
+                            Center(
+                              child: Container(
+                                width: _width,
+                                height: 60,
+                                decoration: BoxDecoration(
+                                    color: Color(0xffffffff),
+                                    borderRadius:  new BorderRadius.circular(borderRadius)
+                                ),
 
 
-                              child: TextField(
-                                textAlign: TextAlign.start,
-                                keyboardType: TextInputType.number,
-                                controller: shippingCostText,
-                                style: style,
-                                decoration: InputDecoration(
-                                    contentPadding: EdgeInsets.all(20),
-                                    labelText: 'Shipping Cost',
-                                    labelStyle: labelStyle,
-                                    focusedBorder: OutlineInputBorder(
-                                      borderSide: BorderSide(color: greenColor, width: 3.0),
-                                      borderRadius: BorderRadius.circular(borderRadius),
-                                    ),
-                                    enabledBorder: OutlineInputBorder(
-                                      borderSide: BorderSide(color: greenColor, width: 2.0),
-                                      borderRadius: BorderRadius.circular(borderRadius),
-                                    ),
-                                    border: OutlineInputBorder(
-                                      borderSide: BorderSide(color: greenColor, width: 2.0),
-                                      borderRadius: BorderRadius.circular(borderRadius),
-                                    )
+                                child: TextField(
+                                  textAlign: TextAlign.start,
+                                  keyboardType: TextInputType.number,
+                                  controller: shippingCostText,
+                                  style: style,
+                                  decoration: InputDecoration(
+                                      contentPadding: EdgeInsets.all(20),
+                                      labelText: 'Shipping Cost',
+                                      labelStyle: labelStyle,
+                                      focusedBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(color: greenColor, width: 3.0),
+                                        borderRadius: BorderRadius.circular(borderRadius),
+                                      ),
+                                      enabledBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(color: greenColor, width: 2.0),
+                                        borderRadius: BorderRadius.circular(borderRadius),
+                                      ),
+                                      border: OutlineInputBorder(
+                                        borderSide: BorderSide(color: greenColor, width: 2.0),
+                                        borderRadius: BorderRadius.circular(borderRadius),
+                                      )
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
-                          SizedBox(height: 24,),
-                          Center(
-                            child: Container(
-                              width: _width,
-                              height: 60,
-                              decoration: BoxDecoration(
-                                  color: Color(0xffffffff),
-                                  borderRadius:  new BorderRadius.circular(borderRadius)
-                              ),
+                            SizedBox(height: 24,),
+                            Center(
+                              child: Container(
+                                width: _width,
+                                height: 60,
+                                decoration: BoxDecoration(
+                                    color: Color(0xffffffff),
+                                    borderRadius:  new BorderRadius.circular(borderRadius)
+                                ),
 
-                              child: TextField(
-                                textAlign: TextAlign.start,
-                                controller: registryText,
-                                style: style,
-                                decoration: InputDecoration(
-                                    contentPadding: EdgeInsets.all(20),
-                                    labelText: 'Registry',
-                                    labelStyle: labelStyle,
-                                    focusedBorder: OutlineInputBorder(
-                                      borderSide: BorderSide(color: greenColor, width: 3.0),
-                                      borderRadius: BorderRadius.circular(borderRadius),
-                                    ),
-                                    enabledBorder: OutlineInputBorder(
-                                      borderSide: BorderSide(color: greenColor, width: 2.0),
-                                      borderRadius: BorderRadius.circular(borderRadius),
-                                    ),
-                                    border: OutlineInputBorder(
-                                      borderSide: BorderSide(color: greenColor, width: 2.0),
-                                      borderRadius: BorderRadius.circular(borderRadius),
-                                    )
+                                child: TextField(
+                                  textAlign: TextAlign.start,
+                                  controller: registryText,
+                                  style: style,
+                                  decoration: InputDecoration(
+                                      contentPadding: EdgeInsets.all(20),
+                                      labelText: 'Registry',
+                                      labelStyle: labelStyle,
+                                      focusedBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(color: greenColor, width: 3.0),
+                                        borderRadius: BorderRadius.circular(borderRadius),
+                                      ),
+                                      enabledBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(color: greenColor, width: 2.0),
+                                        borderRadius: BorderRadius.circular(borderRadius),
+                                      ),
+                                      border: OutlineInputBorder(
+                                        borderSide: BorderSide(color: greenColor, width: 2.0),
+                                        borderRadius: BorderRadius.circular(borderRadius),
+                                      )
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
-                          SizedBox(height: 24,),
-                          Container(
-                            alignment: Alignment.center,
-                            child: new Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.center,
+                            SizedBox(height: 24,),
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
                               children: <Widget>[
                                 Container(
                                   width: _width,
-                                  child: Column(
-                                    children: <Widget>[
-                                      InkWell(
-                                        onTap:loadVetReport,
-                                        child: _vetReportPath!=null
-                                            ? fileType==Constants.FILE_TYPE_PDF
-                                            ?  Container(
-                                            height:120,
-                                            width: 100,
-                                            decoration: BoxDecoration(
-                                                color: Color(0xffffffff),
-                                                borderRadius:
-                                                BorderRadius.all(Radius.circular(24)),
-                                                border: Border.all(color:greenColor, width: 3.0, ),
-                                                boxShadow: [
-                                                  BoxShadow(
-                                                    color: Colors.grey,
-                                                    blurRadius: 3.0, // soften the shadow
-                                                    offset: Offset(
-                                                      1.0, // Move to right 10  horizontally
-                                                      1.0, // Move to bottom 10 Vertically
-                                                    ),
-                                                  )
-                                                ]
-                                            ),
-                                            child: ClipRRect(
-                                              borderRadius:
-                                              BorderRadius.circular(24.0),
-                                              child: Image(
-                                                image: MemoryImage(pageImage.bytes),
-                                              ),
-                                            ))//pdf
-                                            : fileType == Constants.FILE_TYPE_IMAGE
-                                            ? Container(
-                                            height:120,
-                                            width: 100,
-                                            decoration: BoxDecoration(
-                                                color: Color(0xffffffff),
-                                                borderRadius:
-                                                BorderRadius.all(Radius.circular(24)),
-                                                border: Border.all(color:greenColor, width: 3.0, ),
-                                                boxShadow: [
-                                                  BoxShadow(
-                                                    color: Colors.grey,
-                                                    blurRadius: 3.0, // soften the shadow
-                                                    offset: Offset(
-                                                      1.0, // Move to right 10  horizontally
-                                                      1.0, // Move to bottom 10 Vertically
-                                                    ),
-                                                  )
-                                                ]
-                                            ),
-                                            child: ClipRRect(
-                                              borderRadius:
-                                              BorderRadius.circular(24.0),
-                                              child: Image.file(File(_vetReportPath), fit: BoxFit.cover,),
-                                            )) //image
-                                            : Container(
-                                            height:120,
-                                            width: 100,
-                                            decoration: BoxDecoration(
-                                                color: Color(0xffffffff),
-                                                borderRadius:
-                                                BorderRadius.all(Radius.circular(24)),
-                                                border: Border.all(color:greenColor, width: 3.0, ),
-                                                boxShadow: [
-                                                  BoxShadow(
-                                                    color: Colors.grey,
-                                                    blurRadius: 3.0, // soften the shadow
-                                                    offset: Offset(
-                                                      1.0, // Move to right 10  horizontally
-                                                      1.0, // Move to bottom 10 Vertically
-                                                    ),
-                                                  )
-                                                ]
-                                            ),
-                                            child: ClipRRect(
-                                              borderRadius:
-                                              BorderRadius.circular(24.0),
-                                              child: Image.file(File(_vetReportPath), fit: BoxFit.cover,),
-                                            ))  //others
-                                            : Container(
-                                            height:70,
-                                            width: _width,
-                                            decoration: BoxDecoration(
-                                                color: Color(0xffffffff),
-                                                borderRadius:
-                                                BorderRadius.all(Radius.circular(24)),
-                                                border: Border.all(color:greenColor, width: 3.0, ),
-                                                boxShadow: [
-                                                  BoxShadow(
-                                                    color: Colors.grey,
-                                                    blurRadius: 3.0, // soften the shadow
-                                                    offset: Offset(
-                                                      1.0, // Move to right 10  horizontally
-                                                      1.0, // Move to bottom 10 Vertically
-                                                    ),
-                                                  )
-                                                ]
-                                            ),
-                                            child: ClipRRect(
-                                              borderRadius:
-                                              BorderRadius.circular(24.0),
-                                              child:Padding(
-                                                padding: const EdgeInsets.fromLTRB(35,20,35,20),
-                                                child: Image.asset("assets/images/ic_upload.png", color: greenColor,),
-                                              ),
-                                            )),
-                                      ),
-                                      SizedBox(height:12),
-                                      new Text('Vet Check Report',
-                                        style: TextStyle(fontFamily:"NunitoSans",color: Color(0xff707070), fontSize: 12,fontWeight: FontWeight.bold),
-                                      ),
-                                      SizedBox(height:12),
-                                    ],
 
+                                  child: InputDecorator(
+                                    decoration: new InputDecoration(
+
+                                      labelText: 'Vet Check Report',
+                                      labelStyle: labelStyle,
+                                      border: OutlineInputBorder(),
+                                      enabledBorder: OutlineInputBorder(borderRadius:  new BorderRadius.circular(30), borderSide: BorderSide(width:2.0, color: greenColor)),
+                                    ),
+                                    child: Container(
+
+                                      child: _vetReportPath!=null
+                                          ? Column(
+                                            children: <Widget>[
+                                              Container(
+                                                decoration: BoxDecoration(
+                                                  color: Color(0xffFAFAFA),
+                                                  borderRadius:  new BorderRadius.circular(12),
+                                                  boxShadow: [
+                                                    BoxShadow(
+                                                      color: Colors.transparent,
+                                                      blurRadius: 0, // soften the shadow
+                                                      offset: Offset(
+                                                        0, // Move to right 10  horizontally
+                                                        0.0, // Move to bottom 10 Vertically
+                                                      ),
+                                                    )
+                                                  ],
+                                                ),
+
+                                                child: Padding(
+                                                  padding: const EdgeInsets.all(8.0),
+                                                  child: Row(
+                                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                    children: <Widget>[
+                                                      Row(
+                                                        mainAxisAlignment: MainAxisAlignment.start,
+                                                        children: <Widget>[
+                                                          Icon(Icons.attachment, color: Colors.black38, ),
+                                                          SizedBox(width: 8,),
+                                                          Container(
+                                                            width: _width/1.75,
+                                                            child: Text(_vetReportPath.substring(_vetReportPath.lastIndexOf("/")+1),textAlign: TextAlign.start,
+                                                              maxLines: 2,
+                                                              style: TextStyle(fontSize: 14,color: Colors.grey),
+                                                            ),
+                                                          ),
+
+                                                        ],
+                                                      ),
+                                                      InkWell(
+                                                        splashColor: Colors.red,
+                                                        onTap: (){
+                                                          Toast.show("Vet report selection cancelled", context);
+                                                          setState(() {
+                                                            _vetReportPath = null;
+                                                          });
+                                                        },
+                                                        child: Container(
+                                                          height: 40,
+                                                          width: 40,
+                                                          child: Icon(Icons.cancel, color: Colors.redAccent,),
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+
+                                                ),
+                                              ),
+                                              SizedBox(height: 16,),
+                                              Container(
+                                                alignment: Alignment.bottomRight,
+                                                child: Container(
+                                                  width: _width,
+                                                  child: Row(
+                                                    mainAxisAlignment: MainAxisAlignment.end,
+                                                    children: <Widget>[
+                                                      InkWell(
+                                                          onTap:(){
+                                                                  onPreview();
+                                                          },
+                                                          child: Container(
+                                                            padding: EdgeInsets.only(
+                                                              bottom: 0.0, // space between underline and text
+                                                            ),
+                                                            decoration: BoxDecoration(
+                                                                border: Border(bottom: BorderSide(
+                                                                  color: Colors.blue,  // Text colour here
+                                                                  width: 1.5, // Underline width
+                                                                ))
+                                                            ),
+
+                                                            child:new Text("PREVIEW", style: TextStyle(color:Colors.blue, fontWeight: FontWeight.bold, fontSize: 12))
+                                                          )
+                                                      ),
+                                                      SizedBox(width: 20,),
+                                                      InkWell(
+                                                          onTap:(){
+                                                            loadVetReport();
+                                                          },
+                                                          child: Container(
+                                                              padding: EdgeInsets.only(
+                                                                bottom: 0.0, // space between underline and text
+                                                              ),
+                                                              decoration: BoxDecoration(
+                                                                  border: Border(bottom: BorderSide(
+                                                                    color: Colors.blue,  // Text colour here
+                                                                    width: 1.5, // Underline width
+                                                                  ))
+                                                              ),
+
+                                                              child:new Text("CHANGE", style: TextStyle(color:Colors.blue, fontWeight: FontWeight.bold, fontSize: 12))
+                                                          )
+                                                      ),
+                                                      SizedBox(width: 8,),
+                                                    ],
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          )
+                                          : InkWell(
+                                              onTap:loadVetReport,
+                                            child: Container(
+                                              child: Row(
+                                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                              children: <Widget>[
+                                                Padding(
+                                                  padding: const EdgeInsets.fromLTRB(16,0,0,0),
+                                                  child: Text("Upload Vet Report ..", style:labelStyle.copyWith(color: Colors.grey)),
+                                                ),
+                                                ClipRRect(
+                                                  borderRadius:
+                                                  BorderRadius.circular(24.0),
+                                                  child:Padding(
+                                                    padding: const EdgeInsets.fromLTRB(0,0,12 ,0),
+                                                    child: Icon(Icons.file_upload, color: greenColor,),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                            ),
+                                          ),
+
+                                    ),
                                   ),
+                                ),
 
-                                )
                               ],
                             ),
-                          ),
-                          SizedBox(height: 24,),
-                          Center(
-                            child: Container(
-                              width: _width,
+                            SizedBox(height: 24,),
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: <Widget>[
+                                Container(
+                                  width: _width,
 
-                              decoration: BoxDecoration(
-                                  color: Color(0xffffffff),
-                                  borderRadius:  new BorderRadius.circular(borderRadius)
-                              ),
+                                  child: InputDecorator(
+                                    decoration: new InputDecoration(
+
+                                      labelText: 'Flight Ticket',
+                                      labelStyle: labelStyle,
+                                      border: OutlineInputBorder(),
+                                      enabledBorder: OutlineInputBorder(borderRadius:  new BorderRadius.circular(30), borderSide: BorderSide(width:2.0, color: greenColor)),
+                                    ),
+                                    child: Container(
+
+                                      child: _flightTicketPath!=null
+                                          ? Column(
+                                        children: <Widget>[
+                                          Container(
+                                            decoration: BoxDecoration(
+                                              color: Color(0xffFAFAFA),
+                                              borderRadius:  new BorderRadius.circular(12),
+                                              boxShadow: [
+                                                BoxShadow(
+                                                  color: Colors.transparent,
+                                                  blurRadius: 0, // soften the shadow
+                                                  offset: Offset(
+                                                    0, // Move to right 10  horizontally
+                                                    0.0, // Move to bottom 10 Vertically
+                                                  ),
+                                                )
+                                              ],
+                                            ),
+
+                                            child: Padding(
+                                              padding: const EdgeInsets.all(8.0),
+                                              child: Row(
+                                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                children: <Widget>[
+                                                  Row(
+                                                    mainAxisAlignment: MainAxisAlignment.start,
+                                                    children: <Widget>[
+                                                      Icon(Icons.attachment, color: Colors.black38, ),
+                                                      SizedBox(width: 8,),
+                                                      Text(_flightTicketPath.substring(_flightTicketPath.lastIndexOf("/")+1),textAlign: TextAlign.start,
+                                                        maxLines: 2,
+                                                        style: TextStyle(fontSize: 14,color: Colors.grey),
+                                                      ),
+
+                                                    ],
+                                                  ),
+                                                  InkWell(
+                                                    splashColor: Colors.red,
+                                                    onTap: (){
+                                                      Toast.show("Flight Ticket selection cancelled", context);
+                                                      setState(() {
+                                                        _flightTicketPath = null;
+                                                      });
+                                                    },
+                                                    child: Container(
+                                                      height: 40,
+                                                      width: 40,
+                                                      child: Icon(Icons.cancel, color: Colors.redAccent,),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+
+                                            ),
+                                          ),
+                                          SizedBox(height: 16,),
+                                          Container(
+                                            alignment: Alignment.bottomRight,
+                                            child: Container(
+                                              width: _width,
+                                              child: Row(
+                                                mainAxisAlignment: MainAxisAlignment.end,
+                                                children: <Widget>[
+                                                  InkWell(
+                                                      onTap:(){
+
+                                                      },
+                                                      child: Container(
+                                                          padding: EdgeInsets.only(
+                                                            bottom: 0.0, // space between underline and text
+                                                          ),
+                                                          decoration: BoxDecoration(
+                                                              border: Border(bottom: BorderSide(
+                                                                color: Colors.blue,  // Text colour here
+                                                                width: 1.5, // Underline width
+                                                              ))
+                                                          ),
+
+                                                          child:new Text("PREVIEW", style: TextStyle(color:Colors.blue, fontWeight: FontWeight.bold, fontSize: 12))
+                                                      )
+                                                  ),
+                                                  SizedBox(width: 20,),
+                                                  InkWell(
+                                                      onTap:(){
+                                                        loadFlightTicket();
+                                                      },
+                                                      child: Container(
+                                                          padding: EdgeInsets.only(
+                                                            bottom: 0.0, // space between underline and text
+                                                          ),
+                                                          decoration: BoxDecoration(
+                                                              border: Border(bottom: BorderSide(
+                                                                color: Colors.blue,  // Text colour here
+                                                                width: 1.5, // Underline width
+                                                              ))
+                                                          ),
+
+                                                          child:new Text("CHANGE", style: TextStyle(color:Colors.blue, fontWeight: FontWeight.bold, fontSize: 12))
+                                                      )
+                                                  ),
+                                                  SizedBox(width: 8,),
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      )
+                                          : InkWell(
+                                        onTap:loadFlightTicket,
+                                        child: Container(
+                                          child: Row(
+                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                            children: <Widget>[
+                                              Padding(
+                                                padding: const EdgeInsets.fromLTRB(16,0,0,0),
+                                                child: Text("Upload Flight Ticket ..", style:labelStyle.copyWith(color:Colors.grey)),
+                                              ),
+                                              ClipRRect(
+                                                borderRadius:
+                                                BorderRadius.circular(24.0),
+                                                child:Padding(
+                                                  padding: const EdgeInsets.fromLTRB(0,0,12 ,0),
+                                                  child: Icon(Icons.file_upload, color: greenColor,),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+
+                                    ),
+                                  ),
+                                ),
+
+                              ],
+                            ),
+                            SizedBox(height: 24,),
+                            Center(
+                              child: Container(
+                                width: _width,
+
+                                decoration: BoxDecoration(
+                                    color: Color(0xffffffff),
+                                    borderRadius:  new BorderRadius.circular(borderRadius)
+                                ),
 
 
-                              child: Column(
-                                children: <Widget>[
-                                  MergeSemantics(
-                                    child: ListTile(
-                                      dense: true,
-                                      title: Text('Champion Bloodline', style: TextStyle(fontSize: 13,  color:  isChampionBloodline?greenColor : Color(0xffA9A9A9)),),
-                                      trailing: Transform.scale(
-                                        scale: 0.75,
-                                        child: CupertinoSwitch(
-                                          value: isChampionBloodline,
-                                          onChanged: (bool value) {
-                                            setState(() {
-                                              isChampionBloodline = value;
-                                            }
-                                            );
-                                          },
+                                child: Column(
+                                  children: <Widget>[
+                                    MergeSemantics(
+                                      child: ListTile(
+                                        dense: true,
+                                        title: Text('Champion Bloodline', style: TextStyle(fontSize: 13,  color:  isChampionBloodline?greenColor : Color(0xffA9A9A9)),),
+                                        trailing: Transform.scale(
+                                          scale: 0.75,
+                                          child: CupertinoSwitch(
+                                            value: isChampionBloodline,
+                                            onChanged: (bool value) {
+                                              setState(() {
+                                                isChampionBloodline = value;
+                                              }
+                                              );
+                                            },
+                                          ),
                                         ),
+                                        onTap: () {
+                                          setState(() {
+                                            isChampionBloodline = !isChampionBloodline;
+                                          });
+                                        },
                                       ),
-                                      onTap: () {
-                                        setState(() {
-                                          isChampionBloodline = !isChampionBloodline;
-                                        });
-                                      },
                                     ),
-                                  ),
-                                  MergeSemantics(
-                                    child: ListTile(
-                                      dense: true,
-                                      title: Text('Family Raised', style: TextStyle(fontSize: 13,  color:  isFamilyRaised?greenColor : Color(0xffA9A9A9)),),
-                                      trailing: Transform.scale(
-                                        scale: 0.75,
-                                        child: CupertinoSwitch(
-                                          value: isFamilyRaised,
-                                          onChanged: (bool value) {
-                                            setState(() {
-                                              isFamilyRaised = value;
-                                            }
-                                            );
-                                          },
+                                    MergeSemantics(
+                                      child: ListTile(
+                                        dense: true,
+                                        title: Text('Family Raised', style: TextStyle(fontSize: 13,  color:  isFamilyRaised?greenColor : Color(0xffA9A9A9)),),
+                                        trailing: Transform.scale(
+                                          scale: 0.75,
+                                          child: CupertinoSwitch(
+                                            value: isFamilyRaised,
+                                            onChanged: (bool value) {
+                                              setState(() {
+                                                isFamilyRaised = value;
+                                              }
+                                              );
+                                            },
+                                          ),
                                         ),
+                                        onTap: () {
+                                          setState(() {
+                                            isFamilyRaised = !isFamilyRaised;
+                                          });
+                                        },
                                       ),
-                                      onTap: () {
-                                        setState(() {
-                                          isFamilyRaised = !isFamilyRaised;
-                                        });
-                                      },
                                     ),
-                                  ),
-                                  MergeSemantics(
-                                    child: ListTile(
-                                      dense: true,
-                                      title: Text('Kid Friendly', style: TextStyle(fontSize: 13,  color:  isKidFriendly?greenColor : Color(0xffA9A9A9)),),
-                                      trailing: Transform.scale(
-                                        scale: 0.75,
-                                        child: CupertinoSwitch(
-                                          value: isKidFriendly,
-                                          onChanged: (bool value) {
-                                            setState(() {
-                                              isKidFriendly = value;
-                                            }
-                                            );
-                                          },
+                                    MergeSemantics(
+                                      child: ListTile(
+                                        dense: true,
+                                        title: Text('Kid Friendly', style: TextStyle(fontSize: 13,  color:  isKidFriendly?greenColor : Color(0xffA9A9A9)),),
+                                        trailing: Transform.scale(
+                                          scale: 0.75,
+                                          child: CupertinoSwitch(
+                                            value: isKidFriendly,
+                                            onChanged: (bool value) {
+                                              setState(() {
+                                                isKidFriendly = value;
+                                              }
+                                              );
+                                            },
+                                          ),
                                         ),
+                                        onTap: () {
+                                          setState(() {
+                                            isKidFriendly = !isKidFriendly;
+                                          });
+                                        },
                                       ),
-                                      onTap: () {
-                                        setState(() {
-                                          isKidFriendly = !isKidFriendly;
-                                        });
-                                      },
                                     ),
-                                  ),
-                                  MergeSemantics(
-                                    child: ListTile(
-                                      dense: true,
-                                      title: Text('Microchipped', style: TextStyle(fontSize: 13,  color:  isMicrochipped?greenColor : Color(0xffA9A9A9)),),
-                                      trailing: Transform.scale(
-                                        scale: 0.75,
-                                        child: CupertinoSwitch(
-                                          value: isMicrochipped,
-                                          onChanged: (bool value) {
-                                            setState(() {
-                                              isMicrochipped = value;
-                                            }
-                                            );
-                                          },
+                                    MergeSemantics(
+                                      child: ListTile(
+                                        dense: true,
+                                        title: Text('Microchipped', style: TextStyle(fontSize: 13,  color:  isMicrochipped?greenColor : Color(0xffA9A9A9)),),
+                                        trailing: Transform.scale(
+                                          scale: 0.75,
+                                          child: CupertinoSwitch(
+                                            value: isMicrochipped,
+                                            onChanged: (bool value) {
+                                              setState(() {
+                                                isMicrochipped = value;
+                                              }
+                                              );
+                                            },
+                                          ),
                                         ),
+                                        onTap: () {
+                                          setState(() {
+                                            isMicrochipped = !isMicrochipped;
+                                          });
+                                        },
                                       ),
-                                      onTap: () {
-                                        setState(() {
-                                          isMicrochipped = !isMicrochipped;
-                                        });
-                                      },
                                     ),
-                                  ),
-                                  MergeSemantics(
-                                    child: ListTile(
-                                      dense: true,
-                                      title: Text('Socialized', style: TextStyle(fontSize: 13,  color:  isSocialized?greenColor : Color(0xffA9A9A9)),),
-                                      trailing: Transform.scale(
-                                        scale: 0.75,
-                                        child: CupertinoSwitch(
-                                          value: isSocialized,
-                                          onChanged: (bool value) {
-                                            setState(() {
-                                              isSocialized = value;
-                                            }
-                                            );
-                                          },
+                                    MergeSemantics(
+                                      child: ListTile(
+                                        dense: true,
+                                        title: Text('Socialized', style: TextStyle(fontSize: 13,  color:  isSocialized?greenColor : Color(0xffA9A9A9)),),
+                                        trailing: Transform.scale(
+                                          scale: 0.75,
+                                          child: CupertinoSwitch(
+                                            value: isSocialized,
+                                            onChanged: (bool value) {
+                                              setState(() {
+                                                isSocialized = value;
+                                              }
+                                              );
+                                            },
+                                          ),
                                         ),
+                                        onTap: () {
+                                          setState(() {
+                                            isSocialized = !isSocialized;
+                                          });
+                                        },
                                       ),
-                                      onTap: () {
-                                        setState(() {
-                                          isSocialized = !isSocialized;
-                                        });
-                                      },
                                     ),
-                                  ),
-                                ],
+                                  ],
+                                ),
                               ),
                             ),
-                          ),
-                          SizedBox(height: 30,),
-                          Center(
-                            child:  CupertinoButton(
-                              color: maleColor,
-                              borderRadius: BorderRadius.circular(100),
-                              padding: EdgeInsets.fromLTRB(120.0, 24.0, 120.0,24.0),
-                              onPressed: () {
-                                FocusScope.of(context).unfocus();
-                                onFinishClick(context);
-                              },
-                              child: Text("Finsih",
-                                textAlign: TextAlign.center,
-                                style: style.copyWith(fontWeight: FontWeight.bold,color: Colors.white, fontSize: 14),
+                            SizedBox(height: 30,),
+                            Center(
+                              child:  CupertinoButton(
+                                color: maleColor,
+                                borderRadius: BorderRadius.circular(100),
+                                padding: EdgeInsets.fromLTRB(120.0, 24.0, 120.0,24.0),
+                                onPressed: () {
+                                  FocusScope.of(context).unfocus();
+                                  onFinishClick(context);
+                                },
+                                child: Text("Finish",
+                                  textAlign: TextAlign.center,
+                                  style: style.copyWith(fontWeight: FontWeight.bold,color: Colors.white, fontSize: 14),
 
+                                ),
                               ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
-            )));
+              ))),
+    );
   }
 
   void onFinishClick(BuildContext context) {
@@ -1258,5 +1492,38 @@ class AddPuppyState extends State<AddPuppy> {
 
   calculateAgeInWeeks() {
     return ((DateTime.now().difference(dateOfBirth).inDays)/7).round();
+  }
+
+  void onPreview() {
+    Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext context) =>Preview(_vetReportPath, vetFileType)));
+  }
+
+  Future<bool> _onBackPressed() {
+    return  showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return CupertinoAlertDialog(
+          title: Text('Are you sure?'),
+          content: Text("\nAny entries in the form would be lost. Do you want to exit this page?"),
+          actions: <Widget>[
+            CupertinoDialogAction(
+              child: Text('No'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            CupertinoDialogAction(
+              child: Text('Yes'),
+              onPressed: (){
+                Navigator.of(context).pop();
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    ) ??
+        false;
   }
 }

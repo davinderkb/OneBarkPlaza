@@ -32,7 +32,7 @@ int puppyId;
 }
 
 class AddPuppySuccessfulState extends State<AddPuppySuccessful> {
-
+  bool _isLoading = true;
   @override
   void initState() {
     super.initState();
@@ -59,7 +59,16 @@ class AddPuppySuccessfulState extends State<AddPuppySuccessful> {
           elevation: 0.0,
           backgroundColor: greenColor,
         ),
-        body: Center(
+        body: _isLoading? Container(
+            color: Colors.white,
+            width: _width,
+            height: _height,
+            alignment: Alignment.bottomCenter,
+            child: SpinKitRipple(
+              borderWidth: 100.0,
+              color: greenColor,
+              size: 120,
+            )):Center(
           child: Container(
 
             width: _width,
@@ -82,7 +91,7 @@ class AddPuppySuccessfulState extends State<AddPuppySuccessful> {
                           side: BorderSide(color: greenColor, width: 2.0)
                       ),
                       onPressed: () {
-                        Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (BuildContext context) => ViewPuppy(widget.puppyDetails)));
+                        Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (BuildContext context) => ViewPuppy(widget.puppyDetails, true)));
                       },
                       color:Colors.white,
                       disabledColor: Colors.white,
@@ -146,9 +155,14 @@ class AddPuppySuccessfulState extends State<AddPuppySuccessful> {
     try{
       dynamic response = await dio.post(getPuppyUrl, data: formData);
       widget.puppyDetails = PuppyDetails.fromJson(jsonDecode(response.toString()));
+      setState(() {
+        _isLoading = false;
+      });
     }catch(exception){
-      Toast.show("Request Failed. "+exception.toString(), context,
-      );
+      Toast.show("Request Failed. "+exception.toString(), context,);
+      setState(() {
+        _isLoading = false;
+      });
     }
   }
 }

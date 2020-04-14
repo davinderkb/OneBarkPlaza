@@ -10,14 +10,18 @@ import 'package:one_bark_plaza/edit_puppy.dart';
 import 'package:one_bark_plaza/puppy_details.dart';
 import 'package:toast/toast.dart';
 import 'package:one_bark_plaza/util/utility.dart';
+
+import 'homepage.dart';
 final greenColor = Color(0xff7FA432);
 final blueColor = Color(0xff4C8BF5);
 final lightPinkBackground = Color(0xffFEF8F5);
 class ViewPuppy extends StatefulWidget {
   ViewPuppyState viewPuppyState;
   PuppyDetails puppyDetails;
-  ViewPuppy(PuppyDetails puppyDetails){
+  bool isRefreshPop;
+  ViewPuppy(PuppyDetails puppyDetails, isRefreshPop){
     this.puppyDetails = puppyDetails;
+    this.isRefreshPop = isRefreshPop;
   }
   @override
   ViewPuppyState createState() {
@@ -52,7 +56,13 @@ class ViewPuppyState extends State<ViewPuppy> {
           backgroundColor: lightPinkBackground,
           leading: new IconButton(
             icon: new Icon(Icons.arrow_back, color: greenColor),
-            onPressed: () =>Navigator.of(context).maybePop(),
+            onPressed: () {
+              if(widget.isRefreshPop){
+                Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (BuildContext context) => HomePage()));
+              } else {
+                Navigator.of(context).maybePop();
+              }
+            }
           ),
           title: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -144,7 +154,7 @@ class ViewPuppyState extends State<ViewPuppy> {
                             Container(
                               width:_width/2,
                               child: Text(
-                                  widget.puppyDetails.categoryName,
+                                  widget.puppyDetails!=null?widget.puppyDetails.categoryName: "",
                                   maxLines: 2,
 
                                   style: TextStyle(
@@ -159,7 +169,7 @@ class ViewPuppyState extends State<ViewPuppy> {
                                           .normal)),
                             ),
                             Text(
-                                "\$ "+double.parse(widget.puppyDetails.puppyPrice).toString(),
+                                "\$ "+getStringSafely(widget.puppyDetails.puppyPrice).toString(),
                                 style: TextStyle(
                                     fontFamily:
                                     'NunitoSans',
@@ -327,10 +337,12 @@ class ViewPuppyState extends State<ViewPuppy> {
                                         alignment: Alignment.topLeft,
                                         child: Text("Shipping Cost", style: tableHeaderTextStyle,)
                                     ),
+
                                     Container(
                                         width: _width/2 -32,
                                         alignment: Alignment.topLeft,
-                                        child: Text("\$ "+double.parse(widget.puppyDetails.shippingCost).toString(), style: tableContentTextStyle,)
+
+                                        child: Text("\$ "+getStringSafely(widget.puppyDetails.shippingCost), style: tableContentTextStyle,)
                                     ),
                                   ],
                                 ),
@@ -480,6 +492,15 @@ class ViewPuppyState extends State<ViewPuppy> {
       images.add(asset);
     }
     return images;
+  }
+
+  String getStringSafely(val) {
+    try{
+      return double.parse(val).toString();
+    } catch (e){
+      return "";
+    }
+
   }
 
 }

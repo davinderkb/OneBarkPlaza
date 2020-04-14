@@ -50,13 +50,17 @@ class LoginPageState extends State<LoginPage>{
 
           contentPadding: EdgeInsets.fromLTRB(18.0, 20.0, 18.0, 20.0),
           labelText: "Username",
-          labelStyle: TextStyle(color: Colors.orange),
+          labelStyle: TextStyle(color: Colors.white),
           enabledBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: Colors.orange, width: 1.0),
+            borderSide: BorderSide(color: Colors.white, width: 2.0),
+            borderRadius: BorderRadius.circular(30.0),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: Colors.white, width: 2.0),
             borderRadius: BorderRadius.circular(30.0),
           ),
           border: OutlineInputBorder(
-            borderSide: BorderSide(color: Colors.white, width: 1.0),
+            borderSide: BorderSide(color: Colors.white, width: 2.0),
             borderRadius: BorderRadius.circular(30.0),
           )
       ),
@@ -68,13 +72,17 @@ class LoginPageState extends State<LoginPage>{
       decoration: InputDecoration(
           contentPadding: EdgeInsets.fromLTRB(18.0, 20.0, 18.0, 20.0),
           labelText: "Password",
-          labelStyle: TextStyle(color: Colors.orange),
+          labelStyle: TextStyle(color: Colors.white),
           enabledBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: Colors.orange, width: 1.0),
+            borderSide: BorderSide(color: Colors.white, width: 2.0),
+            borderRadius: BorderRadius.circular(30.0),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: Colors.white, width: 2.0),
             borderRadius: BorderRadius.circular(30.0),
           ),
           border: OutlineInputBorder(
-            borderSide: BorderSide(color: Colors.white, width: 1.0),
+            borderSide: BorderSide(color: Colors.white, width: 2.0),
             borderRadius: BorderRadius.circular(30.0),
           )
       ),
@@ -93,11 +101,11 @@ class LoginPageState extends State<LoginPage>{
     );
 
     final loginButton = Material(
-      borderRadius: BorderRadius.circular(30.0),
+      borderRadius: BorderRadius.circular(50.0),
 
       color: Color(0xff308FA4),
       child: MaterialButton(
-        minWidth: 265,
+        minWidth: _width - 100,
         padding: EdgeInsets.fromLTRB(18.0, 20.0, 18.0, 20.0),
         onPressed: () {
           FocusScope.of(context).unfocus();
@@ -126,7 +134,7 @@ class LoginPageState extends State<LoginPage>{
                     width: MediaQuery.of(context).size.width,
                   ),
                   SizedBox(
-                    width: _width-100,
+                    width: _width-110,
 
                     child: Image.asset(
                       "assets/images/logo.png",
@@ -142,15 +150,15 @@ class LoginPageState extends State<LoginPage>{
                   SizedBox(height: 34.0),
                   Padding(
                     padding: const EdgeInsets.all(4.0),
-                    child: Container(height: 54, width: 265, child: userName),
+                    child: Container(height: 64, width: 265, child: userName),
                   ),
-                  SizedBox(height: 12.0),
+                  SizedBox(height: 20.0),
                   Stack(children: [
                     Column(
                       children: <Widget>[
                         Padding(
                           padding: const EdgeInsets.all(4.0),
-                          child: Container(height: 54, width: 265, child: passwordField),
+                          child: Container(height: 64, width: 265, child: passwordField),
                         ),
                         SizedBox(height: 14.0),
                       ],
@@ -163,13 +171,13 @@ class LoginPageState extends State<LoginPage>{
                         onTapUp: outContact,
                         child: Icon(
                           Icons.remove_red_eye,
-                          color: Colors.orangeAccent, size:35
+                          color: Colors.amber, size:35
                         ),
                       ),
                     ),
                   ]),
-                  SizedBox(height: 2.0),
-                  loginButton,
+                  SizedBox(height: 8.0),
+                  Container(height:64,child: loginButton),
                   SizedBox(height: 12.0),
                   Padding(
                     padding: const EdgeInsets.all(4.0),
@@ -233,7 +241,8 @@ class LoginPageState extends State<LoginPage>{
       _isLoading = true;
     });
     var dio = Dio();
-    var loginUrl = 'https://obpdevstage.wpengine.com/wp-json/obp-api/login';
+
+    var loginUrl = 'https://obpdevstage.wpengine.com/wp-json/obp/v1/login';
     FormData formData = new FormData.fromMap({
       "username": userNameController.text.trim(),
       "password": passwordController.text
@@ -284,6 +293,7 @@ class LoginPageState extends State<LoginPage>{
     prefs.setBool(Constants.SHARED_PREF_IS_LOGGED_IN, true);
     prefs.setString(Constants.SHARED_PREF_USER_NAME, userNameController.text.trim());
     prefs.setString(Constants.SHARED_PREF_PASSWORD, passwordController.text);
+    prefs.setString(Constants.SHARED_PREF_GENDER, user.gender);
     prefs.setString(Constants.SHARED_PREF_NAME, user.name);
     prefs.setString(Constants.SHARED_PREF_USER_ID, user.id);
   }

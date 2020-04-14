@@ -30,8 +30,13 @@ TextStyle style = TextStyle(
     fontFamily: 'NunitoSans', fontSize: 14.0, color: Color(0xff707070));
 class HomePage extends StatefulWidget {
   HomePageState homePageState;
-  HomePage() {}
-
+  bool isRedirectedFromDelete = false;
+  HomePage() {
+    this.isRedirectedFromDelete = false;
+  }
+  HomePage.redirectedFromDelete(){
+    this.isRedirectedFromDelete = true;
+  }
   @override
   HomePageState createState() {
     return homePageState = HomePageState();
@@ -82,12 +87,21 @@ class HomePageState extends State<HomePage> {
   double minPrice;
   double maxPrice;
 
+  bool isDeleteSuccess = false;
+
 
 
   @override
   void initState() {
     super.initState();
     futureListOfPuppies = _puppiesList(context);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if(widget.isRedirectedFromDelete){
+        widget.isRedirectedFromDelete = false;
+        Toast.show("Puppy Deleted Successfully", context);
+      }
+    } );
+
   }
   @override
   Widget build(BuildContext context) {
@@ -108,7 +122,10 @@ class HomePageState extends State<HomePage> {
           borderWidth: 100.0,
           color: blueColor,
           size: 120,
-        )):Scaffold(
+        ))
+        : isDeleteSuccess
+        ? Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (BuildContext context) => HomePage.redirectedFromDelete()))
+        : Scaffold(
         backgroundColor: Colors.white,
         appBar: new AppBar(
           //iconTheme: new IconThemeData(color: Color(0xff262B31)),
@@ -392,19 +409,23 @@ class HomePageState extends State<HomePage> {
                                                                               dynamic response = await dio.post(deletePuppyUrl, data: formData);
                                                                               dynamic responseList = jsonDecode(response.toString());
                                                                               if (responseList.length > 0 && responseList[0] == "success"){
-                                                                                  Toast.show("Puppy Deleted Successfully", context);
-                                                                                  Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext context) =>HomePage()));
+                                                                                setState(() {
+                                                                                  _isLoading = false;
+                                                                                  isDeleteSuccess = true;
+                                                                                });
                                                                               } else{
+                                                                                setState(() {
+                                                                                  _isLoading = false;
+                                                                                });
                                                                                 Toast.show("Request Failed. " + response.toString(), context);
                                                                                 Navigator.of(context).pop();
                                                                               }
                                                                             }catch(exception){
-                                                                              Toast.show("Request Failed. "+exception.toString(), context);
-                                                                              Navigator.of(context).pop();
-                                                                            }finally{
                                                                               setState(() {
                                                                                 _isLoading = false;
                                                                               });
+                                                                              Toast.show("Request Failed. "+exception.toString(), context);
+
                                                                             }
                                                                           },
                                                                         ),
@@ -517,7 +538,8 @@ class HomePageState extends State<HomePage> {
                                                         style: TextStyle(fontFamily:"NunitoSans",fontSize: 10, color: Colors.white),
                                                       ),
                                                       onPressed: () {
-                                                        Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext context) =>ViewPuppy(data[index])));
+                                                        Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext context) =>ViewPuppy(data[index],false)));
+                                                        Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext context) =>ViewPuppy(data[index],false)));
                                                       },
                                                       disabledColor: blueColor,
                                                       color: blueColor,
