@@ -2,11 +2,17 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
 import 'dart:ui';
-
+import 'package:flutter/material.dart';
+import 'dart:io';
+import 'package:flutter/services.dart' show rootBundle;
+import 'package:mime/mime.dart';
+import 'dart:convert';
+import 'package:http_parser/http_parser.dart';
 import 'package:dio/dio.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_absolute_path/flutter_absolute_path.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:mime/mime.dart';
 import 'package:multi_image_picker/multi_image_picker.dart';
@@ -20,12 +26,15 @@ import 'package:one_bark_plaza/main.dart';
 import 'package:one_bark_plaza/preview.dart';
 import 'package:one_bark_plaza/util/constants.dart';
 import 'package:one_bark_plaza/util/utility.dart';
+import 'package:open_file/open_file.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:toast/toast.dart';
 import 'package:image/image.dart' as I;
 import 'choose_breed_dialog.dart';
 final greenColor = Color(0xff7FA432);
 final blueColor = Color(0xff4C8BF5);
+var addPuppyUrl = 'https://obpdevstage.wpengine.com/wp-json/obp/v1/create_puppy';
+
 class AddPuppy extends StatefulWidget {
   AddPuppyState addPuppyState;
   @override
@@ -37,7 +46,9 @@ class AddPuppy extends StatefulWidget {
 class AddPuppyState extends State<AddPuppy> {
   bool _isLoading = false;
   DateTime dateOfBirth = DateTime.now();
+  DateTime dateOfCheckup = DateTime.now();
   String dateOfBirthString = '';
+  String dateOfCheckupString = '';
   String _chooseBreed = '';
   int _selectedBreedId = 0;
   bool _isBreedSelectedOnce = false;
@@ -117,6 +128,8 @@ class AddPuppyState extends State<AddPuppy> {
   TextEditingController shippingCostText = new TextEditingController();
   TextEditingController registryText = new TextEditingController();
   TextEditingController vetAddressText = new TextEditingController();
+  TextEditingController vetNameText = new TextEditingController();
+
 
   @override
   void initState() {
@@ -158,7 +171,62 @@ class AddPuppyState extends State<AddPuppy> {
     });
   }
 
+  /*Future<Map<String, dynamic>> _uploadImage(File image) async {
 
+    final mimeTypeData = lookupMimeType(image.path, headerBytes: [0xFF, 0xD8]).split('/');
+    final imageUploadRequest = http.MultipartRequest('POST', Uri.parse(addPuppyUrl));
+    final file = await http.MultipartFile.fromPath('image', image.path, contentType: MediaType(mimeTypeData[0], mimeTypeData[1]));
+    // Explicitly pass the extension of the image with request body
+    // Since image_picker has some bugs due which it mixes up
+    // image extension with file name like this filenamejpge
+    // Which creates some problem at the server side to manage
+    // or verify the file extension
+    imageUploadRequest.fields['ext'] = mimeTypeData[1];
+    imageUploadRequest.files.add(file);
+    try {
+      final streamedResponse = await imageUploadRequest.send();
+      final response = await http.Response.fromStream(streamedResponse);
+      if (response.statusCode != 200) {
+        return null;
+      }
+      final Map<String, dynamic> responseData = json.decode(response.body);
+      return responseData;
+    } catch (e) {
+      print(e);
+      return null;
+    }
+  }
+  void _startUploading() async {
+
+    Uri uri = Uri.parse(addPuppyUrl);
+
+// create multipart request
+    MultipartRequest request = http.MultipartRequest("POST", uri);
+
+    ByteData byteData = await images[0].getByteData();
+    List<int> imageData = byteData.buffer.asUint8List();
+
+    http.MultipartFile multipartFile = http.MultipartFile.fromBytes(
+      'image',
+      imageData,
+      filename: 'onebark_test.jpg',
+      contentType: MediaType("image", "jpg"),
+    );
+
+// add file to multipart
+    request.files.add(multipartFile);
+// send
+    var response = await request.send();
+    print(response);
+    // Check if any error occured
+    if (response == null || response.toString().contains("error")) {
+      Toast.show("Image Upload Failed!!!", context,
+          duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
+    } else {
+      Toast.show("Image Uploaded Successfully!!!", context,
+          duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
+    }
+  }*/
   void loadVetReport() async {
     try {
       String filePath = await FilePicker.getFilePath(type: FileType.custom, allowedExtensions: ['jpg', 'jpeg', 'png', 'pdf', 'doc' , 'docx'],);
@@ -385,7 +453,7 @@ class AddPuppyState extends State<AddPuppy> {
                                             onPressed: loadAssets,
                                             color: Color(0xffffffff),
                                             icon: new Icon(Icons.image, color:greenColor, size:16),
-                                            label: new Text("Add / Preview", style: TextStyle(color:greenColor,fontFamily:"NunitoSans", fontWeight: FontWeight.bold, fontSize: 13),)),
+                                            label: new Text("Add / View", style: TextStyle(color:greenColor,fontFamily:"NunitoSans", fontWeight: FontWeight.bold, fontSize: 13),)),
                                       ),
                                     ],
                                   ),
@@ -926,12 +994,158 @@ class AddPuppyState extends State<AddPuppy> {
                               ),
                             ),
                             SizedBox(height: 24,),
+                            Center(
+                              child: Container(
+                                width: _width,
+                                height: 60,
+                                decoration: BoxDecoration(
+                                    color: Color(0xffffffff),
+                                    borderRadius:  new BorderRadius.circular(borderRadius)
+                                ),
+
+                                child: TextField(
+                                  textAlign: TextAlign.start,
+                                  controller: vetNameText,
+                                  style: style,
+                                  decoration: InputDecoration(
+                                      contentPadding: EdgeInsets.all(20),
+                                      labelText: 'Vet Name',
+                                      labelStyle: labelStyle,
+                                      focusedBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(color: greenColor, width: 3.0),
+                                        borderRadius: BorderRadius.circular(borderRadius),
+                                      ),
+                                      enabledBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(color: greenColor, width: 2.0),
+                                        borderRadius: BorderRadius.circular(borderRadius),
+                                      ),
+                                      border: OutlineInputBorder(
+                                        borderSide: BorderSide(color: greenColor, width: 2.0),
+                                        borderRadius: BorderRadius.circular(borderRadius),
+                                      )
+                                  ),
+                                ),
+                              ),
+                            ),
+                            SizedBox(height: 24,),
+                            Center(
+                              child: Container(
+                                width: _width,
+                                height: 60,
+                                decoration: BoxDecoration(
+                                    color: Color(0xffffffff),
+                                    borderRadius:  new BorderRadius.circular(borderRadius)
+                                ),
+
+                                child: TextField(
+                                  textAlign: TextAlign.start,
+                                  controller: vetAddressText,
+                                  style: style,
+                                  decoration: InputDecoration(
+                                      contentPadding: EdgeInsets.all(20),
+                                      labelText: 'Vet Address',
+                                      labelStyle: labelStyle,
+                                      focusedBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(color: greenColor, width: 3.0),
+                                        borderRadius: BorderRadius.circular(borderRadius),
+                                      ),
+                                      enabledBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(color: greenColor, width: 2.0),
+                                        borderRadius: BorderRadius.circular(borderRadius),
+                                      ),
+                                      border: OutlineInputBorder(
+                                        borderSide: BorderSide(color: greenColor, width: 2.0),
+                                        borderRadius: BorderRadius.circular(borderRadius),
+                                      )
+                                  ),
+                                ),
+                              ),
+                            ),
+                            SizedBox(height: 24,),
+
+                            Center(
+                              child: InkWell(
+                                onTap: () {
+                                  FocusScope.of(context).unfocus();
+                                  _selectDateOfCheckup(context);
+                                },
+                                child: Container(
+                                  width: _width,
+                                  height: 64,
+                                  decoration: BoxDecoration(
+                                    color: Color(0xffffffff),
+                                    borderRadius:  new BorderRadius.circular(30),
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Colors.grey,
+                                        blurRadius: 1.0, // soften the shadow
+                                        offset: Offset(
+                                          1.0, // Move to right 10  horizontally
+                                          1.0, // Move to bottom 10 Vertically
+                                        ),
+                                      )
+                                    ],
+                                  ),
+
+
+                                  child: InputDecorator(
+
+                                    decoration: new InputDecoration(
+                                      contentPadding: EdgeInsets.all(20),
+                                      labelText: 'Check-up Date',
+                                      labelStyle: labelStyle,
+                                      border: OutlineInputBorder(),
+                                      enabledBorder: OutlineInputBorder(borderRadius:  new BorderRadius.circular(30), borderSide: BorderSide(width: 2.0, color: greenColor)),
+                                    ),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                      children: <Widget>[
+
+                                        Text(
+                                          "${dateOfCheckupString}",
+                                          textAlign: TextAlign.start,
+                                          style: TextStyle(
+                                              fontFamily: "NunitoSans",
+                                              fontSize: 14,
+                                              color: greenColor),
+                                        ),
+                                        Padding(
+                                            padding:
+                                            const EdgeInsets.fromLTRB(
+                                                00, 0, 20, 0),
+                                            child: Container(
+                                              height: 40,
+                                              width: 40,
+                                              child: Icon(Icons.calendar_today, color: greenColor),
+                                            )),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            SizedBox(height: 24,),
+
                             Column(
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: <Widget>[
                                 Container(
                                   width: _width,
-
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius:  new BorderRadius.circular(30),
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Colors.grey,
+                                        blurRadius: 1, // soften the shadow
+                                        offset: Offset(
+                                          1, // Move to right 10  horizontally
+                                          1.0, // Move to bottom 10 Vertically
+                                        ),
+                                      )
+                                    ],
+                                  ),
                                   child: InputDecorator(
                                     decoration: new InputDecoration(
 
@@ -947,7 +1161,7 @@ class AddPuppyState extends State<AddPuppy> {
                                             children: <Widget>[
                                               Container(
                                                 decoration: BoxDecoration(
-                                                  color: Color(0xffFAFAFA),
+                                                  color: Colors.white,
                                                   borderRadius:  new BorderRadius.circular(12),
                                                   boxShadow: [
                                                     BoxShadow(
@@ -1009,8 +1223,8 @@ class AddPuppyState extends State<AddPuppy> {
                                                     mainAxisAlignment: MainAxisAlignment.end,
                                                     children: <Widget>[
                                                       InkWell(
-                                                          onTap:(){
-                                                                  onPreview();
+                                                          onTap:() async {
+                                                            await OpenFile.open(_vetReportPath);
                                                           },
                                                           child: Container(
                                                             padding: EdgeInsets.only(
@@ -1023,7 +1237,7 @@ class AddPuppyState extends State<AddPuppy> {
                                                                 ))
                                                             ),
 
-                                                            child:new Text("PREVIEW", style: TextStyle(color:Colors.blue, fontWeight: FontWeight.bold, fontSize: 12))
+                                                            child:new Text("VIEW", style: TextStyle(color:Colors.blue, fontWeight: FontWeight.bold, fontSize: 12))
                                                           )
                                                       ),
                                                       SizedBox(width: 20,),
@@ -1055,12 +1269,13 @@ class AddPuppyState extends State<AddPuppy> {
                                           : InkWell(
                                               onTap:loadVetReport,
                                             child: Container(
+
                                               child: Row(
                                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                               children: <Widget>[
                                                 Padding(
                                                   padding: const EdgeInsets.fromLTRB(16,0,0,0),
-                                                  child: Text("Upload Vet Report ..", style:labelStyle.copyWith(color: Colors.grey)),
+                                                  child: Text("Upload", style:labelStyle),
                                                 ),
                                                 ClipRRect(
                                                   borderRadius:
@@ -1087,7 +1302,20 @@ class AddPuppyState extends State<AddPuppy> {
                               children: <Widget>[
                                 Container(
                                   width: _width,
-
+                                  decoration: BoxDecoration(
+                                    color: Color(0xffffffff),
+                                    borderRadius:  new BorderRadius.circular(30),
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Colors.grey,
+                                        blurRadius: 1, // soften the shadow
+                                        offset: Offset(
+                                          1, // Move to right 10  horizontally
+                                          1.0, // Move to bottom 10 Vertically
+                                        ),
+                                      )
+                                    ],
+                                  ),
                                   child: InputDecorator(
                                     decoration: new InputDecoration(
 
@@ -1103,7 +1331,6 @@ class AddPuppyState extends State<AddPuppy> {
                                         children: <Widget>[
                                           Container(
                                             decoration: BoxDecoration(
-                                              color: Color(0xffFAFAFA),
                                               borderRadius:  new BorderRadius.circular(12),
                                               boxShadow: [
                                                 BoxShadow(
@@ -1127,9 +1354,12 @@ class AddPuppyState extends State<AddPuppy> {
                                                     children: <Widget>[
                                                       Icon(Icons.attachment, color: Colors.black38, ),
                                                       SizedBox(width: 8,),
-                                                      Text(_flightTicketPath.substring(_flightTicketPath.lastIndexOf("/")+1),textAlign: TextAlign.start,
-                                                        maxLines: 2,
-                                                        style: TextStyle(fontSize: 14,color: Colors.grey),
+                                                      Container(
+                                                        width: _width/1.75,
+                                                        child: Text(_flightTicketPath.substring(_flightTicketPath.lastIndexOf("/")+1),textAlign: TextAlign.start,
+                                                          maxLines: 2,
+                                                          style: TextStyle(fontSize: 14,color: Colors.grey),
+                                                        ),
                                                       ),
 
                                                     ],
@@ -1162,9 +1392,9 @@ class AddPuppyState extends State<AddPuppy> {
                                                 mainAxisAlignment: MainAxisAlignment.end,
                                                 children: <Widget>[
                                                   InkWell(
-                                                      onTap:(){
-
-                                                      },
+                                                      onTap:() async {
+                                                          await OpenFile.open(_flightTicketPath);
+                                                        },
                                                       child: Container(
                                                           padding: EdgeInsets.only(
                                                             bottom: 0.0, // space between underline and text
@@ -1176,7 +1406,7 @@ class AddPuppyState extends State<AddPuppy> {
                                                               ))
                                                           ),
 
-                                                          child:new Text("PREVIEW", style: TextStyle(color:Colors.blue, fontWeight: FontWeight.bold, fontSize: 12))
+                                                          child:new Text("VIEW", style: TextStyle(color:Colors.blue, fontWeight: FontWeight.bold, fontSize: 12))
                                                       )
                                                   ),
                                                   SizedBox(width: 20,),
@@ -1213,7 +1443,7 @@ class AddPuppyState extends State<AddPuppy> {
                                             children: <Widget>[
                                               Padding(
                                                 padding: const EdgeInsets.fromLTRB(16,0,0,0),
-                                                child: Text("Upload Flight Ticket ..", style:labelStyle.copyWith(color:Colors.grey)),
+                                                child: Text("Upload ..", style:labelStyle),
                                               ),
                                               ClipRRect(
                                                 borderRadius:
@@ -1400,36 +1630,64 @@ class AddPuppyState extends State<AddPuppy> {
     setState(() {
       _isLoading = true;
     });
+    List<MultipartFile> multipart = List<MultipartFile>();
+    for (int i = 0; i < images.length; i++) {
+      var path = await FlutterAbsolutePath.getAbsolutePath(images[i].identifier);
+      final mimeTypeData = lookupMimeType(path, headerBytes: [0xFF, 0xD8]).split('/');
+      ByteData byteData = await images[i].getByteData();
+      List<int> imageData = byteData.buffer.asUint8List();
+      MultipartFile multipartFile = MultipartFile.fromBytes(
+        imageData,
+        filename: 'image',
+        contentType: MediaType("image", mimeTypeData[1]),
+      );
+      multipart.add(multipartFile);
+    }
+
+
+
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String userId =  prefs.getString(Constants.SHARED_PREF_USER_ID);
+
     var dio = Dio();
-    var addPuppyUrl = 'https://obpdevstage.wpengine.com/wp-json/obp-api/create_puppy';
     FormData formData = new FormData.fromMap({
-      "name": Utility.capitalize(puppyNameText.text.trim()),
+      "puppy-name": Utility.capitalize(puppyNameText.text.trim()),
       "description": Utility.capitalize(puppyDescriptionText.text.trim()),
       "categories": [ { "id" : _selectedBreedId }],
       "user_id": userId,
-      "price": askingPriceText.text.trim(),
-      "shipping_cost": shippingCostText.text.trim(),
-      "date_of_birth": dateOfBirthString,
-      "age_in_weeks": calculateAgeInWeeks(),
+      "selling-price": askingPriceText.text.trim(),
+      "shipping-cost": shippingCostText.text.trim(),
+      "date-of-birth": dateOfBirthString,
+      "date-available-new": dateOfBirthString,
+      "age-in-week": calculateAgeInWeeks(),
       "color": Utility.capitalize(puppyColorText.text.trim()),
-      "puppy_weight": puppyWeightText.text.trim(),
-      "puppy_dad_weight": puppyDadWeightText.text.trim(),
-      "puppy_mom_weight": puppyMomWeightText.text.trim(),
-      "registry": "AKC"
+      "puppy-weight": puppyWeightText.text.trim(),
+      "dad-weight": puppyDadWeightText.text.trim(),
+      "mom-weight": puppyMomWeightText.text.trim(),
+      "registry": registryText.text.trim(),
+      "vet-name": vetNameText.text.trim(),
+      "vet-address": vetAddressText.text.trim(),
+      "checkup-date": dateOfCheckupString,
+      "kid-friendly": isKidFriendly?"1":"0",
+      "socialized": isSocialized?"1":"0",
+      "family-raised":isFamilyRaised?"1":"0",
+      "champion-bloodlines": isChampionBloodline?"1":"0",
+      "microchipped": isMicrochipped?"1":"0",
+      "gender": isFemale?"Female":"Male",
+      "gallery_images": [multipart]
     });
     try{
-      dynamic response = await dio.post(addPuppyUrl, data: formData);
+      dynamic response = await dio.post("http://192.168.0.107/file-upload.php",data:formData);
       if (response.toString() != '[]') {
         dynamic responseList = jsonDecode(response.toString());
         if (responseList["success"] == "Puppy successfully created!") {
-          Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (BuildContext context) => AddPuppySuccessful(responseList["puppy_id"])));
+          Toast.show("Add Puppy Successful " +response.toString(), context,duration: Toast.LENGTH_LONG);
+          //Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (BuildContext context) => AddPuppySuccessful(responseList["puppy_id"])));
         } else {
-          Toast.show("Add Puppy Failed " +response.toString(), context);
+          Toast.show("Add Puppy Failed " +response.toString(), context, duration: Toast.LENGTH_LONG);
         }
       } else {
-        Toast.show("Add Puppy Failed "+response.toString(), context);
+        Toast.show("Add Puppy Failed "+response.toString(), context,duration: Toast.LENGTH_LONG);
       }
       setState(() {
         _isLoading = false;
@@ -1475,6 +1733,31 @@ class AddPuppyState extends State<AddPuppy> {
       });
   }
 
+  Future<Null> _selectDateOfCheckup(BuildContext context) async {
+    final DateTime picked = await showDatePicker(
+        context: context,
+        initialDate: dateOfCheckup,
+        firstDate: DateTime(dateOfBirth.year),
+        lastDate: new DateTime.now(),
+        builder: (BuildContext context, Widget child) {
+          return Theme(
+            data: ThemeData.light().copyWith(
+              primaryColor: Colors.blue,//Head background
+              accentColor: Colors.blue,
+              buttonTheme: ButtonTheme.of(context).copyWith(
+                colorScheme: ColorScheme.fromSwatch(accentColor: Colors.blue, primarySwatch: Colors.blue),
+              ),
+            ),
+            child: child,
+          );
+        });
+    if (picked != null)
+      setState(() {
+        dateOfCheckup = picked;
+        dateOfCheckupString = new DateFormat("MMM dd, yyyy").format(picked);
+      });
+  }
+
   chooseBreed(String value) {
     setState(() {
       _chooseBreed = value;
@@ -1492,10 +1775,6 @@ class AddPuppyState extends State<AddPuppy> {
 
   calculateAgeInWeeks() {
     return ((DateTime.now().difference(dateOfBirth).inDays)/7).round();
-  }
-
-  void onPreview() {
-    Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext context) =>Preview(_vetReportPath, vetFileType)));
   }
 
   Future<bool> _onBackPressed() {

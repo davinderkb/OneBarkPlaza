@@ -19,9 +19,31 @@ class ViewPuppy extends StatefulWidget {
   ViewPuppyState viewPuppyState;
   PuppyDetails puppyDetails;
   bool isRefreshPop;
+  List<String> puppyBadges = new List<String>();
   ViewPuppy(PuppyDetails puppyDetails, isRefreshPop){
     this.puppyDetails = puppyDetails;
     this.isRefreshPop = isRefreshPop;
+    puppyBadges.clear();
+    if(puppyDetails!=null)
+      initBadges(puppyDetails);
+  }
+
+  void initBadges(PuppyDetails puppyDetails) {
+     if(puppyDetails.isChampionBloodline){
+        puppyBadges.add("Champion Bloodline");
+    }
+    if(puppyDetails.isFamilyRaised){
+      puppyBadges.add("Family Raised");
+    }
+    if(puppyDetails.isKidFriendly){
+      puppyBadges.add("Kid Friendly");
+    }
+    if(puppyDetails.isMicrochipped){
+      puppyBadges.add("Microchipped");
+    }
+    if(puppyDetails.isSocialized){
+      puppyBadges.add("Socialized");
+    }
   }
   @override
   ViewPuppyState createState() {
@@ -196,56 +218,9 @@ class ViewPuppyState extends State<ViewPuppy> {
                                     .normal)),
 
                           SizedBox(height: 24,),
-                          Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                        children: <Widget>[
-                                          Container(
-                                            width: _width/2 -24,
-                                            child: Row(
-                                              children: <Widget>[
-                                                Image.asset("assets/images/ic_badge.png", height: 20,width: 20,),
-                                                SizedBox(width: 5,),
-                                                Text("Champion Bloodline", style: TextStyle(fontFamily: "NunitoSans", color: greenColor, fontSize: 13),),
-                                              ],
-                                            ),
-                                          ),
-                                          Container(
-                                            width: _width/2 - 24,
-                                            child: Row(
-                                              children: <Widget>[
-                                                Image.asset("assets/images/ic_badge.png", height: 20,width: 20,),
-                                                SizedBox(width: 5,),
-                                                Text("Family Raised", style: TextStyle(fontFamily: "NunitoSans", color: greenColor, fontSize: 13),),
-                                              ],
-                                            ),
-                                          )
-                                        ],),
-                          SizedBox(height: 12,),
-                          Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: <Widget>[
-                            Container(
-                              width: _width/2 -24,
-                              child: Row(
-                                children: <Widget>[
-                                  Image.asset("assets/images/ic_badge.png", height: 20,width: 20,),
-                                  SizedBox(width: 5,),
-                                  Text("Socialized", style: TextStyle(fontFamily: "NunitoSans", color: greenColor, fontSize: 13),),
-                                ],
-                              ),
-                            ),
-                            Container(
-                              width: _width/2 -24,
-                              child: Row(
-                                children: <Widget>[
-                                  Image.asset("assets/images/ic_badge.png", height: 20,width: 20,),
-                                  SizedBox(width: 5,),
-                                  Text("Kid Friendly", style: TextStyle(fontFamily: "NunitoSans", color: greenColor, fontSize: 13),),
-                                ],
-                              ),
-                            )
-                          ],),
-                          SizedBox(height: 20,),
+                          Container(height: (_width/2 -24)/5 * (widget.puppyBadges.length /2).round(), child: buildGridView()),
+
+                          widget.puppyBadges.length>0?SizedBox(height: 20,):SizedBox(height: 0,),
                           Text(widget.puppyDetails.puppyName +" is an active, charming, confident, eager to please, easily trained, gentle, intelligent, lovable, loyal, patient, well mannered dog.", style: tableHeaderTextStyle,),
                           SizedBox(height: 20,),
                           Column(
@@ -501,6 +476,31 @@ class ViewPuppyState extends State<ViewPuppy> {
       return "";
     }
 
+  }
+
+  Widget buildGridView() {
+    return GridView.count(
+      crossAxisCount: 2,
+      childAspectRatio: 5,
+      mainAxisSpacing: 1.0,
+      crossAxisSpacing: 0.0,
+      children: List.generate(widget.puppyBadges.length, (index) {
+        String badge = widget.puppyBadges[index];
+        return  Padding(
+          padding: const EdgeInsets.all(2.0),
+          child: Container(
+            height: 20,
+            child: Row(
+              children: <Widget>[
+                Image.asset("assets/images/ic_badge.png", height: 20,width: 20,),
+                SizedBox(width: 5,),
+                Text(badge, style: TextStyle(fontFamily: "NunitoSans", color: greenColor, fontSize: 13),),
+              ],
+            ),
+          ),
+        );
+      }),
+    );
   }
 
 }

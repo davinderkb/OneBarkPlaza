@@ -147,13 +147,13 @@ class AddPuppySuccessfulState extends State<AddPuppySuccessful> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String userId =  prefs.getString(Constants.SHARED_PREF_USER_ID);
     var dio = Dio();
-    var getPuppyUrl = 'https://obpdevstage.wpengine.com/wp-json/obp-api/product';
+    var getPuppyUrl = 'https://obpdevstage.wpengine.com/wp-json/obp/v1/puppy';
     FormData formData = new FormData.fromMap({
       "user_id": userId,
       "pid": widget.puppyId,
     });
     try{
-      dynamic response = await dio.post(getPuppyUrl, data: formData);
+      dynamic response = await dio.get(getPuppyUrl+"?user_id="+userId+"&puppy_id="+widget.puppyId.toString());
       widget.puppyDetails = PuppyDetails.fromJson(jsonDecode(response.toString()));
       setState(() {
         _isLoading = false;

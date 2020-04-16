@@ -44,7 +44,7 @@ class HomePage extends StatefulWidget {
 }
 
 var puppyDetailsUrl =
-    'https://obpdevstage.wpengine.com/wp-json/obp-api/products/';
+    'https://obpdevstage.wpengine.com/wp-json/obp/v1/puppies?user_id=';
 Future<List<PuppyDetails>> _puppiesList(BuildContext context) async {
   var dio = Dio();
   SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -54,7 +54,7 @@ Future<List<PuppyDetails>> _puppiesList(BuildContext context) async {
       "user_id": userId,
     });
     final list = List<PuppyDetails>();
-    dynamic response = await dio.post(puppyDetailsUrl, data: formData);
+      dynamic response = await dio.get(puppyDetailsUrl + userId);
     Map<String, dynamic> responseList = jsonDecode(response.toString());
     for (dynamic item in responseList["breeder_puppies"]) {
       list.add(PuppyDetails.fromJson(item));
@@ -533,12 +533,11 @@ class HomePageState extends State<HomePage> {
                                                     FlatButton(
                                                       padding: _height>_width?EdgeInsets.fromLTRB(40,0,40,0):EdgeInsets.fromLTRB(100,12,100,12),
                                                       child: Text(
-                                                        'Preview',
+                                                        'View',
                                                         textAlign: TextAlign.start,
                                                         style: TextStyle(fontFamily:"NunitoSans",fontSize: 10, color: Colors.white),
                                                       ),
                                                       onPressed: () {
-                                                        Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext context) =>ViewPuppy(data[index],false)));
                                                         Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext context) =>ViewPuppy(data[index],false)));
                                                       },
                                                       disabledColor: blueColor,
@@ -578,7 +577,11 @@ class HomePageState extends State<HomePage> {
                 children: <Widget>[
                   InkWell(
                     onTap: (){
-                      onSortClick(context);
+                      if(setOfPuppies !=null && setOfPuppies.length>0){
+                        onSortClick(context);
+                      } else{
+                        Toast.show("Let the page loading finish and then try this option", context);
+                      }
                       },
                     child: Container(
                         width: _width / 2 - 1,
@@ -610,12 +613,18 @@ class HomePageState extends State<HomePage> {
                   ),
                   InkWell(
                     onTap: (){
-                      if(filter == null){
-                        Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext context) =>filter = Filter(setOfPuppies, widget.homePageState, minPrice, maxPrice)));;
+                      if(setOfPuppies !=null && setOfPuppies.length>0){
+                        if(filter == null){
+                          Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext context) =>filter = Filter(setOfPuppies, widget.homePageState, minPrice, maxPrice)));;
+                        }
+                        else{
+                          Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext context) =>filter));
+                        }
+                      } else{
+                          Toast.show("Let the page loading finish and then try this option", context);
                       }
-                      else{
-                        Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext context) =>filter));
-                      }
+
+
                     },
                     child: Container(
                         width: _width / 2 - 1,

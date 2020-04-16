@@ -21,6 +21,13 @@ class PuppyDetails {
       _categoryName,
       _categoryLink;
 
+  bool _isChampionBloodline;
+  bool _isFamilyRaised;
+  bool _isKidFriendly;
+  bool _isMicrochipped;
+  bool _isSocialized;
+
+
   set puppyId(int value) {
     _puppyId = value;
   }
@@ -44,7 +51,16 @@ class PuppyDetails {
       this._status,
       this._categoryId,
       this._categoryName,
-      this._categoryLink);
+      this._categoryLink,
+      this._isChampionBloodline,
+      this._isFamilyRaised,
+      this._isKidFriendly,
+      this._isMicrochipped,
+      this._isSocialized){
+    if(this._images == null){
+      this._images ="";
+    }
+  }
 
   factory PuppyDetails.fromJson(dynamic json) {
     Map<String,dynamic> categoryDetails = (json['categories'][0] as Map<String,dynamic>);
@@ -58,8 +74,7 @@ class PuppyDetails {
         json['images'] as String,
         json['gallery'] as String,
         json['gender'] as String,
-        /*json['date_of_birth'] as String,*/
-        "Feb 23, 2020",
+        /*json['date_of_birth'] as String*/"Feb 23, 2020",
         json['age_in_weeks'] as String,
         json['color'] as String,
         json['puppy_weight'] as String,
@@ -67,11 +82,17 @@ class PuppyDetails {
         json['puppy_mom_weight'] as String,
         json['registry'] as String,
         json['status'] as String,
-        int.parse(categoryDetails["id"].toString()) as int,
+        categoryDetails["id"].toString().trim() == "" ? 0 : categoryDetails["id"],
         categoryDetails["name"] as String,
-        categoryDetails["link"] as String);
-  }
+        categoryDetails["link"] as String,
+        json['champion-bloodlines'].toString() == '1',
+        json['family-raised'].toString() == '1',
+        json['kid-friendly'].toString() == '1',
+        json['microchipped'].toString() == '1',
+        json['socialized'].toString() == '1'
+    );
 
+  }
   get categoryLink => _categoryLink;
 
   get categoryName => _categoryName;
@@ -88,7 +109,14 @@ class PuppyDetails {
 
   get color => _color;
 
-  get ageInWeeks => _ageInWeeks;
+  get ageInWeeks{
+    try{
+      return int.parse(_ageInWeeks).toString();
+    }catch(e){
+      return "0";
+    }
+
+  }
 
   get dob => _dob;
 
@@ -183,4 +211,15 @@ class PuppyDetails {
   set puppyName(String value) {
     _puppyName = value;
   }
+
+  bool get isFamilyRaised => _isFamilyRaised;
+
+  bool get isKidFriendly => _isKidFriendly;
+
+  bool get isMicrochipped => _isMicrochipped;
+
+  bool get isSocialized => _isSocialized;
+
+  bool get isChampionBloodline => _isChampionBloodline;
+
 }

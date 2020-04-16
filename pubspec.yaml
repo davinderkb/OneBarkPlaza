@@ -22,6 +22,8 @@ dependencies:
   cupertino_range_slider: ^1.0.1
   native_pdf_renderer: ^1.8.1
   mime: ^0.9.6+3
+  open_file: ^3.0.1
+  flutter_absolute_path: ^1.0.6
   flutter_localizations:
     sdk: flutter
 

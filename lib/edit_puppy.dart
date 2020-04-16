@@ -39,7 +39,13 @@ class EditPuppy extends StatefulWidget {
         puppyDetails.status,
         puppyDetails.categoryId,
         puppyDetails.categoryName,
-        puppyDetails.categoryLink);
+        puppyDetails.categoryLink,
+        puppyDetails.isChampionBloodline,
+        puppyDetails.isFamilyRaised,
+        puppyDetails.isKidFriendly,
+        puppyDetails.isMicrochipped,
+        puppyDetails.isSocialized
+    );
   }
   @override
   EditPuppyState createState() {
