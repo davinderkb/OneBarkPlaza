@@ -54,7 +54,7 @@ Future<List<PuppyDetails>> _puppiesList(BuildContext context) async {
       "user_id": userId,
     });
     final list = List<PuppyDetails>();
-      dynamic response = await dio.get(puppyDetailsUrl + userId);
+    dynamic response = await dio.get(puppyDetailsUrl + userId);
     Map<String, dynamic> responseList = jsonDecode(response.toString());
     for (dynamic item in responseList["breeder_puppies"]) {
       list.add(PuppyDetails.fromJson(item));
@@ -320,7 +320,8 @@ class HomePageState extends State<HomePage> {
                                                               24.0),
                                                       child: CachedNetworkImage(
                                                         imageUrl:
-                                                            data[index].images,
+                                                            data[index].image != null?data[index].image.src:"",
+                                                        fit: BoxFit.cover,
                                                         placeholder:
                                                             (context, url) =>
                                                                 SpinKitCircle(
@@ -329,9 +330,7 @@ class HomePageState extends State<HomePage> {
                                                         ),
                                                         errorWidget: (context,
                                                                 url, error) =>
-                                                            Image.asset(
-                                                          "assets/images/bulldog"+(index+1).toString()+".jpg", fit: BoxFit.cover,
-                                                        ),
+                                                        new Icon(Icons.image, size:48, color:Colors.white),
                                                       ),
                                                     )),
                                               ),

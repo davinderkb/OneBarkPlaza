@@ -1,15 +1,19 @@
 import 'dart:ui';
 
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:dynamic_widget/dynamic_widget/basic/container_widget_parser.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:multi_image_picker/multi_image_picker.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:one_bark_plaza/edit_puppy.dart';
+import 'package:one_bark_plaza/img.dart';
 import 'package:one_bark_plaza/puppy_details.dart';
+import 'package:open_file/open_file.dart';
 import 'package:toast/toast.dart';
 import 'package:one_bark_plaza/util/utility.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import 'homepage.dart';
 final greenColor = Color(0xff7FA432);
@@ -138,7 +142,7 @@ class ViewPuppyState extends State<ViewPuppy> {
                 mainAxisSize: MainAxisSize.max,
                 children: <Widget>[
                   SizedBox(height:16),
-                  CarouselSlider(
+                  images.length==0?Container():CarouselSlider(
                     height:_height>_width?_height/3: _width/2,
                     viewportFraction: 0.85,
                     items: images.map((i) {
@@ -154,7 +158,7 @@ class ViewPuppyState extends State<ViewPuppy> {
                             ),
                             child: ClipRRect(
                                 borderRadius: BorderRadius.circular(45),
-                                child: Image.asset(i, fit: BoxFit.cover,)
+                                child: Image.network(i, fit: BoxFit.cover,)
                             ),
                           );
                         },
@@ -387,7 +391,17 @@ class ViewPuppyState extends State<ViewPuppy> {
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: <Widget>[
                                     InkWell(
-                                      onTap: (){Toast.show("Download vet check report", context);},
+                                      onTap: () async {
+                                        if(widget.puppyDetails.vetReport==null || widget.puppyDetails.vetReport.toString().trim() ==""){
+                                            Toast.show("File is not available", context,duration:Toast.LENGTH_LONG);
+                                        }else {
+                                          if (await canLaunch(widget.puppyDetails.vetReport)) {
+                                            await launch(widget.puppyDetails.vetReport);
+                                          } else {
+                                            Toast.show("Couldn't find the file", context,duration:Toast.LENGTH_LONG);
+                                          }
+                                        }
+                                        },
                                       child: Container(
                                         alignment: Alignment.center,
                                         height: 120,
@@ -462,11 +476,17 @@ class ViewPuppyState extends State<ViewPuppy> {
 
   List<String> getPuppyImages() {
     List<String> images = new List<String>();
-    for(int i=1;i<=6;i++){
-      String asset = "assets/images/bulldog"+i.toString()+".jpg";
-      images.add(asset);
+    if(widget.puppyDetails.gallery!=null && widget.puppyDetails.gallery.length>0 )
+      {
+        for(ImageCustom image in widget.puppyDetails.gallery){
+          String asset = image.src;
+          images.add(asset);
+        }
+        return images;
+      }
+    else{
+      return images;
     }
-    return images;
   }
 
   String getStringSafely(val) {

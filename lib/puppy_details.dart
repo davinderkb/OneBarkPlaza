@@ -1,14 +1,16 @@
 import 'dart:convert';
 import 'dart:ui';
 
+import 'img.dart';
+
 class PuppyDetails {
   int _puppyId, _categoryId;
+  ImageCustom _image;
+  List<ImageCustom> _gallery;
   String _puppyName,
       _puppyPrice,
       _shippingCost,
       _description,
-      _images,
-      _gallery,
       _gender,
       _dob,
       _ageInWeeks,
@@ -19,7 +21,22 @@ class PuppyDetails {
       _registry,
       _status,
       _categoryName,
-      _categoryLink;
+      _categoryLink,
+      _vetReport,
+      _flightTicket
+      ;
+
+  get flightTicket => _flightTicket;
+
+  set flightTicket(value) {
+    _flightTicket = value;
+  }
+
+  get vetReport => _vetReport;
+
+  set vetReport(value) {
+    _vetReport = value;
+  }
 
   bool _isChampionBloodline;
   bool _isFamilyRaised;
@@ -38,7 +55,7 @@ class PuppyDetails {
       this._puppyPrice,
       this._shippingCost,
       this._description,
-      this._images,
+      this._image,
       this._gallery,
       this._gender,
       this._dob,
@@ -52,27 +69,43 @@ class PuppyDetails {
       this._categoryId,
       this._categoryName,
       this._categoryLink,
+      this._vetReport,
+      this._flightTicket,
       this._isChampionBloodline,
       this._isFamilyRaised,
       this._isKidFriendly,
       this._isMicrochipped,
-      this._isSocialized){
-    if(this._images == null){
-      this._images ="";
-    }
-  }
+      this._isSocialized);
 
   factory PuppyDetails.fromJson(dynamic json) {
     Map<String,dynamic> categoryDetails = (json['categories'][0] as Map<String,dynamic>);
+    Map<String,dynamic> productImage = null;
+    ImageCustom featuredImage = null;
+    try {
+      productImage = (json['product-image'] as Map<String, dynamic>);
+      featuredImage = ImageCustom(productImage["id"], productImage["src"]);
+    }catch(e) {}
 
-    return PuppyDetails(
+    List<ImageCustom> galleryImages = new List<ImageCustom>();
+    if(featuredImage!= null)
+      galleryImages.add(featuredImage);
+    try {
+      for(dynamic items in json['gallery-images']){
+        var item = (items as Map<String, dynamic>);
+        for (int i=0; i< item.length;i++){
+                    galleryImages.add(ImageCustom(item["id"].toString(), item["src"]));
+        }
+      }
+    }catch(e){}
+
+      return PuppyDetails(
         int.parse(json['ID'].toString()) as int,
         json['name'] as String,
         json['price'].toString().trim() == "" ? "0" : json['price'].toString().trim(),
         json['shipping_cost'] as String,
         json['description'] as String,
-        json['images'] as String,
-        json['gallery'] as String,
+        featuredImage,
+        galleryImages,
         json['gender'] as String,
         /*json['date_of_birth'] as String*/"Feb 23, 2020",
         json['age_in_weeks'] as String,
@@ -85,14 +118,18 @@ class PuppyDetails {
         categoryDetails["id"].toString().trim() == "" ? 0 : categoryDetails["id"],
         categoryDetails["name"] as String,
         categoryDetails["link"] as String,
+        json["report-copy"] as String,
+        json["upload-documentations"] as String,
         json['champion-bloodlines'].toString() == '1',
         json['family-raised'].toString() == '1',
         json['kid-friendly'].toString() == '1',
         json['microchipped'].toString() == '1',
-        json['socialized'].toString() == '1'
-    );
+        json['socialized'].toString() == '1',
 
-  }
+      );
+    }
+
+
   get categoryLink => _categoryLink;
 
   get categoryName => _categoryName;
@@ -122,9 +159,9 @@ class PuppyDetails {
 
   get gender => _gender;
 
-  get gallery => _gallery;
+  List<ImageCustom> get gallery => _gallery;
 
-  get images => _images;
+  ImageCustom get image => _image;
 
   get description => _description;
 
@@ -190,8 +227,8 @@ class PuppyDetails {
     _gallery = value;
   }
 
-  set images(value) {
-    _images = value;
+  set image(value) {
+    _image = value;
   }
 
   set description(value) {

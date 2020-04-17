@@ -177,7 +177,7 @@ class LoginPageState extends State<LoginPage>{
                     ),
                   ]),
                   SizedBox(height: 8.0),
-                  Container(height:64,child: loginButton),
+                  Container(height:64,width: 265,child: loginButton),
                   SizedBox(height: 12.0),
                   Padding(
                     padding: const EdgeInsets.all(4.0),

@@ -76,6 +76,8 @@ class AddPuppyState extends State<AddPuppy> {
   Image vetReportThumbnail;
   PDFPageImage vetPageImage;
   PDFPageImage flightPageImage;
+  MultipartFile vetReport;
+  MultipartFile flightTicketFile;
   Widget buildGridView() {
     return GridView.count(
       crossAxisCount: imagesInGridRow,
@@ -242,7 +244,14 @@ class AddPuppyState extends State<AddPuppy> {
       } else{
         vetFileType = Constants.FILE_TYPE_OTHER;
       }
-
+      if(_vetReportPath!=null){
+        List<int> vetFile = await File(_vetReportPath).readAsBytes();
+        vetReport= MultipartFile.fromBytes(
+            vetFile,
+            filename: 'vet_report',
+            contentType: MediaType("vet_report", _vetReportPath.substring(_vetReportPath.lastIndexOf(".")+1))
+        );
+      }
       setState((){
         this._vetReportPath = filePath;
       });
@@ -270,7 +279,14 @@ class AddPuppyState extends State<AddPuppy> {
       } else{
         vetFileType = Constants.FILE_TYPE_OTHER;
       }
-
+      if(_flightTicketPath!=null){
+        List<int> flightTicket = await File(_flightTicketPath).readAsBytes();
+        flightTicketFile= MultipartFile.fromBytes(
+            flightTicket,
+            filename: 'flight_ticket',
+            contentType: MediaType("flight_ticket", _flightTicketPath.substring(_flightTicketPath.lastIndexOf(".")+1))
+        );
+      }
       setState((){
         this._flightTicketPath = filePath;
       });
@@ -1644,8 +1660,6 @@ class AddPuppyState extends State<AddPuppy> {
       multipart.add(multipartFile);
     }
 
-
-
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String userId =  prefs.getString(Constants.SHARED_PREF_USER_ID);
 
@@ -1674,15 +1688,17 @@ class AddPuppyState extends State<AddPuppy> {
       "champion-bloodlines": isChampionBloodline?"1":"0",
       "microchipped": isMicrochipped?"1":"0",
       "gender": isFemale?"Female":"Male",
-      "gallery_images": [multipart]
+      "gallery_images": [multipart],
+      "report-copy" : _vetReportPath!=null?vetReport:"",
+      "upload-documentations" : _flightTicketPath!=null?_flightTicketPath:""
     });
     try{
-      dynamic response = await dio.post("http://192.168.0.107/file-upload.php",data:formData);
+      dynamic response = await dio.post("https://obpdevstage.wpengine.com/wp-json/obp/v1/create_puppy",data:formData);
       if (response.toString() != '[]') {
         dynamic responseList = jsonDecode(response.toString());
         if (responseList["success"] == "Puppy successfully created!") {
           Toast.show("Add Puppy Successful " +response.toString(), context,duration: Toast.LENGTH_LONG);
-          //Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (BuildContext context) => AddPuppySuccessful(responseList["puppy_id"])));
+          Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (BuildContext context) => AddPuppySuccessful(responseList["puppy_id"])));
         } else {
           Toast.show("Add Puppy Failed " +response.toString(), context, duration: Toast.LENGTH_LONG);
         }
