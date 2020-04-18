@@ -244,6 +244,7 @@ class AddPuppyState extends State<AddPuppy> {
       } else{
         vetFileType = Constants.FILE_TYPE_OTHER;
       }
+      this._vetReportPath = filePath;
       if(_vetReportPath!=null){
         List<int> vetFile = await File(_vetReportPath).readAsBytes();
         vetReport= MultipartFile.fromBytes(
@@ -253,7 +254,7 @@ class AddPuppyState extends State<AddPuppy> {
         );
       }
       setState((){
-        this._vetReportPath = filePath;
+
       });
     } on Exception catch (e) {
       print("Error while picking the file: " + e.toString());
@@ -279,6 +280,7 @@ class AddPuppyState extends State<AddPuppy> {
       } else{
         vetFileType = Constants.FILE_TYPE_OTHER;
       }
+      this._flightTicketPath = filePath;
       if(_flightTicketPath!=null){
         List<int> flightTicket = await File(_flightTicketPath).readAsBytes();
         flightTicketFile= MultipartFile.fromBytes(
@@ -288,7 +290,6 @@ class AddPuppyState extends State<AddPuppy> {
         );
       }
       setState((){
-        this._flightTicketPath = filePath;
       });
     } on Exception catch (e) {
       print("Error while picking the file: " + e.toString());

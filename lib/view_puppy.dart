@@ -1,9 +1,12 @@
+import 'dart:io';
 import 'dart:ui';
 
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:dio/dio.dart';
 import 'package:dynamic_widget/dynamic_widget/basic/container_widget_parser.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:multi_image_picker/multi_image_picker.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
@@ -14,6 +17,9 @@ import 'package:open_file/open_file.dart';
 import 'package:toast/toast.dart';
 import 'package:one_bark_plaza/util/utility.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:http/http.dart' as http;
+import 'package:path_provider/path_provider.dart';
+
 
 import 'homepage.dart';
 final greenColor = Color(0xff7FA432);
@@ -59,6 +65,8 @@ class ViewPuppyState extends State<ViewPuppy> {
   DateTime dateOfBirth = DateTime.now();
   String dateOfBirthString = 'Choose';
   BuildContext context;
+
+  bool _isLoading = false;
 
 
   @override
@@ -395,11 +403,27 @@ class ViewPuppyState extends State<ViewPuppy> {
                                         if(widget.puppyDetails.vetReport==null || widget.puppyDetails.vetReport.toString().trim() ==""){
                                             Toast.show("File is not available", context,duration:Toast.LENGTH_LONG);
                                         }else {
-                                          if (await canLaunch(widget.puppyDetails.vetReport)) {
-                                            await launch(widget.puppyDetails.vetReport);
-                                          } else {
-                                            Toast.show("Couldn't find the file", context,duration:Toast.LENGTH_LONG);
-                                          }
+                                          setState(() {
+                                            _isLoading = true;
+                                          });
+                                            Dio dio = new Dio();
+                                            var data = await http.get(widget.puppyDetails.vetReport);
+
+                                            var bytes = data.bodyBytes;
+                                            var dir = await getApplicationDocumentsDirectory();
+
+                                            var ext = widget.puppyDetails.vetReport.substring(widget.puppyDetails.vetReport.lastIndexOf(".")+1);
+                                            if(ext!=null && ext != "")
+                                              ext = "."+ext;
+                                            else
+                                              ext="";
+                                            File file  = File("${dir.path}/vetReport"+ext);
+                                            File assetFile = await file.writeAsBytes(bytes);
+                                            OpenFile.open("${dir.path}/vetReport"+ext);
+                                          setState(() {
+                                            _isLoading = false;
+                                          });
+                                          //  await launch(widget.puppyDetails.vetReport);
                                         }
                                         },
                                       child: Container(
@@ -420,12 +444,42 @@ class ViewPuppyState extends State<ViewPuppy> {
                                             )
                                           ],
                                         ),
-                                        child: Text("Vet Check Report", textAlign: TextAlign.center, style: TextStyle(fontFamily: "NunitoSans", fontSize: 18, color:Colors.white),),
+                                        child: _isLoading? SpinKitRing(
+                                          lineWidth: 3,
+                                          color: Colors.white,
+                                          size: 40,
+                                        ):Text("Vet Check Report", textAlign: TextAlign.center, style: TextStyle(fontFamily: "NunitoSans", fontSize: 18, color:Colors.white),),
                                       ),
                                     ),
 
                                     InkWell(
-                                      onTap: (){Toast.show("Download flight details", context);},
+                                      onTap: () async {
+                                        if(widget.puppyDetails.flightTicket==null || widget.puppyDetails.flightTicket.toString().trim() ==""){
+                                          Toast.show("Flight information not available", context,duration:Toast.LENGTH_LONG);
+                                        }else {
+                                          setState(() {
+                                            _isLoading = true;
+                                          });
+                                          Dio dio = new Dio();
+                                          var data = await http.get(widget.puppyDetails.flightTicket);
+
+                                          var bytes = data.bodyBytes;
+                                          var dir = await getApplicationDocumentsDirectory();
+
+                                          var ext = widget.puppyDetails.flightTicket.substring(widget.puppyDetails.flightTicket.lastIndexOf(".")+1);
+                                          if(ext!=null && ext != "")
+                                            ext = "."+ext;
+                                          else
+                                            ext="";
+                                          File file  = File("${dir.path}/flightTicket"+ext);
+                                          File assetFile = await file.writeAsBytes(bytes);
+                                          OpenFile.open("${dir.path}/flightTicket"+ext);
+                                          setState(() {
+                                            _isLoading = false;
+                                          });
+                                          //  await launch(widget.puppyDetails.vetReport);
+                                        }
+                                      },
                                       child: Container(
                                         alignment: Alignment.center,
                                         height: 120,
@@ -444,7 +498,11 @@ class ViewPuppyState extends State<ViewPuppy> {
                                             )
                                           ],
                                         ),
-                                        child: Text("Flight Information", textAlign: TextAlign.center, style: TextStyle(fontFamily: "NunitoSans", fontSize: 18, color:Colors.white),),
+                                        child: _isLoading? SpinKitRing(
+                                          lineWidth: 3,
+                                          color: Colors.white,
+                                          size: 40,
+                                        ):Text("Flight Information", textAlign: TextAlign.center, style: TextStyle(fontFamily: "NunitoSans", fontSize: 18, color:Colors.white),),
                                       ),
                                     ),
                                   ],

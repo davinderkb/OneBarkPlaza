@@ -226,6 +226,7 @@ class EditPuppyState extends State<EditPuppy> {
                         SizedBox(
                           height: 24,
                         ),
+                        
                         Center(
                           child: Container(
                             width: _width,

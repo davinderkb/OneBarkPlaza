@@ -25,6 +25,7 @@ dependencies:
   open_file: ^3.0.1
   flutter_absolute_path: ^1.0.6
   url_launcher: ^5.4.2
+  path_provider:
   flutter_localizations:
     sdk: flutter
 
