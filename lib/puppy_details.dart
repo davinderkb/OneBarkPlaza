@@ -1,18 +1,21 @@
 import 'dart:convert';
 import 'dart:ui';
 
+import 'package:intl/intl.dart';
+
 import 'img.dart';
 
 class PuppyDetails {
   int _puppyId, _categoryId;
   ImageCustom _image;
   List<ImageCustom> _gallery;
+  DateTime _dob;
   String _puppyName,
       _puppyPrice,
       _shippingCost,
       _description,
       _gender,
-      _dob,
+      _dobString,
       _ageInWeeks,
       _color,
       _puppyWeight,
@@ -22,9 +25,17 @@ class PuppyDetails {
       _status,
       _categoryName,
       _categoryLink,
+      _vetName,
+      _vetAddress,
       _vetReport,
       _flightTicket
       ;
+
+  get vetName => _vetName;
+
+  set vetName(value) {
+    _vetName = value;
+  }
 
   get flightTicket => _flightTicket;
 
@@ -58,6 +69,46 @@ class PuppyDetails {
       this._image,
       this._gallery,
       this._gender,
+      this._dobString,
+      this._ageInWeeks,
+      this._color,
+      this._puppyWeight,
+      this._puppyDadWeight,
+      this._puppyMomWeight,
+      this._registry,
+      this._status,
+      this._categoryId,
+      this._categoryName,
+      this._categoryLink,
+      this._vetName,
+      this._vetAddress,
+      this._vetReport,
+      this._flightTicket,
+      this._isChampionBloodline,
+      this._isFamilyRaised,
+      this._isKidFriendly,
+      this._isMicrochipped,
+      this._isSocialized){
+    try{
+      this._dob = new DateTime.fromMicrosecondsSinceEpoch(int.parse(_dobString));
+      this._dobString = new DateFormat("MMM dd, yyyy").format(_dob);
+    }catch(e){
+      this._dobString = "";
+      this._dob = DateTime.now();
+    }
+  }
+
+
+  PuppyDetails.deepCopy(
+      this._puppyId,
+      this._puppyName,
+      this._puppyPrice,
+      this._shippingCost,
+      this._description,
+      this._image,
+      this._gallery,
+      this._gender,
+      this._dobString,
       this._dob,
       this._ageInWeeks,
       this._color,
@@ -69,6 +120,8 @@ class PuppyDetails {
       this._categoryId,
       this._categoryName,
       this._categoryLink,
+      this._vetName,
+      this._vetAddress,
       this._vetReport,
       this._flightTicket,
       this._isChampionBloodline,
@@ -105,7 +158,7 @@ class PuppyDetails {
         featuredImage,
         galleryImages,
         json['gender'] as String,
-        /*json['date_of_birth'] as String*/"Feb 23, 2020",
+        json['date_of_birth'] is int || json['date_of_birth'] is String? json['date_of_birth'].toString(): "",
         json['age_in_weeks'] as String,
         json['color'] as String,
         json['puppy_weight'] as String,
@@ -116,6 +169,8 @@ class PuppyDetails {
         categoryDetails["id"].toString().trim() == "" ? 0 : categoryDetails["id"],
         categoryDetails["name"] as String,
         categoryDetails["link"] as String,
+        json["vet-name"] as String,
+        json["vet-address"] as String,
         json["report-copy"] as String,
         json["upload-documentations"] as String,
         json['champion-bloodlines'].toString() == '1',
@@ -153,7 +208,12 @@ class PuppyDetails {
 
   }
 
-  get dob => _dob;
+  DateTime get dob {
+    return _dob;
+  }
+  get dobString {
+   return  _dobString;
+  }
 
   get gender => _gender;
 
@@ -262,6 +322,12 @@ class PuppyDetails {
     if(_gallery!=null)
       count = count + _gallery.length;
     return count;
+  }
+
+  get vetAddress => _vetAddress;
+
+  set vetAddress(value) {
+    _vetAddress = value;
   }
 
 }

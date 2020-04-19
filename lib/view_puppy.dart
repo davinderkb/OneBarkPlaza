@@ -62,8 +62,7 @@ class ViewPuppy extends StatefulWidget {
 }
 
 class ViewPuppyState extends State<ViewPuppy> {
-  DateTime dateOfBirth = DateTime.now();
-  String dateOfBirthString = 'Choose';
+
   BuildContext context;
 
   bool _isLoading = false;
@@ -270,7 +269,7 @@ class ViewPuppyState extends State<ViewPuppy> {
                                     Container(
                                         width: _width/2 -32,
                                         alignment: Alignment.topLeft,
-                                        child: Text("Nov 01, 2019", style: tableContentTextStyle,)
+                                        child: Text(widget.puppyDetails.dobString == null ?"Not Available" :widget.puppyDetails.dobString , style: tableContentTextStyle,)
                                     ),
                                   ],
                                 ),

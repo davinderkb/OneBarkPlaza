@@ -269,10 +269,6 @@ class AddPuppyState extends State<AddPuppy> {
       }
       if(filePath.substring(filePath.lastIndexOf(".") + 1) == "pdf"){
         flightFileType = Constants.FILE_TYPE_PDF;
-        final document = await PDFDocument.openFile(filePath);
-        final page = await document.getPage(1);
-        flightPageImage = await page.render(width: page.width, height: page.height);
-        await page.close();
       } else if (filePath.substring(filePath.lastIndexOf(".") + 1) == "jpg"
           || filePath.substring(filePath.lastIndexOf(".") + 1) == "jpeg"
           || filePath.substring(filePath.lastIndexOf(".") + 1) == "png" ){
@@ -1672,7 +1668,7 @@ class AddPuppyState extends State<AddPuppy> {
       "user_id": userId,
       "selling-price": askingPriceText.text.trim(),
       "shipping-cost": shippingCostText.text.trim(),
-      "date-of-birth": dateOfBirthString,
+      "date-of-birth": dateOfBirth.millisecondsSinceEpoch.toString(),
       "date-available-new": dateOfBirthString,
       "age-in-week": calculateAgeInWeeks(),
       "color": Utility.capitalize(puppyColorText.text.trim()),
