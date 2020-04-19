@@ -1,16 +1,23 @@
+import 'dart:typed_data';
 import 'dart:ui';
 
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:multi_image_picker/multi_image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:one_bark_plaza/puppy_details.dart';
+import 'package:one_bark_plaza/util/constants.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:toast/toast.dart';
-
+import 'package:http/http.dart' as http;
 import 'choose_breed_dialog.dart';
+import 'img.dart';
+import 'package:flutter_absolute_path/flutter_absolute_path.dart';
 
 final greenColor = Color(0xff7FA432);
 final blueColor = Color(0xff4C8BF5);
@@ -60,11 +67,12 @@ class EditPuppyState extends State<EditPuppy> {
   String dateOfBirthString = '';
   String _chooseBreed = '';
   bool _isBreedSelectedOnce = false;
-  List<Asset> images = List<Asset>();
+  List<Asset> imageAssets = List<Asset>();
+  Future<List<Image>> futureAllImages ;
   String _error = 'No Error Dectected';
   String _platformMessage = 'No Error';
   List images2;
-  int maxImageNo = 10;
+  int maxImageNo = 6;
   bool selectSingleImage = false;
   int imagesInGridRow = 3;
   int thumbnailSize = 100;
@@ -77,11 +85,18 @@ class EditPuppyState extends State<EditPuppy> {
   ChooseBreedDialog chooseBreedDialog = null;
 
   bool isFemale = false;
-  Widget buildGridView() {
+
+  List<Image> allImages = new List<Image>();
+  List<Image> oldImages;
+
+  bool isFirstTime = true;
+
+  Future<Widget> buildGridView() async {
+
     return GridView.count(
       crossAxisCount: imagesInGridRow,
-      children: List.generate(images.length, (index) {
-        Asset asset = images[index];
+      children: List.generate(imageAssets.length, (index) {
+        Asset asset = imageAssets[index];
         return Padding(
           padding: const EdgeInsets.all(2.0),
           child: Container(
@@ -110,6 +125,16 @@ class EditPuppyState extends State<EditPuppy> {
     );
   }
 
+   Future<List<Image>> addNewImages() async {
+    List<Image> newImages = new List<Image>();
+    for(Asset item in imageAssets){
+        ByteData byteData = await item.getByteData();
+        List<int> imageData = byteData.buffer.asUint8List();
+        newImages.add(Image.memory(imageData));
+    }
+    return newImages;
+  }
+
   isBreedSelectedOnce(bool value) {
     _isBreedSelectedOnce = value;
   }
@@ -121,17 +146,38 @@ class EditPuppyState extends State<EditPuppy> {
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance
+        .addPostFrameCallback((_) => isFirstTime = false);
+
+  }
+  Future<List<Image>>getImages() async {
+
+    oldImages = new List<Image>();
+    for(ImageCustom galleryItem in widget.puppyDetails.gallery){
+      var data = await http.get(galleryItem.src);
+      var bytes = data.bodyBytes;
+      oldImages.add(Image.memory(bytes, fit: BoxFit.cover));
+    }
+    return oldImages;
   }
 
+  Future<List<Image>>syncNewImages() async {
+    if(allImages!=null) {
+      allImages.clear();
+      allImages.addAll(oldImages);
+      allImages.addAll(await addNewImages());
+      return allImages;
+    }
+  }
   Future<void> loadAssets() async {
     List<Asset> resultList = List<Asset>();
     String error = 'No Error Dectected';
 
     try {
       resultList = await MultiImagePicker.pickImages(
-        maxImages: 6,
+        maxImages: maxImageNo - widget.puppyDetails.imageCount() > 0 ? 6 - widget.puppyDetails.imageCount(): 0,
         enableCamera: true,
-        selectedAssets: images,
+        selectedAssets: imageAssets,
         cupertinoOptions: CupertinoOptions(takePhotoIcon: "chat"),
         materialOptions: MaterialOptions(
           actionBarColor: "#000000",
@@ -145,13 +191,9 @@ class EditPuppyState extends State<EditPuppy> {
       error = e.toString();
     }
 
-    // If the widget was removed from the tree while the asynchronous platform
-    // message was in flight, we want to discard the reply rather than calling
-    // setState to update our non-existent appearance.
-    if (!mounted) return;
 
     setState(() {
-      images = resultList;
+      imageAssets = resultList;
       _error = error;
     });
   }
@@ -159,6 +201,7 @@ class EditPuppyState extends State<EditPuppy> {
   @override
   Widget build(BuildContext context) {
     this.context = context;
+    futureAllImages = isFirstTime? getImages():syncNewImages();
     final _width = MediaQuery.of(context).size.width;
     final _height = MediaQuery.of(context).size.height;
     final borderRadius = 30.0;
@@ -223,10 +266,135 @@ class EditPuppyState extends State<EditPuppy> {
                           height: 8,
                         ),
 
-                        SizedBox(
-                          height: 24,
+                        SizedBox(height: 24),
+                        Center(
+                          child: Container(
+                            height: _width -120,
+                            width: _width -60,
+                            child: FutureBuilder(
+                              future: futureAllImages,
+                              // ignore: missing_return
+                              builder: (context, snapshot) {
+                                switch (snapshot.connectionState) {
+                                  case ConnectionState.none:
+                                    return Container(
+                                      alignment: Alignment.center,
+                                      child: Text("Error: ${snapshot.error}"),
+                                    );
+                                  case ConnectionState.waiting:
+                                  case ConnectionState.active:
+                                    return Container(
+                                      alignment: Alignment.center,
+                                      child: SpinKitRing(
+                                        lineWidth: 2,
+                                        color: greenColor,
+                                        size: 50.0,
+                                      ),
+                                    );
+                                    break;
+                                  case ConnectionState.done:
+                                    if (snapshot.hasError) {
+                                      // return whatever you'd do for this case, probably an error
+
+                                    }
+                                    var data = snapshot.data as List<Image>;
+                                    return new ListView.builder(
+                                      reverse: false,
+                                      scrollDirection: Axis.horizontal,
+                                      itemCount:  data.length,
+                                      itemBuilder:
+                                          (BuildContext context, int index) => Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: Stack(
+                                              children: <Widget>[
+                                                Container(
+                                                    height:_width-120,
+                                                    width: _width - 120,
+                                                    decoration: BoxDecoration(
+                                                      color: Color(0xffffffff),
+                                                      borderRadius:BorderRadius.all(Radius.circular(16)),
+                                                      border: Border.all(color: Colors.black12),
+                                                    ),
+                                                    child: Padding(
+                                                      padding: const EdgeInsets.all(0.0),
+                                                      child: ClipRRect(
+                                                        borderRadius:
+                                                        BorderRadius.circular(16.0),
+                                                        child:Padding(
+                                                          padding: const EdgeInsets.all(0.0),
+                                                          child: FittedBox(
+                                                            child: data[index],
+                                                            fit: BoxFit.cover,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    )),
+                                                Positioned(
+                                                  top:12.0,
+                                                  right: 14.0,
+                                                  child: Container(
+
+                                                    decoration: BoxDecoration(
+                                                      color: Colors.white,
+                                                      //color: Color(0xffFFFFFF),
+                                                      borderRadius:
+                                                      BorderRadius.all(Radius.circular(16)),
+                                                    ),
+
+                                                    child: InkWell(
+                                                        onTap: (){
+                                                          showDialog<void>(
+                                                            context: context,
+                                                            barrierDismissible: false, // user must tap button!
+                                                            builder: (BuildContext context) {
+                                                              return CupertinoAlertDialog(
+                                                                title: Text('Are you sure?'),
+                                                                content: Text('\nYou want to delete this image?'),
+                                                                actions: <Widget>[
+                                                                  CupertinoDialogAction(
+                                                                    child: Text('No'),
+                                                                    onPressed: () {
+                                                                      Navigator.of(context).pop();
+                                                                    },
+                                                                  ),
+                                                                  CupertinoDialogAction(
+                                                                    child: Text('Yes'),
+                                                                    onPressed: () async{
+                                                                      Navigator.of(context).pop();
+                                                                    },
+                                                                  ),
+                                                                ],
+                                                              );
+                                                            },
+                                                          );
+                                                          },
+                                                        child: Icon(Icons.cancel, size:32)
+                                                    ),
+                                                  ),
+                                                )
+                                              ],
+                                            ),
+                                          ),
+                                    );
+                                    break;
+                                }
+                              },
+                            ),
+                          ),
                         ),
-                        
+                        SizedBox(height: 14),  /*maxImageNo - (widget.puppyDetails.gallery.length+imageAssets.length) > 0 ?*/
+                        Center(
+                          child: new RaisedButton.icon(
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: new BorderRadius.circular(30.0),
+                                  side: BorderSide(color: greenColor, width: 2.0)
+                              ),
+                              onPressed: loadAssets,
+                              color: Color(0xffffffff),
+                              icon: new Icon(Icons.image, color:greenColor, size:16),
+                              label: new Text("Add Images", style: TextStyle(color:greenColor,fontFamily:"NunitoSans", fontWeight: FontWeight.bold, fontSize: 13),)),
+                        ),
+                        SizedBox(height: 24),
                         Center(
                           child: Container(
                             width: _width,
@@ -1095,7 +1263,7 @@ class EditPuppyState extends State<EditPuppy> {
 
   double calculateGridHeight() {
     double numRowsReq =
-        images.length == 1 ? 1 : ((images.length - 1) / imagesInGridRow) + 1;
+        imageAssets.length == 1 ? 1 : ((imageAssets.length - 1) / imagesInGridRow) + 1;
     return thumbnailSize * numRowsReq.toInt() + 16.0;
   }
 
@@ -1136,4 +1304,6 @@ class EditPuppyState extends State<EditPuppy> {
       isFemale = !isFemale;
     });
   }
+
+
 }

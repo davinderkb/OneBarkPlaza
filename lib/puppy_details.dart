@@ -79,10 +79,10 @@ class PuppyDetails {
 
   factory PuppyDetails.fromJson(dynamic json) {
     Map<String,dynamic> categoryDetails = (json['categories'][0] as Map<String,dynamic>);
-    Map<String,dynamic> productImage = null;
+
     ImageCustom featuredImage = null;
     try {
-      productImage = (json['product-image'] as Map<String, dynamic>);
+      Map<String,dynamic> productImage = (json['product-image'] as Map<String, dynamic>);
       featuredImage = ImageCustom(productImage["id"], productImage["src"]);
     }catch(e) {}
 
@@ -92,9 +92,7 @@ class PuppyDetails {
     try {
       for(dynamic items in json['gallery-images']){
         var item = (items as Map<String, dynamic>);
-        for (int i=0; i< item.length;i++){
-                    galleryImages.add(ImageCustom(item["id"].toString(), item["src"]));
-        }
+        galleryImages.add(ImageCustom(item["id"].toString(), item["src"]));
       }
     }catch(e){}
 
@@ -258,5 +256,12 @@ class PuppyDetails {
   bool get isSocialized => _isSocialized;
 
   bool get isChampionBloodline => _isChampionBloodline;
+
+  int imageCount() {
+    int count = 0;
+    if(_gallery!=null)
+      count = count + _gallery.length;
+    return count;
+  }
 
 }
