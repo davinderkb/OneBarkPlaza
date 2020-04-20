@@ -7,7 +7,6 @@ import 'img.dart';
 
 class PuppyDetails {
   int _puppyId, _categoryId;
-  ImageCustom _image;
   List<ImageCustom> _gallery;
   DateTime _dob;
   String _puppyName,
@@ -30,6 +29,14 @@ class PuppyDetails {
       _vetReport,
       _flightTicket
       ;
+
+  ImageCustom _coverPic;
+
+  ImageCustom get coverPic => _coverPic;
+
+  set coverPic(ImageCustom value) {
+    _coverPic = value;
+  }
 
   get vetName => _vetName;
 
@@ -66,7 +73,6 @@ class PuppyDetails {
       this._puppyPrice,
       this._shippingCost,
       this._description,
-      this._image,
       this._gallery,
       this._gender,
       this._dobString,
@@ -96,7 +102,20 @@ class PuppyDetails {
       this._dobString = "";
       this._dob = DateTime.now();
     }
+    if(_gallery.length>0){
+      for(ImageCustom item in _gallery){
+        if(item.isCoverPic){
+          coverPic = item;
+          break;
+        }
+      }
+     if(coverPic == null){
+       coverPic = _gallery[0];
+     }
+    }
+
   }
+
 
 
   PuppyDetails.deepCopy(
@@ -105,7 +124,6 @@ class PuppyDetails {
       this._puppyPrice,
       this._shippingCost,
       this._description,
-      this._image,
       this._gallery,
       this._gender,
       this._dobString,
@@ -128,24 +146,18 @@ class PuppyDetails {
       this._isFamilyRaised,
       this._isKidFriendly,
       this._isMicrochipped,
-      this._isSocialized);
+      this._isSocialized,
+      this._coverPic);
 
   factory PuppyDetails.fromJson(dynamic json) {
     Map<String,dynamic> categoryDetails = (json['categories'][0] as Map<String,dynamic>);
 
-    ImageCustom featuredImage = null;
-    try {
-      Map<String,dynamic> productImage = (json['product-image'] as Map<String, dynamic>);
-      featuredImage = ImageCustom(productImage["id"], productImage["src"]);
-    }catch(e) {}
-
     List<ImageCustom> galleryImages = new List<ImageCustom>();
-    if(featuredImage!= null)
-      galleryImages.add(featuredImage);
+
     try {
       for(dynamic items in json['gallery-images']){
         var item = (items as Map<String, dynamic>);
-        galleryImages.add(ImageCustom(item["id"].toString(), item["src"]));
+        galleryImages.add(ImageCustom(item["id"].toString(), item["src"], item["isCoverPic"]));
       }
     }catch(e){}
 
@@ -155,7 +167,6 @@ class PuppyDetails {
         json['price'].toString().trim() == "" ? "0" : json['price'].toString().trim(),
         json['shipping_cost'] as String,
         json['description'] as String,
-        featuredImage,
         galleryImages,
         json['gender'] as String,
         json['date_of_birth'] is int || json['date_of_birth'] is String? json['date_of_birth'].toString(): "",
@@ -172,7 +183,7 @@ class PuppyDetails {
         json["vet-name"] as String,
         json["vet-address"] as String,
         json["report-copy"] as String,
-        json["upload-documentations"] as String,
+        json["flight-doc"] as String,
         json['champion-bloodlines'].toString() == '1',
         json['family-raised'].toString() == '1',
         json['kid-friendly'].toString() == '1',
@@ -218,8 +229,6 @@ class PuppyDetails {
   get gender => _gender;
 
   List<ImageCustom> get gallery => _gallery;
-
-  ImageCustom get image => _image;
 
   get description => _description;
 
@@ -283,10 +292,6 @@ class PuppyDetails {
 
   set gallery(value) {
     _gallery = value;
-  }
-
-  set image(value) {
-    _image = value;
   }
 
   set description(value) {

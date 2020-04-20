@@ -320,7 +320,7 @@ class HomePageState extends State<HomePage> {
                                                               24.0),
                                                       child: CachedNetworkImage(
                                                         imageUrl:
-                                                            data[index].image != null?data[index].image.src:"",
+                                                            data[index].coverPic != null?data[index].coverPic.src:"",
                                                         fit: BoxFit.cover,
                                                         placeholder:
                                                             (context, url) =>

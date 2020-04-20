@@ -65,7 +65,8 @@ class ViewPuppyState extends State<ViewPuppy> {
 
   BuildContext context;
 
-  bool _isLoading = false;
+  bool _isLoadingFlight = false;
+  bool _isLoadingVet = false;
 
 
   @override
@@ -403,9 +404,8 @@ class ViewPuppyState extends State<ViewPuppy> {
                                             Toast.show("File is not available", context,duration:Toast.LENGTH_LONG);
                                         }else {
                                           setState(() {
-                                            _isLoading = true;
+                                            _isLoadingVet = true;
                                           });
-                                            Dio dio = new Dio();
                                             var data = await http.get(widget.puppyDetails.vetReport);
 
                                             var bytes = data.bodyBytes;
@@ -420,7 +420,7 @@ class ViewPuppyState extends State<ViewPuppy> {
                                             File assetFile = await file.writeAsBytes(bytes);
                                             OpenFile.open("${dir.path}/vetReport"+ext);
                                           setState(() {
-                                            _isLoading = false;
+                                            _isLoadingVet = false;
                                           });
                                           //  await launch(widget.puppyDetails.vetReport);
                                         }
@@ -443,7 +443,7 @@ class ViewPuppyState extends State<ViewPuppy> {
                                             )
                                           ],
                                         ),
-                                        child: _isLoading? SpinKitRing(
+                                        child: _isLoadingVet? SpinKitRing(
                                           lineWidth: 3,
                                           color: Colors.white,
                                           size: 40,
@@ -457,7 +457,7 @@ class ViewPuppyState extends State<ViewPuppy> {
                                           Toast.show("Flight information not available", context,duration:Toast.LENGTH_LONG);
                                         }else {
                                           setState(() {
-                                            _isLoading = true;
+                                            _isLoadingFlight = true;
                                           });
                                           Dio dio = new Dio();
                                           var data = await http.get(widget.puppyDetails.flightTicket);
@@ -474,7 +474,7 @@ class ViewPuppyState extends State<ViewPuppy> {
                                           File assetFile = await file.writeAsBytes(bytes);
                                           OpenFile.open("${dir.path}/flightTicket"+ext);
                                           setState(() {
-                                            _isLoading = false;
+                                            _isLoadingFlight = false;
                                           });
                                           //  await launch(widget.puppyDetails.vetReport);
                                         }
@@ -497,7 +497,7 @@ class ViewPuppyState extends State<ViewPuppy> {
                                             )
                                           ],
                                         ),
-                                        child: _isLoading? SpinKitRing(
+                                        child: _isLoadingFlight? SpinKitRing(
                                           lineWidth: 3,
                                           color: Colors.white,
                                           size: 40,

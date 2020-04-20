@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
 import 'dart:ui';
@@ -7,14 +8,17 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:mime/mime.dart';
 import 'package:multi_image_picker/multi_image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:native_pdf_renderer/native_pdf_renderer.dart';
+import 'package:one_bark_plaza/homepage.dart';
 import 'package:one_bark_plaza/puppy_details.dart';
 import 'package:one_bark_plaza/util/constants.dart';
+import 'package:one_bark_plaza/util/utility.dart';
 import 'package:open_file/open_file.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:toast/toast.dart';
@@ -37,7 +41,6 @@ class EditPuppy extends StatefulWidget {
         puppyDetails.puppyPrice,
         puppyDetails.shippingCost,
         puppyDetails.description,
-        puppyDetails.image,
         puppyDetails.gallery,
         puppyDetails.gender,
         puppyDetails.dobString,
@@ -60,7 +63,8 @@ class EditPuppy extends StatefulWidget {
         puppyDetails.isFamilyRaised,
         puppyDetails.isKidFriendly,
         puppyDetails.isMicrochipped,
-        puppyDetails.isSocialized
+        puppyDetails.isSocialized,
+        puppyDetails.coverPic
     );
   }
   @override
@@ -70,6 +74,7 @@ class EditPuppy extends StatefulWidget {
 }
 
 class EditPuppyState extends State<EditPuppy> {
+  bool _isLoading = false;
   DateTime dateOfBirth = DateTime.now();
   DateTime dateOfCheckup = DateTime.now();
   String dateOfBirthString = '';
@@ -77,7 +82,7 @@ class EditPuppyState extends State<EditPuppy> {
   String _chooseBreed = '';
   bool _isBreedSelectedOnce = false;
   List<Asset> imageAssets = List<Asset>();
-  Future<List<Image>> futureAllImages ;
+  Future<List<ImageWithId>> futureAllImages ;
   String _error = 'No Error Dectected';
   String _platformMessage = 'No Error';
   List images2;
@@ -92,8 +97,8 @@ class EditPuppyState extends State<EditPuppy> {
   bool isSocialized = false;
   ChooseBreedDialog chooseBreedDialog = null;
   bool isFemale = false;
-  List<Image> allImages = new List<Image>();
-  List<Image> oldImages;
+  List<ImageWithId> allImages = new List<ImageWithId>();
+  List<ImageWithId> oldImages;
   String _vetReportPath;
   String _flightTicketPath;
   int vetFileType = Constants.FILE_TYPE_OTHER;
@@ -101,6 +106,10 @@ class EditPuppyState extends State<EditPuppy> {
   MultipartFile vetReport;
   MultipartFile flightTicketFile;
   bool isFirstTime = true;
+
+  List<ImageWithId> newImages;
+
+  List<String> deletedImagesIdList = new List<String>() ;
   Future<Widget> buildGridView() async {
 
     return GridView.count(
@@ -134,12 +143,12 @@ class EditPuppyState extends State<EditPuppy> {
       }),
     );
   }
-   Future<List<Image>> addNewImages() async {
-    List<Image> newImages = new List<Image>();
+   Future<List<ImageWithId>> addNewImages() async {
+    List<ImageWithId> newImages = new List<ImageWithId>();
     for(Asset item in imageAssets){
         ByteData byteData = await item.getByteData();
         List<int> imageData = byteData.buffer.asUint8List();
-        newImages.add(Image.memory(imageData));
+        newImages.add(ImageWithId.name(null, Image.memory(imageData)));
     }
     return newImages;
   }
@@ -161,18 +170,18 @@ class EditPuppyState extends State<EditPuppy> {
         .addPostFrameCallback((_) => isFirstTime = false);
 
   }
-  Future<List<Image>>getImages() async {
+  Future<List<ImageWithId>>getImages() async {
 
-    oldImages = new List<Image>();
+    oldImages = new List<ImageWithId>();
     for(ImageCustom galleryItem in widget.puppyDetails.gallery){
       var data = await http.get(galleryItem.src);
       var bytes = data.bodyBytes;
-      oldImages.add(Image.memory(bytes, fit: BoxFit.cover));
+      oldImages.add(ImageWithId.name(galleryItem.id, Image.memory(bytes, fit: BoxFit.cover)));
     }
     return oldImages;
   }
 
-  Future<List<Image>>syncNewImages() async {
+  Future<List<ImageWithId>>syncNewImages() async {
     if(allImages!=null) {
       allImages.clear();
       allImages.addAll(oldImages);
@@ -186,7 +195,7 @@ class EditPuppyState extends State<EditPuppy> {
 
     try {
       resultList = await MultiImagePicker.pickImages(
-        maxImages: maxImageNo - widget.puppyDetails.imageCount() > 0 ? 6 - widget.puppyDetails.imageCount(): 0,
+        maxImages: maxImageNo - oldImages.length > 0 ? maxImageNo -  oldImages.length: 0,
         enableCamera: true,
         selectedAssets: imageAssets,
         cupertinoOptions: CupertinoOptions(takePhotoIcon: "chat"),
@@ -229,7 +238,16 @@ class EditPuppyState extends State<EditPuppy> {
     );
     var maleColor = Color(0xff5cbaed);
     var femaleColor = Color(0xfff25fa3);
-    return Scaffold(
+    return _isLoading? Container(
+        color: Colors.white,
+        width: _width,
+        height: _height,
+        alignment: Alignment.bottomCenter,
+        child: SpinKitRipple(
+          borderWidth: 100.0,
+          color: greenColor,
+          size: 120,
+        )):Scaffold(
         key: globalKey,
         backgroundColor: Colors.transparent,
         appBar: new AppBar(
@@ -308,7 +326,7 @@ class EditPuppyState extends State<EditPuppy> {
                                       // return whatever you'd do for this case, probably an error
 
                                     }
-                                    var data = snapshot.data as List<Image>;
+                                    var data = snapshot.data as List<ImageWithId>;
                                     return new ListView.builder(
                                       reverse: false,
                                       scrollDirection: Axis.horizontal,
@@ -334,7 +352,7 @@ class EditPuppyState extends State<EditPuppy> {
                                                         child:Padding(
                                                           padding: const EdgeInsets.all(0.0),
                                                           child: FittedBox(
-                                                            child: data[index],
+                                                            child: data[index].photo,
                                                             fit: BoxFit.cover,
                                                           ),
                                                         ),
@@ -372,6 +390,15 @@ class EditPuppyState extends State<EditPuppy> {
                                                                     child: Text('Yes'),
                                                                     onPressed: () async{
                                                                       Navigator.of(context).pop();
+                                                                      if(data[index].photoId==null){
+                                                                        //New image delete requested
+                                                                      } else{
+                                                                          deletedImagesIdList.add(data[index].photoId);
+                                                                          oldImages.removeWhere((element) => element.photoId==data[index].photoId);
+                                                                          setState(() {
+
+                                                                          });
+                                                                      }
                                                                     },
                                                                   ),
                                                                 ],
@@ -1616,10 +1643,87 @@ class EditPuppyState extends State<EditPuppy> {
         )));
   }
 
-  void onSave(BuildContext context) {
-    Toast.show("Save, to-do", context);
-  }
+  void onSave(BuildContext context) async{
+    setState(() {
+      _isLoading = true;
+    });
+    List<MultipartFile> multipart = List<MultipartFile>();
+    for (int i = 0; i < imageAssets.length; i++) {
+      var path = await FlutterAbsolutePath.getAbsolutePath(imageAssets[i].identifier);
+      final mimeTypeData = lookupMimeType(path, headerBytes: [0xFF, 0xD8]).split('/');
+      ByteData byteData = await imageAssets[i].getByteData();
+      List<int> imageData = byteData.buffer.asUint8List();
+      MultipartFile multipartFile = MultipartFile.fromBytes(
+        imageData,
+        filename: 'image',
+        contentType: MediaType("image", mimeTypeData[1]),
+      );
+      multipart.add(multipartFile);
+    }
 
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String userId =  prefs.getString(Constants.SHARED_PREF_USER_ID);
+    Toast.show("New Images "+multipart.length.toString() + ", Deleted: " +deletedImagesIdList.length.toString(), context, duration: Toast.LENGTH_LONG);
+
+    var dio = Dio();
+    FormData formData = new FormData.fromMap({
+      "puppy-name": Utility.capitalize(widget.puppyDetails.puppyName.trim()),
+      "description": Utility.capitalize(widget.puppyDetails.description.trim()),
+      "categories": [ { "id" : widget.puppyDetails.categoryName }],
+      "user_id": userId,
+      "selling-price": widget.puppyDetails.puppyPrice.trim(),
+      "shipping-cost": widget.puppyDetails.shippingCost.trim(),
+      "date-of-birth": dateOfBirth.millisecondsSinceEpoch.toString(),
+      "date-available-new": dateOfBirthString,
+      "age-in-week": calculateAgeInWeeks(),
+      "color": Utility.capitalize(widget.puppyDetails.color.trim()),
+      "puppy-weight": widget.puppyDetails.puppyWeight.trim(),
+      "dad-weight": widget.puppyDetails.puppyDadWeight.trim(),
+      "mom-weight": widget.puppyDetails.puppyMomWeight.trim(),
+      "registry": widget.puppyDetails.registry.trim(),
+      "vet-name": widget.puppyDetails.vetName.trim(),
+      "vet-address": widget.puppyDetails.vetAddress.trim(),
+      "checkup-date": dateOfCheckupString,
+      "kid-friendly": isKidFriendly?"1":"0",
+      "socialized": isSocialized?"1":"0",
+      "family-raised":isFamilyRaised?"1":"0",
+      "champion-bloodlines": isChampionBloodline?"1":"0",
+      "microchipped": isMicrochipped?"1":"0",
+      "gender": isFemale?"Female":"Male",
+      "gallery_images": [multipart],
+      "deleted_imgs_ids": deletedImagesIdList,
+      "report-copy" : _vetReportPath!=null?vetReport:"",
+      "flight-doc" : _flightTicketPath!=null?_flightTicketPath:""
+    });
+    try{
+      dynamic response = await dio.post("https://obpdevstage.wpengine.com/wp-json/obp/v1/create_puppy",data:formData);
+      if (response.toString() != '[]') {
+        dynamic responseList = jsonDecode(response.toString());
+        if (responseList["success"] == "Puppy successfully Edit!") {
+          Toast.show("Edit Puppy Successful " +response.toString(), context,duration: Toast.LENGTH_LONG);
+          Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (BuildContext context) => HomePage()));
+        } else {
+          Toast.show("Edit Puppy Failed " +response.toString(), context, duration: Toast.LENGTH_LONG);
+        }
+      } else {
+        Toast.show("Edit Puppy Failed "+response.toString(), context,duration: Toast.LENGTH_LONG);
+      }
+      setState(() {
+        _isLoading = false;
+      });
+    }catch(exception){
+      Toast.show("Request Failed. "+exception.toString(), context,
+      );
+      setState(() {
+        _isLoading = false;
+      });
+    }
+
+
+  }
+  calculateAgeInWeeks() {
+    return ((DateTime.now().difference(dateOfBirth).inDays)/7).round();
+  }
   double calculateGridHeight() {
     double numRowsReq =
         imageAssets.length == 1 ? 1 : ((imageAssets.length - 1) / imagesInGridRow) + 1;
@@ -1753,5 +1857,27 @@ class EditPuppyState extends State<EditPuppy> {
   }
 
 
+
+}
+
+
+class ImageWithId{
+  Image _photo;
+
+  Image get photo => _photo;
+
+  set photo(Image value) {
+    _photo = value;
+  }
+
+  String _photoId;
+
+  ImageWithId.name(this._photoId, this._photo);
+
+  String get photoId => _photoId;
+
+  set photoId(String value) {
+    _photoId = value;
+  }
 
 }

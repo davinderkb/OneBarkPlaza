@@ -1686,8 +1686,9 @@ class AddPuppyState extends State<AddPuppy> {
       "microchipped": isMicrochipped?"1":"0",
       "gender": isFemale?"Female":"Male",
       "gallery_images": [multipart],
+      "deleted_imgs_ids" : "",
       "report-copy" : _vetReportPath!=null?vetReport:"",
-      "upload-documentations" : _flightTicketPath!=null?_flightTicketPath:""
+      "flight-doc" : _flightTicketPath!=null?_flightTicketPath:""
     });
     try{
       dynamic response = await dio.post("https://obpdevstage.wpengine.com/wp-json/obp/v1/create_puppy",data:formData);
