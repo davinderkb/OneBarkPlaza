@@ -1647,7 +1647,7 @@ class AddPuppyState extends State<AddPuppy> {
     for (int i = 0; i < images.length; i++) {
       var path = await FlutterAbsolutePath.getAbsolutePath(images[i].identifier);
       final mimeTypeData = lookupMimeType(path, headerBytes: [0xFF, 0xD8]).split('/');
-      ByteData byteData = await images[i].getByteData();
+      ByteData byteData = await images[i].getByteData(quality: 10);
       List<int> imageData = byteData.buffer.asUint8List();
       MultipartFile multipartFile = MultipartFile.fromBytes(
         imageData,
@@ -1686,7 +1686,6 @@ class AddPuppyState extends State<AddPuppy> {
       "microchipped": isMicrochipped?"1":"0",
       "gender": isFemale?"Female":"Male",
       "gallery_images": [multipart],
-      "deleted_imgs_ids" : "",
       "report-copy" : _vetReportPath!=null?vetReport:"",
       "flight-doc" : _flightTicketPath!=null?_flightTicketPath:""
     });

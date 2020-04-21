@@ -58,6 +58,8 @@ class EditPuppy extends StatefulWidget {
         puppyDetails.vetName,
         puppyDetails.vetAddress,
         puppyDetails.vetReport,
+        puppyDetails.checkUpDateString,
+        puppyDetails.checkupDate,
         puppyDetails.flightTicket,
         puppyDetails.isChampionBloodline,
         puppyDetails.isFamilyRaised,
@@ -80,6 +82,7 @@ class EditPuppyState extends State<EditPuppy> {
   String dateOfBirthString = '';
   String dateOfCheckupString = '';
   String _chooseBreed = '';
+  int _selectedBreedId = 0;
   bool _isBreedSelectedOnce = false;
   List<Asset> imageAssets = List<Asset>();
   Future<List<ImageWithId>> futureAllImages ;
@@ -164,8 +167,17 @@ class EditPuppyState extends State<EditPuppy> {
   void initState() {
     super.initState();
     dateOfBirth = widget.puppyDetails.dob;
+    dateOfCheckup = widget.puppyDetails.checkupDate;
     dateOfBirthString = widget.puppyDetails.dobString;
+    dateOfCheckupString = widget.puppyDetails.checkUpDateString;
     _chooseBreed = widget.puppyDetails.categoryName;
+    _selectedBreedId = widget.puppyDetails.categoryId;
+    isFemale = widget.puppyDetails.isFemale;
+    isMicrochipped = widget.puppyDetails.isMicrochipped;
+    isSocialized = widget.puppyDetails.isSocialized;
+    isChampionBloodline = widget.puppyDetails.isChampionBloodline;
+    isFamilyRaised = widget.puppyDetails.isFamilyRaised;
+    isKidFriendly = widget.puppyDetails.isKidFriendly;
     WidgetsBinding.instance
         .addPostFrameCallback((_) => isFirstTime = false);
 
@@ -391,7 +403,14 @@ class EditPuppyState extends State<EditPuppy> {
                                                                     onPressed: () async{
                                                                       Navigator.of(context).pop();
                                                                       if(data[index].photoId==null){
-                                                                        //New image delete requested
+                                                                        if(oldImages.length>0) {
+                                                                          imageAssets.removeAt(index - oldImages.length);
+                                                                        } else{
+                                                                          imageAssets.removeAt(index);
+                                                                        }
+                                                                        setState(() {
+
+                                                                        });
                                                                       } else{
                                                                           deletedImagesIdList.add(data[index].photoId);
                                                                           oldImages.removeWhere((element) => element.photoId==data[index].photoId);
@@ -492,7 +511,7 @@ class EditPuppyState extends State<EditPuppy> {
                                 context: context,
                                 builder: (BuildContext context) => BackdropFilter(
                                   filter: ImageFilter.blur(sigmaX:2.0,sigmaY:2.0),
-                                  child: chooseBreedDialog = ChooseBreedDialog(null),
+                                  child: chooseBreedDialog = ChooseBreedDialog(widget.editPuppyState),
                                 ),
                               )
                               ;
@@ -1651,7 +1670,7 @@ class EditPuppyState extends State<EditPuppy> {
     for (int i = 0; i < imageAssets.length; i++) {
       var path = await FlutterAbsolutePath.getAbsolutePath(imageAssets[i].identifier);
       final mimeTypeData = lookupMimeType(path, headerBytes: [0xFF, 0xD8]).split('/');
-      ByteData byteData = await imageAssets[i].getByteData();
+      ByteData byteData = await imageAssets[i].getByteData(quality: 10);
       List<int> imageData = byteData.buffer.asUint8List();
       MultipartFile multipartFile = MultipartFile.fromBytes(
         imageData,
@@ -1669,11 +1688,11 @@ class EditPuppyState extends State<EditPuppy> {
     FormData formData = new FormData.fromMap({
       "puppy-name": Utility.capitalize(widget.puppyDetails.puppyName.trim()),
       "description": Utility.capitalize(widget.puppyDetails.description.trim()),
-      "categories": [ { "id" : widget.puppyDetails.categoryName }],
+      "categories": [ { "id" : _selectedBreedId }],
       "user_id": userId,
       "selling-price": widget.puppyDetails.puppyPrice.trim(),
       "shipping-cost": widget.puppyDetails.shippingCost.trim(),
-      "date-of-birth": dateOfBirth.millisecondsSinceEpoch.toString(),
+      "date-of-birth": dateOfBirth.microsecondsSinceEpoch.toString(),
       "date-available-new": dateOfBirthString,
       "age-in-week": calculateAgeInWeeks(),
       "color": Utility.capitalize(widget.puppyDetails.color.trim()),
@@ -1683,7 +1702,7 @@ class EditPuppyState extends State<EditPuppy> {
       "registry": widget.puppyDetails.registry.trim(),
       "vet-name": widget.puppyDetails.vetName.trim(),
       "vet-address": widget.puppyDetails.vetAddress.trim(),
-      "checkup-date": dateOfCheckupString,
+      "checkup-date": dateOfCheckup.microsecondsSinceEpoch.toString(),
       "kid-friendly": isKidFriendly?"1":"0",
       "socialized": isSocialized?"1":"0",
       "family-raised":isFamilyRaised?"1":"0",
@@ -1750,8 +1769,8 @@ class EditPuppyState extends State<EditPuppy> {
         });
     if (picked != null)
       setState(() {
-        dateOfCheckup = picked;
-        dateOfCheckupString = new DateFormat("MMM dd, yyyy").format(picked);
+        dateOfBirth = picked;
+        dateOfBirthString = new DateFormat("MMM dd, yyyy").format(picked);
       });
   }
 
@@ -1785,6 +1804,10 @@ class EditPuppyState extends State<EditPuppy> {
     setState(() {
       _chooseBreed = value;
     });
+  }
+
+  setSelectedBreedId(int value) {
+    _selectedBreedId = value;
   }
 
   void toggleState() {

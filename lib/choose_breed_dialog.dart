@@ -10,11 +10,11 @@ import 'package:toast/toast.dart';
 import 'package:flutter/scheduler.dart';
 import 'breeds.dart';
 class ChooseBreedDialog extends StatefulWidget {
-  AddPuppyState addPuppyState;
+  var formState;
   Set<Breed> allDuplicateItems  = Set<Breed>();
   bool isLoadedOnce = false;
-  ChooseBreedDialog(AddPuppyState addPuppyState){
-        this.addPuppyState = addPuppyState;
+  ChooseBreedDialog(var formState){
+        this.formState = formState;
   }
 
   @override
@@ -207,9 +207,9 @@ class ChoosBreedDailogState extends State<ChooseBreedDialog>{
                                 ),
                               ),
                                       onTap: () {
-                                        widget.addPuppyState.isBreedSelectedOnce(true);
-                                        widget.addPuppyState.setSelectedBreedId(data[index].categoryId);
-                                        widget.addPuppyState.chooseBreed(data[index].name);
+                                        widget.formState.isBreedSelectedOnce(true);
+                                        widget.formState.setSelectedBreedId(data[index].categoryId);
+                                        widget.formState.chooseBreed(data[index].name);
                                         Navigator.pop(context);
                                       },
                                   ),
@@ -254,8 +254,8 @@ class ChoosBreedDailogState extends State<ChooseBreedDialog>{
                         ),
                       ),
                             onTap: () {
-                              widget.addPuppyState.isBreedSelectedOnce(true);
-                              widget.addPuppyState.chooseBreed(filteredItems[index].name);
+                              widget.formState.isBreedSelectedOnce(true);
+                              widget.formState.chooseBreed(filteredItems[index].name);
                               Navigator.pop(context);
                             },
                           ),

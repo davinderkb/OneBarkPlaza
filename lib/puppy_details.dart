@@ -8,7 +8,7 @@ import 'img.dart';
 class PuppyDetails {
   int _puppyId, _categoryId;
   List<ImageCustom> _gallery;
-  DateTime _dob;
+  DateTime _dob,_checkupDate;
   String _puppyName,
       _puppyPrice,
       _shippingCost,
@@ -27,12 +27,17 @@ class PuppyDetails {
       _vetName,
       _vetAddress,
       _vetReport,
+      _checkUpDateString,
       _flightTicket
       ;
 
   ImageCustom _coverPic;
 
   ImageCustom get coverPic => _coverPic;
+
+  bool get isFemale {
+    return this._gender == "Female";
+  }
 
   set coverPic(ImageCustom value) {
     _coverPic = value;
@@ -89,6 +94,7 @@ class PuppyDetails {
       this._vetName,
       this._vetAddress,
       this._vetReport,
+      this._checkUpDateString,
       this._flightTicket,
       this._isChampionBloodline,
       this._isFamilyRaised,
@@ -101,6 +107,13 @@ class PuppyDetails {
     }catch(e){
       this._dobString = "";
       this._dob = DateTime.now();
+    }
+    try{
+      this._checkupDate = new DateTime.fromMicrosecondsSinceEpoch(int.parse(_checkUpDateString));
+      this._checkUpDateString = new DateFormat("MMM dd, yyyy").format(_checkupDate);
+    }catch(e){
+      this._checkUpDateString = "";
+      this._checkupDate = DateTime.now();
     }
     if(_gallery.length>0){
       for(ImageCustom item in _gallery){
@@ -141,6 +154,8 @@ class PuppyDetails {
       this._vetName,
       this._vetAddress,
       this._vetReport,
+      this._checkUpDateString,
+      this._checkupDate,
       this._flightTicket,
       this._isChampionBloodline,
       this._isFamilyRaised,
@@ -183,6 +198,7 @@ class PuppyDetails {
         json["vet-name"] as String,
         json["vet-address"] as String,
         json["report-copy"] as String,
+        json['checkup-date'] is int || json['checkup-date'] is String? json['checkup-date'].toString(): "",
         json["flight-doc"] as String,
         json['champion-bloodlines'].toString() == '1',
         json['family-raised'].toString() == '1',
@@ -217,6 +233,13 @@ class PuppyDetails {
       return "0";
     }
 
+  }
+
+  DateTime get checkupDate {
+    return _checkupDate;
+  }
+  get checkUpDateString {
+    return  _checkUpDateString;
   }
 
   DateTime get dob {
