@@ -233,7 +233,9 @@ class ViewPuppyState extends State<ViewPuppy> {
                           Container(height: (_width/2 -24)/5 * (widget.puppyBadges.length /2).round(), child: buildGridView()),
 
                           widget.puppyBadges.length>0?SizedBox(height: 20,):SizedBox(height: 0,),
-                          Text(widget.puppyDetails.puppyName +" is an active, charming, confident, eager to please, easily trained, gentle, intelligent, lovable, loyal, patient, well mannered dog.", style: tableHeaderTextStyle,),
+                          Text(widget.puppyDetails.description!=null && widget.puppyDetails.description.toString().trim()!=""?
+                              widget.puppyDetails.description:
+                          widget.puppyDetails.puppyName +" is an active, charming, confident, eager to please, easily trained, gentle, intelligent, lovable, loyal, patient, well mannered dog.", style: tableHeaderTextStyle,),
                           SizedBox(height: 20,),
                           Column(
                             children: <Widget>[
@@ -343,12 +345,12 @@ class ViewPuppyState extends State<ViewPuppy> {
                                     Container(
                                         width: _width/2 -32,
                                         alignment: Alignment.topLeft,
-                                        child: Text("Date of Availbility", style: tableHeaderTextStyle,)
+                                        child: Text("Last Checkup Date", style: tableHeaderTextStyle,)
                                     ),
                                     Container(
                                         width: _width/2 -32,
                                         alignment: Alignment.topLeft,
-                                        child: Text("Apr 02, 2020", style: tableContentTextStyle,)
+                                        child: Text(widget.puppyDetails.checkUpDateString == null ?"Not Available" :widget.puppyDetails.checkUpDateString, style: tableContentTextStyle,)
                                     ),
                                   ],
                                 ),
@@ -407,10 +409,8 @@ class ViewPuppyState extends State<ViewPuppy> {
                                             _isLoadingVet = true;
                                           });
                                             var data = await http.get(widget.puppyDetails.vetReport);
-
                                             var bytes = data.bodyBytes;
                                             var dir = await getApplicationDocumentsDirectory();
-
                                             var ext = widget.puppyDetails.vetReport.substring(widget.puppyDetails.vetReport.lastIndexOf(".")+1);
                                             if(ext!=null && ext != "")
                                               ext = "."+ext;

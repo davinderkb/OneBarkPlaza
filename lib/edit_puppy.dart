@@ -26,6 +26,7 @@ import 'package:http/http.dart' as http;
 import 'choose_breed_dialog.dart';
 import 'img.dart';
 import 'package:flutter_absolute_path/flutter_absolute_path.dart';
+import 'package:path_provider/path_provider.dart';
 
 final greenColor = Color(0xff7FA432);
 final blueColor = Color(0xff4C8BF5);
@@ -110,6 +111,7 @@ class EditPuppyState extends State<EditPuppy> {
   MultipartFile flightTicketFile;
   bool isFirstTime = true;
 
+
   List<ImageWithId> newImages;
 
   List<String> deletedImagesIdList = new List<String>() ;
@@ -178,6 +180,8 @@ class EditPuppyState extends State<EditPuppy> {
     isChampionBloodline = widget.puppyDetails.isChampionBloodline;
     isFamilyRaised = widget.puppyDetails.isFamilyRaised;
     isKidFriendly = widget.puppyDetails.isKidFriendly;
+    _vetReportPath = widget.puppyDetails.vetReport;
+    _flightTicketPath = widget.puppyDetails.flightTicket;
     WidgetsBinding.instance
         .addPostFrameCallback((_) => isFirstTime = false);
 
@@ -310,7 +314,7 @@ class EditPuppyState extends State<EditPuppy> {
                         SizedBox(height: 0),
                         Center(
                           child: Container(
-                            height: _width -120,
+
                             width: _width -60,
                             child: FutureBuilder(
                               future: futureAllImages,
@@ -339,99 +343,147 @@ class EditPuppyState extends State<EditPuppy> {
 
                                     }
                                     var data = snapshot.data as List<ImageWithId>;
-                                    return new ListView.builder(
-                                      reverse: false,
-                                      scrollDirection: Axis.horizontal,
-                                      itemCount:  data.length,
-                                      itemBuilder:
-                                          (BuildContext context, int index) => Padding(
-                                            padding: const EdgeInsets.fromLTRB(8,0,8,0),
-                                            child: Stack(
-                                              children: <Widget>[
-                                                Container(
-                                                    height:_width-120,
-                                                    width: _width - 120,
-                                                    decoration: BoxDecoration(
-                                                      color: Color(0xffffffff),
-                                                      borderRadius:BorderRadius.all(Radius.circular(16)),
-                                                      border: Border.all(color: Colors.black12),
-                                                    ),
-                                                    child: Padding(
-                                                      padding: const EdgeInsets.all(0.0),
-                                                      child: ClipRRect(
-                                                        borderRadius:
-                                                        BorderRadius.circular(16.0),
-                                                        child:Padding(
-                                                          padding: const EdgeInsets.all(0.0),
-                                                          child: FittedBox(
-                                                            child: data[index].photo,
-                                                            fit: BoxFit.cover,
+                                    return data.length>0?Container(
+                                      height: _width -120,
+                                      child: ListView.builder(
+                                        reverse: false,
+                                        scrollDirection: Axis.horizontal,
+                                        itemCount:  data.length,
+                                        itemBuilder:
+                                            (BuildContext context, int index) => Padding(
+                                              padding: const EdgeInsets.fromLTRB(8,0,8,0),
+                                              child: Stack(
+                                                children: <Widget>[
+                                                  Container(
+                                                      height:_width-120,
+                                                      width: _width - 120,
+                                                      decoration: BoxDecoration(
+                                                        color: Color(0xffffffff),
+                                                        borderRadius:BorderRadius.all(Radius.circular(16)),
+                                                        border: Border.all(color: Colors.black12),
+                                                      ),
+                                                      child: Padding(
+                                                        padding: const EdgeInsets.all(0.0),
+                                                        child: ClipRRect(
+                                                          borderRadius:
+                                                          BorderRadius.circular(16.0),
+                                                          child:Padding(
+                                                            padding: const EdgeInsets.all(0.0),
+                                                            child: FittedBox(
+                                                              child: data[index].photo,
+                                                              fit: BoxFit.cover,
+                                                            ),
                                                           ),
                                                         ),
+                                                      )),
+                                                  Positioned(
+                                                    top:12.0,
+                                                    right: 14.0,
+                                                    child: Container(
+
+                                                      decoration: BoxDecoration(
+                                                        color: Colors.white,
+                                                        //color: Color(0xffFFFFFF),
+                                                        borderRadius:
+                                                        BorderRadius.all(Radius.circular(16)),
                                                       ),
-                                                    )),
-                                                Positioned(
-                                                  top:12.0,
-                                                  right: 14.0,
-                                                  child: Container(
 
-                                                    decoration: BoxDecoration(
-                                                      color: Colors.white,
-                                                      //color: Color(0xffFFFFFF),
-                                                      borderRadius:
-                                                      BorderRadius.all(Radius.circular(16)),
-                                                    ),
-
-                                                    child: InkWell(
-                                                        onTap: (){
-                                                          showDialog<void>(
-                                                            context: context,
-                                                            barrierDismissible: false, // user must tap button!
-                                                            builder: (BuildContext context) {
-                                                              return CupertinoAlertDialog(
-                                                                title: Text('Are you sure?'),
-                                                                content: Text('\nYou want to delete this image?'),
-                                                                actions: <Widget>[
-                                                                  CupertinoDialogAction(
-                                                                    child: Text('No'),
-                                                                    onPressed: () {
-                                                                      Navigator.of(context).pop();
-                                                                    },
-                                                                  ),
-                                                                  CupertinoDialogAction(
-                                                                    child: Text('Yes'),
-                                                                    onPressed: () async{
-                                                                      Navigator.of(context).pop();
-                                                                      if(data[index].photoId==null){
-                                                                        if(oldImages.length>0) {
-                                                                          imageAssets.removeAt(index - oldImages.length);
-                                                                        } else{
-                                                                          imageAssets.removeAt(index);
-                                                                        }
-                                                                        setState(() {
-
-                                                                        });
-                                                                      } else{
-                                                                          deletedImagesIdList.add(data[index].photoId);
-                                                                          oldImages.removeWhere((element) => element.photoId==data[index].photoId);
+                                                      child: InkWell(
+                                                          onTap: (){
+                                                            showDialog<void>(
+                                                              context: context,
+                                                              barrierDismissible: false, // user must tap button!
+                                                              builder: (BuildContext context) {
+                                                                return CupertinoAlertDialog(
+                                                                  title: Text('Are you sure?'),
+                                                                  content: Text('\nYou want to delete this image?'),
+                                                                  actions: <Widget>[
+                                                                    CupertinoDialogAction(
+                                                                      child: Text('No'),
+                                                                      onPressed: () {
+                                                                        Navigator.of(context).pop();
+                                                                      },
+                                                                    ),
+                                                                    CupertinoDialogAction(
+                                                                      child: Text('Yes'),
+                                                                      onPressed: () async{
+                                                                        Navigator.of(context).pop();
+                                                                        if(data[index].photoId==null){
+                                                                          if(oldImages.length>0) {
+                                                                            imageAssets.removeAt(index - oldImages.length);
+                                                                          } else{
+                                                                            imageAssets.removeAt(index);
+                                                                          }
                                                                           setState(() {
 
                                                                           });
-                                                                      }
-                                                                    },
-                                                                  ),
-                                                                ],
-                                                              );
+                                                                        } else{
+                                                                            deletedImagesIdList.add(data[index].photoId);
+                                                                            oldImages.removeWhere((element) => element.photoId==data[index].photoId);
+                                                                            setState(() {
+
+                                                                            });
+                                                                        }
+                                                                      },
+                                                                    ),
+                                                                  ],
+                                                                );
+                                                              },
+                                                            );
                                                             },
-                                                          );
-                                                          },
-                                                        child: Icon(Icons.cancel, size:32)
+                                                          child: Icon(Icons.cancel, size:32)
+                                                      ),
                                                     ),
-                                                  ),
-                                                )
-                                              ],
+                                                  )
+                                                ],
+                                              ),
                                             ),
+                                      ),
+                                    ) : Container(
+                                      width: _width,
+                                      child: Column(
+                                        children: <Widget>[
+                                          InkWell(
+                                            onTap:loadAssets,
+                                            child: Container(
+                                                height:120,
+                                                width: 115,
+                                                decoration: BoxDecoration(
+                                                    color: Color(0xffffffff),
+                                                    borderRadius:
+                                                    BorderRadius.all(Radius.circular(24)),
+                                                    border: Border.all(color:greenColor, width: 3.0, ),
+                                                    boxShadow: [
+                                                      BoxShadow(
+                                                        color: Colors.grey,
+                                                        blurRadius: 3.0, // soften the shadow
+                                                        offset: Offset(
+                                                          1.0, // Move to right 10  horizontally
+                                                          1.0, // Move to bottom 10 Vertically
+                                                        ),
+                                                      )
+                                                    ]
+                                                ),
+                                                child: ClipRRect(
+                                                  borderRadius:
+                                                  BorderRadius.circular(24.0),
+                                                  child:Padding(
+                                                    padding: const EdgeInsets.fromLTRB(35,27,27,27),
+                                                    child: Image.asset("assets/images/ic_dp.png", color: greenColor,),
+                                                  ),
+                                                )),
                                           ),
+                                          SizedBox(height:12),
+                                          new Text('You can add upto 6 photos',
+                                            style: TextStyle(fontFamily:"NunitoSans",color: Color(0xff707070), fontSize: 12,fontWeight: FontWeight.bold),
+                                          ),
+                                          new Text('First photo of your selection will be cover photo',
+                                            style: TextStyle(fontFamily:"NunitoSans",color: Color(0xff707070), fontSize: 12,fontWeight: FontWeight.normal),
+                                          ),SizedBox(height:12),
+                                        ],
+
+                                      ),
+
                                     );
                                     break;
                                 }
@@ -440,7 +492,7 @@ class EditPuppyState extends State<EditPuppy> {
                           ),
                         ),
                         SizedBox(height: 24),
-                        maxImageNo - widget.puppyDetails.imageCount() > 0 ?
+                        maxImageNo - oldImages.length  > 0 ?
                         Center(
                           child: new RaisedButton.icon(
                               shape: RoundedRectangleBorder(
@@ -1181,7 +1233,7 @@ class EditPuppyState extends State<EditPuppy> {
                                 ),
                                 child: Container(
 
-                                  child: _vetReportPath!=null
+                                  child: _vetReportPath!=null && _vetReportPath.trim()!=""
                                       ? Column(
                                     children: <Widget>[
                                       Container(
@@ -1223,7 +1275,7 @@ class EditPuppyState extends State<EditPuppy> {
                                               InkWell(
                                                 splashColor: Colors.red,
                                                 onTap: (){
-                                                  Toast.show("Vet report selection cancelled", context);
+                                                  Toast.show("Vet report removed", context);
                                                   setState(() {
                                                     _vetReportPath = null;
                                                   });
@@ -1249,7 +1301,39 @@ class EditPuppyState extends State<EditPuppy> {
                                             children: <Widget>[
                                               InkWell(
                                                   onTap:() async {
-                                                    await OpenFile.open(_vetReportPath);
+                                                    try{
+                                                    showDialog(context: context,child:  BackdropFilter(
+                                                      filter: ImageFilter.blur(sigmaX:2.0,sigmaY:2.0),
+                                                      child: SpinKitRing(
+                                                        lineWidth: 2,
+                                                        color: greenColor,
+                                                        size: 50,
+                                                      ),
+                                                    ),
+                                                    );
+
+                                                    if(_vetReportPath == widget.puppyDetails.vetReport){
+                                                      var data = await http.get(_vetReportPath);
+                                                      var bytes = data.bodyBytes;
+                                                      var dir = await getApplicationDocumentsDirectory();
+                                                      var ext = _vetReportPath.substring(_vetReportPath.lastIndexOf(".")+1);
+                                                      if(ext!=null && ext != "")
+                                                        ext = "."+ext;
+                                                      else
+                                                        ext="";
+                                                      File file  = File("${dir.path}/vetReport"+ext);
+                                                      File assetFile = await file.writeAsBytes(bytes);
+                                                      Navigator.of(context).pop();
+                                                      await OpenFile.open("${dir.path}/vetReport"+ext);
+                                                    } else{
+                                                      Navigator.of(context).pop();
+                                                      await OpenFile.open(_vetReportPath);
+                                                    }
+
+                                                  }catch(exception){
+                                                    Navigator.of(context).pop();
+                                                    Toast.show("Error while fetching vet report", context,duration:Toast.LENGTH_LONG);
+                                                  }
                                                   },
                                                   child: Container(
                                                       padding: EdgeInsets.only(
@@ -1418,7 +1502,40 @@ class EditPuppyState extends State<EditPuppy> {
                                             children: <Widget>[
                                               InkWell(
                                                   onTap:() async {
-                                                    await OpenFile.open(_flightTicketPath);
+                                                    try{
+                                                      showDialog(context: context,child:  BackdropFilter(
+                                                        filter: ImageFilter.blur(sigmaX:2.0,sigmaY:2.0),
+                                                        child: SpinKitRing(
+                                                          lineWidth: 2,
+                                                          color: greenColor,
+                                                          size: 50,
+                                                        ),
+                                                      ),
+                                                      );
+
+                                                      if(_flightTicketPath == widget.puppyDetails.flightTicket){
+                                                        var data = await http.get(_flightTicketPath);
+                                                        var bytes = data.bodyBytes;
+                                                        var dir = await getApplicationDocumentsDirectory();
+                                                        var ext = _flightTicketPath.substring(_flightTicketPath.lastIndexOf(".")+1);
+                                                        if(ext!=null && ext != "")
+                                                          ext = "."+ext;
+                                                        else
+                                                          ext="";
+                                                        File file  = File("${dir.path}/flight"+ext);
+                                                        File assetFile = await file.writeAsBytes(bytes);
+                                                        Navigator.of(context).pop();
+                                                        await OpenFile.open("${dir.path}/flight"+ext);
+                                                      } else{
+                                                        Navigator.of(context).pop();
+                                                        await OpenFile.open(_flightTicketPath);
+                                                      }
+                                                    }catch(exception){
+                                                      Navigator.of(context).pop();
+                                                      Toast.show("Error while fetching flight ticket", context,duration:Toast.LENGTH_LONG);
+                                                    }
+
+
                                                   },
                                                   child: Container(
                                                       padding: EdgeInsets.only(
@@ -1670,7 +1787,7 @@ class EditPuppyState extends State<EditPuppy> {
     for (int i = 0; i < imageAssets.length; i++) {
       var path = await FlutterAbsolutePath.getAbsolutePath(imageAssets[i].identifier);
       final mimeTypeData = lookupMimeType(path, headerBytes: [0xFF, 0xD8]).split('/');
-      ByteData byteData = await imageAssets[i].getByteData(quality: 10);
+      ByteData byteData = await imageAssets[i].getByteData(quality: 60);
       List<int> imageData = byteData.buffer.asUint8List();
       MultipartFile multipartFile = MultipartFile.fromBytes(
         imageData,

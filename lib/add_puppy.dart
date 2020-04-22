@@ -1647,7 +1647,7 @@ class AddPuppyState extends State<AddPuppy> {
     for (int i = 0; i < images.length; i++) {
       var path = await FlutterAbsolutePath.getAbsolutePath(images[i].identifier);
       final mimeTypeData = lookupMimeType(path, headerBytes: [0xFF, 0xD8]).split('/');
-      ByteData byteData = await images[i].getByteData(quality: 10);
+      ByteData byteData = await images[i].getByteData(quality:50);
       List<int> imageData = byteData.buffer.asUint8List();
       MultipartFile multipartFile = MultipartFile.fromBytes(
         imageData,
@@ -1664,11 +1664,11 @@ class AddPuppyState extends State<AddPuppy> {
     FormData formData = new FormData.fromMap({
       "puppy-name": Utility.capitalize(puppyNameText.text.trim()),
       "description": Utility.capitalize(puppyDescriptionText.text.trim()),
-      "categories": [ { "id" : _selectedBreedId }],
+      "categories": _selectedBreedId,
       "user_id": userId,
       "selling-price": askingPriceText.text.trim(),
       "shipping-cost": shippingCostText.text.trim(),
-      "date-of-birth": dateOfBirth.millisecondsSinceEpoch.toString(),
+      "date-of-birth": dateOfBirth.microsecondsSinceEpoch.toString(),
       "date-available-new": dateOfBirthString,
       "age-in-week": calculateAgeInWeeks(),
       "color": Utility.capitalize(puppyColorText.text.trim()),
@@ -1678,7 +1678,7 @@ class AddPuppyState extends State<AddPuppy> {
       "registry": registryText.text.trim(),
       "vet-name": vetNameText.text.trim(),
       "vet-address": vetAddressText.text.trim(),
-      "checkup-date": dateOfCheckupString,
+      "checkup-date": dateOfCheckup.microsecondsSinceEpoch.toString(),
       "kid-friendly": isKidFriendly?"1":"0",
       "socialized": isSocialized?"1":"0",
       "family-raised":isFamilyRaised?"1":"0",
@@ -1687,7 +1687,7 @@ class AddPuppyState extends State<AddPuppy> {
       "gender": isFemale?"Female":"Male",
       "gallery_images": [multipart],
       "report-copy" : _vetReportPath!=null?vetReport:"",
-      "flight-doc" : _flightTicketPath!=null?_flightTicketPath:""
+      "flight-doc" : _flightTicketPath!=null?flightTicketFile:""
     });
     try{
       dynamic response = await dio.post("https://obpdevstage.wpengine.com/wp-json/obp/v1/create_puppy",data:formData);

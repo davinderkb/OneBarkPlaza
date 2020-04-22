@@ -36,7 +36,7 @@ class PuppyDetails {
   ImageCustom get coverPic => _coverPic;
 
   bool get isFemale {
-    return this._gender == "Female";
+    return this._gender.toLowerCase() == "female";
   }
 
   set coverPic(ImageCustom value) {
@@ -102,14 +102,14 @@ class PuppyDetails {
       this._isMicrochipped,
       this._isSocialized){
     try{
-      this._dob = new DateTime.fromMicrosecondsSinceEpoch(int.parse(_dobString));
+      this._dob = new DateTime.fromMicrosecondsSinceEpoch(_dobString.contains(".")?int.parse(_dobString.substring(0,_dobString.indexOf("."))):int.parse(_dobString));
       this._dobString = new DateFormat("MMM dd, yyyy").format(_dob);
     }catch(e){
       this._dobString = "";
       this._dob = DateTime.now();
     }
     try{
-      this._checkupDate = new DateTime.fromMicrosecondsSinceEpoch(int.parse(_checkUpDateString));
+      this._checkupDate = new DateTime.fromMicrosecondsSinceEpoch(_checkUpDateString.contains(".")?int.parse(_checkUpDateString.substring(0,_checkUpDateString.indexOf("."))):int.parse(_checkUpDateString));
       this._checkUpDateString = new DateFormat("MMM dd, yyyy").format(_checkupDate);
     }catch(e){
       this._checkUpDateString = "";
@@ -184,7 +184,7 @@ class PuppyDetails {
         json['description'] as String,
         galleryImages,
         json['gender'] as String,
-        json['date_of_birth'] is int || json['date_of_birth'] is String? json['date_of_birth'].toString(): "",
+        json['date_of_birth'] is int || json['date_of_birth'] is String || json['date_of_birth'] is double? json['date_of_birth'].toString(): "",
         json['age_in_weeks'] as String,
         json['color'] as String,
         json['puppy_weight'] as String,
