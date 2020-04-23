@@ -294,6 +294,7 @@ class LoginPageState extends State<LoginPage>{
     prefs.setString(Constants.SHARED_PREF_USER_NAME, userNameController.text.trim());
     prefs.setString(Constants.SHARED_PREF_PASSWORD, passwordController.text);
     prefs.setString(Constants.SHARED_PREF_GENDER, user.gender);
+    prefs.setString(Constants.SHARED_PREF_PROFILE_IMAGE, user.profileImage);
     prefs.setString(Constants.SHARED_PREF_NAME, user.name);
     prefs.setString(Constants.SHARED_PREF_USER_ID, user.id);
   }

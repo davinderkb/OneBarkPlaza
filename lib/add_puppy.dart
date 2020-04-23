@@ -249,7 +249,7 @@ class AddPuppyState extends State<AddPuppy> {
         List<int> vetFile = await File(_vetReportPath).readAsBytes();
         vetReport= MultipartFile.fromBytes(
             vetFile,
-            filename: 'vet_report',
+            filename: 'vet_report.'+_vetReportPath.substring(_vetReportPath.lastIndexOf(".")+1),
             contentType: MediaType("vet_report", _vetReportPath.substring(_vetReportPath.lastIndexOf(".")+1))
         );
       }
@@ -281,7 +281,7 @@ class AddPuppyState extends State<AddPuppy> {
         List<int> flightTicket = await File(_flightTicketPath).readAsBytes();
         flightTicketFile= MultipartFile.fromBytes(
             flightTicket,
-            filename: 'flight_ticket',
+            filename: 'flight_ticket.'+_flightTicketPath.substring(_flightTicketPath.lastIndexOf(".")+1),
             contentType: MediaType("flight_ticket", _flightTicketPath.substring(_flightTicketPath.lastIndexOf(".")+1))
         );
       }

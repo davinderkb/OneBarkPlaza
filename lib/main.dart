@@ -4,6 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:one_bark_plaza/add_puppy.dart';
+import 'package:one_bark_plaza/update_profile.dart';
 import 'package:one_bark_plaza/util/constants.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -149,10 +150,7 @@ class MainNavigationDrawerState extends State<MainNavigationDrawer>{
                                       Row(
                                         mainAxisAlignment: MainAxisAlignment.center,
                                         children: <Widget>[
-                                          Text("   ",style: TextStyle(color:Colors.black,fontSize: 20, fontWeight:FontWeight.bold, fontFamily: 'NunitoSans')),
                                           Text(data["name"],style: TextStyle(color:Colors.black,fontSize: 15, fontWeight:FontWeight.bold, fontFamily: 'NunitoSans')),
-                                          Text("   ",style: TextStyle(color:drawerContentColor,fontSize: 14, fontWeight:FontWeight.bold, fontFamily: 'NunitoSans')),
-                                          Icon(Icons.edit, color: drawerContentColor, size: 16,),
                                         ],
                                       ),
                                       Text(data["email"],style: TextStyle(color:Colors.grey,fontSize: 12, fontFamily: 'NunitoSans')),
@@ -180,7 +178,7 @@ class MainNavigationDrawerState extends State<MainNavigationDrawer>{
                                                 placeholder: data["gender"]=="Male"
                                                     ? "assets/images/ic_profile_male.png"
                                                     : "assets/images/ic_profile_female.png",
-                                                image: "",
+                                                image: data["profilePic"],
                                                 fit: BoxFit.contain),
                                           ),
                                           decoration: new BoxDecoration(
@@ -199,21 +197,26 @@ class MainNavigationDrawerState extends State<MainNavigationDrawer>{
                                       Positioned(
                                         width: _width/1.2 + 90 ,
                                         top: _height>_width?_width * 0.18 : _height * 0.18 ,
-                                        child: Container(
-                                            height: 25,
-                                            width: 25,
-                                            child: Icon(Icons.edit, color: drawerContentColor,),
-                                            decoration: new BoxDecoration(
-                                              color: drawerAvatarBackgroundColor,
-                                              shape: BoxShape.circle,
-                                              boxShadow: [
-                                                BoxShadow(
-                                                  color: Colors.grey,
-                                                  offset: Offset(0.0, 1.0), //(x,y)
-                                                  blurRadius: 2.0,
-                                                ),
-                                              ],
-                                            )
+                                        child: InkWell(
+                                          onTap:(){
+                                            Navigator.push(context, MaterialPageRoute(builder: (context) => UpdateProfile(profilePic:data["profilePic"], gender:data["gender"], name:data["name"])))  ;
+                                          },
+                                          child: Container(
+                                              height: 25,
+                                              width: 25,
+                                              child: Icon(Icons.edit, color: drawerContentColor,),
+                                              decoration: new BoxDecoration(
+                                                color: drawerAvatarBackgroundColor,
+                                                shape: BoxShape.circle,
+                                                boxShadow: [
+                                                  BoxShadow(
+                                                    color: Colors.grey,
+                                                    offset: Offset(0.0, 1.0), //(x,y)
+                                                    blurRadius: 2.0,
+                                                  ),
+                                                ],
+                                              )
+                                          ),
                                         ),
                                       )
                                     ],
@@ -309,6 +312,7 @@ class MainNavigationDrawerState extends State<MainNavigationDrawer>{
     prefs.setBool(Constants.SHARED_PREF_IS_LOGGED_IN, false);
     prefs.setString(Constants.SHARED_PREF_USER_NAME, null);
     prefs.setString(Constants.SHARED_PREF_GENDER, null);
+    prefs.setString(Constants.SHARED_PREF_PROFILE_IMAGE, null);
     prefs.setString(Constants.SHARED_PREF_PASSWORD, null);
     prefs.setString(Constants.SHARED_PREF_NAME, null);
     prefs.setString(Constants.SHARED_PREF_USER_ID, null);
@@ -320,9 +324,10 @@ class MainNavigationDrawerState extends State<MainNavigationDrawer>{
     String email =  prefs.getString(Constants.SHARED_PREF_USER_NAME);
     String name = prefs.getString(Constants.SHARED_PREF_NAME);
     String gender = prefs.getString(Constants.SHARED_PREF_GENDER);
+    String profilePic = prefs.getString(Constants.SHARED_PREF_PROFILE_IMAGE);
 
     if(email!=null && email!='' && name !=null && name !='' && gender !=null && gender !=''){
-      Map<dynamic,dynamic> user = {"email": email,"name": name, "gender": gender,};
+      Map<dynamic,dynamic> user = {"email": email,"name": name, "gender": gender,"profilePic": profilePic};
       return user;
     }else {
       Toast.show("Error while loading navigation header, Try again", context,

@@ -1804,8 +1804,9 @@ class EditPuppyState extends State<EditPuppy> {
     var dio = Dio();
     FormData formData = new FormData.fromMap({
       "puppy-name": Utility.capitalize(widget.puppyDetails.puppyName.trim()),
+      "puppy_id": widget.puppyDetails.puppyId,
       "description": Utility.capitalize(widget.puppyDetails.description.trim()),
-      "categories": [ { "id" : _selectedBreedId }],
+      "categories": _selectedBreedId,
       "user_id": userId,
       "selling-price": widget.puppyDetails.puppyPrice.trim(),
       "shipping-cost": widget.puppyDetails.shippingCost.trim(),
@@ -1828,19 +1829,25 @@ class EditPuppyState extends State<EditPuppy> {
       "gender": isFemale?"Female":"Male",
       "gallery_images": [multipart],
       "deleted_imgs_ids": deletedImagesIdList,
-      "report-copy" : _vetReportPath!=null?vetReport:"",
-      "flight-doc" : _flightTicketPath!=null?_flightTicketPath:""
+      "report-copy" :_vetReportPath!=null && _vetReportPath.trim()!=""
+          ? _vetReportPath == widget.puppyDetails.vetReport
+          ? widget.puppyDetails.vetReport
+          : vetReport
+          : "",
+      "flight-doc" : _flightTicketPath!=null && _flightTicketPath.trim()!=""
+          ? _flightTicketPath == widget.puppyDetails.flightTicket
+          ? widget.puppyDetails.flightTicket
+          : flightTicketFile
+          : "",
     });
     try{
-      dynamic response = await dio.post("https://obpdevstage.wpengine.com/wp-json/obp/v1/create_puppy",data:formData);
-      if (response.toString() != '[]') {
+      dynamic response = await dio.post("https://obpdevstage.wpengine.com/wp-json/obp/v1/update_puppy",data:formData);
+      if (response.statusCode == 200) {
         dynamic responseList = jsonDecode(response.toString());
         if (responseList["success"] == "Puppy successfully Edit!") {
-          Toast.show("Edit Puppy Successful " +response.toString(), context,duration: Toast.LENGTH_LONG);
-          Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (BuildContext context) => HomePage()));
-        } else {
-          Toast.show("Edit Puppy Failed " +response.toString(), context, duration: Toast.LENGTH_LONG);
         }
+        Toast.show("Edit request successful" , context,duration: Toast.LENGTH_LONG);
+        Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (BuildContext context) => HomePage()));
       } else {
         Toast.show("Edit Puppy Failed "+response.toString(), context,duration: Toast.LENGTH_LONG);
       }
@@ -1953,7 +1960,7 @@ class EditPuppyState extends State<EditPuppy> {
         List<int> vetFile = await File(_vetReportPath).readAsBytes();
         vetReport= MultipartFile.fromBytes(
             vetFile,
-            filename: 'vet_report',
+            filename: 'vet_report.' +  _vetReportPath.substring(_vetReportPath.lastIndexOf(".")+1),
             contentType: MediaType("vet_report", _vetReportPath.substring(_vetReportPath.lastIndexOf(".")+1))
         );
       }
@@ -1985,7 +1992,7 @@ class EditPuppyState extends State<EditPuppy> {
         List<int> flightTicket = await File(_flightTicketPath).readAsBytes();
         flightTicketFile= MultipartFile.fromBytes(
             flightTicket,
-            filename: 'flight_ticket',
+            filename: 'flight_ticket.'+_flightTicketPath.substring(_flightTicketPath.lastIndexOf(".")+1),
             contentType: MediaType("flight_ticket", _flightTicketPath.substring(_flightTicketPath.lastIndexOf(".")+1))
         );
       }

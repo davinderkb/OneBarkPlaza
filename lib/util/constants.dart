@@ -25,6 +25,8 @@ class Constants{
   static const SHARED_PREF_USER_ID = "userId";
   static const SHARED_PREF_PASSWORD = "password";
   static const SHARED_PREF_GENDER = "gender";
+  static const SHARED_PREF_PROFILE_IMAGE = "profilePic";
+  static const SHARED_PREF_EMAIL = "email";
   static const SHARED_PREF_NAME = "name";
   static const FILE_TYPE_PDF = 2;
   static const FILE_TYPE_IMAGE = 1;
