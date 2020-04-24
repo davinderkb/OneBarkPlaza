@@ -102,14 +102,14 @@ class PuppyDetails {
       this._isMicrochipped,
       this._isSocialized){
     try{
-      this._dob = new DateTime.fromMicrosecondsSinceEpoch(_dobString.contains(".")?int.parse(_dobString.substring(0,_dobString.indexOf("."))):int.parse(_dobString));
+      this._dob = new DateTime.fromMillisecondsSinceEpoch(_dobString.contains(".")?int.parse(_dobString.substring(0,_dobString.indexOf("."))):int.parse(_dobString));
       this._dobString = new DateFormat("MMM dd, yyyy").format(_dob);
     }catch(e){
       this._dobString = "";
       this._dob = DateTime.now();
     }
     try{
-      this._checkupDate = new DateTime.fromMicrosecondsSinceEpoch(_checkUpDateString.contains(".")?int.parse(_checkUpDateString.substring(0,_checkUpDateString.indexOf("."))):int.parse(_checkUpDateString));
+      this._checkupDate = new DateTime.fromMillisecondsSinceEpoch(_checkUpDateString.contains(".")?int.parse(_checkUpDateString.substring(0,_checkUpDateString.indexOf("."))):int.parse(_checkUpDateString));
       this._checkUpDateString = new DateFormat("MMM dd, yyyy").format(_checkupDate);
     }catch(e){
       this._checkUpDateString = "";

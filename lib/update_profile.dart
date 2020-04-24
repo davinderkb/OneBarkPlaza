@@ -37,8 +37,7 @@ class UpdateProfileState extends State<UpdateProfile> with TickerProviderStateMi
   AnimationController _controller;
   ImagePickerHandler imagePicker;
   bool _isLoading = false;
-  TextEditingController firstNameText = new TextEditingController();
-  TextEditingController lastNameText = new TextEditingController();
+
 
   @override
   userImage(File _image) {
@@ -76,7 +75,7 @@ class UpdateProfileState extends State<UpdateProfile> with TickerProviderStateMi
 
 
     TextStyle style = TextStyle(fontFamily: 'NunitoSans', fontSize: 14.0, color: Color(0xff707070));
-    TextStyle labelStyle = TextStyle(fontFamily: 'NunitoSans',  fontSize: 12,);
+    TextStyle labelStyle = TextStyle(fontFamily: 'NunitoSans',  fontSize: 12, color: Color(0xff707070));
 
     return WillPopScope(
       onWillPop: _onBackPressed,
@@ -86,31 +85,35 @@ class UpdateProfileState extends State<UpdateProfile> with TickerProviderStateMi
             leading: new IconButton(
                 icon: new Icon(Icons.arrow_back, color: Colors.blueAccent),
                 onPressed: () {
-                  showDialog<void>(
-                    context: context,
-                    barrierDismissible: false, // user must tap button!
-                    builder: (BuildContext context) {
-                      return CupertinoAlertDialog(
-                        title: Text('Are you sure?'),
-                        content: Text("\nAny entries in the form would be lost. Do you want to exit this page?"),
-                        actions: <Widget>[
-                          CupertinoDialogAction(
-                            child: Text('No'),
-                            onPressed: () {
-                              Navigator.of(context).pop();
-                            },
-                          ),
-                          CupertinoDialogAction(
-                            child: Text('Yes'),
-                            onPressed: (){
-                              Navigator.of(context).pop();
-                              Navigator.of(context).pop();
-                            },
-                          ),
-                        ],
-                      );
-                    },
-                  );
+                  if(isAnyFieldChanged()){
+                    showDialog<void>(
+                      context: context,
+                      barrierDismissible: false, // user must tap button!
+                      builder: (BuildContext context) {
+                        return CupertinoAlertDialog(
+                          title: Text('Are you sure?'),
+                          content: Text("\nAll unsaved changes would be lost. Do you want to exit this page?"),
+                          actions: <Widget>[
+                            CupertinoDialogAction(
+                              child: Text('No'),
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                            ),
+                            CupertinoDialogAction(
+                              child: Text('Yes'),
+                              onPressed: (){
+                                Navigator.of(context).pop();
+                                Navigator.of(context).pop();
+                              },
+                            ),
+                          ],
+                        );
+                      },
+                    );
+                  } else{
+                    Navigator.of(context).pop();
+                  }
                 }
             ),
             title: Row(
@@ -183,11 +186,12 @@ class UpdateProfileState extends State<UpdateProfile> with TickerProviderStateMi
                                                   ? "assets/images/ic_profile_male.png"
                                                   : "assets/images/ic_profile_female.png",
                                               image:widget.profilePic,
-                                              fit: BoxFit.contain),
+                                              fit: BoxFit.cover),
                                         ),
                                         decoration: new BoxDecoration(
                                           color: Color(0xffFEF8F5),
                                           shape: BoxShape.circle,
+                                          border:  Border.all(width: 3, color: Colors.blueAccent),
                                           boxShadow: [
                                             BoxShadow(
                                               color: Colors.grey,
@@ -308,7 +312,7 @@ class UpdateProfileState extends State<UpdateProfile> with TickerProviderStateMi
                                 width: _width-60,
                                 child: CupertinoButton(
                                   color: Colors.blueAccent,
-                                  borderRadius: BorderRadius.circular(12),
+                                  borderRadius: BorderRadius.circular(30),
                                   padding: EdgeInsets.fromLTRB(0.0, 24.0, 0.0,24.0),
                                   onPressed: () {
                                     FocusScope.of(context).unfocus();
@@ -363,7 +367,9 @@ class UpdateProfileState extends State<UpdateProfile> with TickerProviderStateMi
     try{
       dynamic response = await dio.post(updateProfileUrl, data:formData);
       if (response.statusCode == 200) {
-          Toast.show("Profile Updated" , context,duration: Toast.LENGTH_LONG);
+        dynamic responseList = jsonDecode(response.toString());
+        prefs.setString(Constants.SHARED_PREF_PROFILE_IMAGE, responseList["success"]["profile_image"]);
+        Toast.show("Profile Updated Successfully" , context,duration: Toast.LENGTH_LONG);
           Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (BuildContext context) => HomePage()));
       } else {
         Toast.show("Profile Updation Failed "+response.toString(), context,duration: Toast.LENGTH_LONG);
@@ -382,32 +388,41 @@ class UpdateProfileState extends State<UpdateProfile> with TickerProviderStateMi
   }
 
   Future<bool> _onBackPressed() {
-    return  showDialog<void>(
-      context: context,
-      barrierDismissible: false, // user must tap button!
-      builder: (BuildContext context) {
-        return CupertinoAlertDialog(
-          title: Text('Are you sure?'),
-          content: Text("\nAny entries in the form would be lost. Do you want to exit this page?"),
-          actions: <Widget>[
-            CupertinoDialogAction(
-              child: Text('No'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-            CupertinoDialogAction(
-              child: Text('Yes'),
-              onPressed: (){
-                Navigator.of(context).pop();
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
-    ) ??
-        false;
+    if(isAnyFieldChanged()){
+      return  showDialog<void>(
+        context: context,
+        barrierDismissible: false, // user must tap button!
+        builder: (BuildContext context) {
+          return CupertinoAlertDialog(
+            title: Text('Are you sure?'),
+            content: Text("\nAll unsaved changes would be lost. Do you want to exit this page?"),
+            actions: <Widget>[
+              CupertinoDialogAction(
+                child: Text('No'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+              CupertinoDialogAction(
+                child: Text('Yes'),
+                onPressed: (){
+                  Navigator.of(context).pop();
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        },
+      );
+    }
+     else
+      Navigator.of(context).pop();
+  }
+
+  bool isAnyFieldChanged() {
+   return _image != null ||
+       lastName != widget.name.substring(widget.name.lastIndexOf(" ")+1) ||
+       firstName != widget.name.substring(0, widget.name.lastIndexOf(" "));
   }
 
 }

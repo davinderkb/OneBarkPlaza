@@ -1435,7 +1435,7 @@ class EditPuppyState extends State<EditPuppy> {
                                 ),
                                 child: Container(
 
-                                  child: _flightTicketPath!=null
+                                  child: _flightTicketPath!=null && _flightTicketPath.trim()!=""
                                       ? Column(
                                     children: <Widget>[
                                       Container(
@@ -1810,7 +1810,7 @@ class EditPuppyState extends State<EditPuppy> {
       "user_id": userId,
       "selling-price": widget.puppyDetails.puppyPrice.trim(),
       "shipping-cost": widget.puppyDetails.shippingCost.trim(),
-      "date-of-birth": dateOfBirth.microsecondsSinceEpoch.toString(),
+      "date-of-birth": dateOfBirth.millisecondsSinceEpoch.toString(),
       "date-available-new": dateOfBirthString,
       "age-in-week": calculateAgeInWeeks(),
       "color": Utility.capitalize(widget.puppyDetails.color.trim()),
@@ -1820,7 +1820,7 @@ class EditPuppyState extends State<EditPuppy> {
       "registry": widget.puppyDetails.registry.trim(),
       "vet-name": widget.puppyDetails.vetName.trim(),
       "vet-address": widget.puppyDetails.vetAddress.trim(),
-      "checkup-date": dateOfCheckup.microsecondsSinceEpoch.toString(),
+      "checkup-date": dateOfCheckup.millisecondsSinceEpoch.toString(),
       "kid-friendly": isKidFriendly?"1":"0",
       "socialized": isSocialized?"1":"0",
       "family-raised":isFamilyRaised?"1":"0",

@@ -4,6 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:one_bark_plaza/add_puppy.dart';
+import 'package:one_bark_plaza/orders.dart';
 import 'package:one_bark_plaza/update_profile.dart';
 import 'package:one_bark_plaza/util/constants.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -169,30 +170,35 @@ class MainNavigationDrawerState extends State<MainNavigationDrawer>{
                                   child: Stack(
                                     children: <Widget>[
                                       Center(
-                                        child: Container(
-                                          height: 100,
-                                          width: 100,
-                                          child: ClipRRect(
-                                            borderRadius:BorderRadius.circular(300.0),
-                                            child: FadeInImage.assetNetwork(
-                                                placeholder: data["gender"]=="Male"
-                                                    ? "assets/images/ic_profile_male.png"
-                                                    : "assets/images/ic_profile_female.png",
-                                                image: data["profilePic"],
-                                                fit: BoxFit.contain),
-                                          ),
-                                          decoration: new BoxDecoration(
-                                            color: drawerAvatarBackgroundColor,
-                                              shape: BoxShape.circle,
-                                            boxShadow: [
-                                              BoxShadow(
-                                                color: Colors.grey,
-                                                offset: Offset(0.0, 1.0), //(x,y)
-                                                blurRadius: 2.0,
-                                              ),
-                                            ],
-                                          )
+                                        child: InkWell(
+                                          onTap:(){
+                                            Navigator.push(context, MaterialPageRoute(builder: (context) => UpdateProfile(profilePic:data["profilePic"], gender:data["gender"], name:data["name"])))  ;
+                                          },
+                                          child: Container(
+                                            height: 100,
+                                            width: 100,
+                                            child: ClipRRect(
+                                              borderRadius:BorderRadius.circular(300.0),
+                                              child: FadeInImage.assetNetwork(
+                                                  placeholder: data["gender"]=="Male"
+                                                      ? "assets/images/ic_profile_male.png"
+                                                      : "assets/images/ic_profile_female.png",
+                                                  image: data["profilePic"],
+                                                  fit: BoxFit.cover),
+                                            ),
+                                            decoration: new BoxDecoration(
+                                              color: drawerAvatarBackgroundColor,
+                                                shape: BoxShape.circle,
+                                              boxShadow: [
+                                                BoxShadow(
+                                                  color: Colors.grey,
+                                                  offset: Offset(0.0, 1.0), //(x,y)
+                                                  blurRadius: 2.0,
+                                                ),
+                                              ],
+                                            )
                                 ),
+                                        ),
                                       ),
                                       Positioned(
                                         width: _width/1.2 + 90 ,
@@ -260,8 +266,7 @@ class MainNavigationDrawerState extends State<MainNavigationDrawer>{
                   title: Text("Orders",style:listTileTextStyle,),
                   leading: Image.asset("assets/images/ic_orders.png",  width: iconSize),
                   onTap: () {
-                    Toast.show("Orders, to-do", context);
-
+                    Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext context) =>Orders()));
                   },
                 ),
                 SizedBox(height: 4,),
@@ -326,10 +331,10 @@ class MainNavigationDrawerState extends State<MainNavigationDrawer>{
     String gender = prefs.getString(Constants.SHARED_PREF_GENDER);
     String profilePic = prefs.getString(Constants.SHARED_PREF_PROFILE_IMAGE);
 
-    if(email!=null && email!='' && name !=null && name !='' && gender !=null && gender !=''){
+   try{
       Map<dynamic,dynamic> user = {"email": email,"name": name, "gender": gender,"profilePic": profilePic};
       return user;
-    }else {
+    }catch(e) {
       Toast.show("Error while loading navigation header, Try again", context,
           textColor: Colors.white,
           duration: Toast.LENGTH_LONG,

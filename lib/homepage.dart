@@ -44,7 +44,7 @@ class HomePage extends StatefulWidget {
 }
 
 var puppyDetailsUrl =
-    'https://obpdevstage.wpengine.com/wp-json/obp/v1/puppies?user_id=';
+    'https://obpdevstage.wpengine.com/wp-json/obp/v1/puppies/';
 Future<List<PuppyDetails>> _puppiesList(BuildContext context) async {
   var dio = Dio();
   SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -54,7 +54,7 @@ Future<List<PuppyDetails>> _puppiesList(BuildContext context) async {
       "user_id": userId,
     });
     final list = List<PuppyDetails>();
-    dynamic response = await dio.get(puppyDetailsUrl + userId);
+    dynamic response = await dio.post(puppyDetailsUrl,data:formData);
     Map<String, dynamic> responseList = jsonDecode(response.toString());
     for (dynamic item in responseList["breeder_puppies"]) {
       list.add(PuppyDetails.fromJson(item));
@@ -299,6 +299,7 @@ class HomePageState extends State<HomePage> {
                                           Row(
                                             mainAxisAlignment:
                                                 MainAxisAlignment.start,
+                                            crossAxisAlignment: CrossAxisAlignment.start,
                                             children: <Widget>[
                                               Padding(
                                                 padding: const EdgeInsets.fromLTRB(0,8,0,8),
@@ -310,8 +311,8 @@ class HomePageState extends State<HomePage> {
                                                       borderRadius:
                                                           BorderRadius.all(
                                                               Radius.circular(
-                                                                  24)),
-                                                      //border: Border.all()
+                                                                  24), ),
+                                                     // border: Border.all(color: Color(0xffA9A9A9))
                                                       //color: Colors.green,
                                                     ),
                                                     child: ClipRRect(
@@ -328,9 +329,11 @@ class HomePageState extends State<HomePage> {
                                                           color: blueColor,
                                                           size: 30.0,
                                                         ),
-                                                        errorWidget: (context,
-                                                                url, error) =>
-                                                        new Icon(Icons.image, size:48, color:Colors.white),
+                                                        errorWidget: (context,url, error) =>
+                                                        Container(
+                                                            margin: EdgeInsets.all(10),
+                                                            child: new Image.asset("assets/images/noImageIcon.png",color: Colors.white)
+                                                        ),
                                                       ),
                                                     )),
                                               ),

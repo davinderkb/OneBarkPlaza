@@ -150,10 +150,10 @@ class AddPuppySuccessfulState extends State<AddPuppySuccessful> {
     var getPuppyUrl = 'https://obpdevstage.wpengine.com/wp-json/obp/v1/puppy';
     FormData formData = new FormData.fromMap({
       "user_id": userId,
-      "pid": widget.puppyId,
+      "puppy_id": widget.puppyId,
     });
     try{
-      dynamic response = await dio.get(getPuppyUrl+"?user_id="+userId+"&puppy_id="+widget.puppyId.toString());
+      dynamic response = await dio.post(getPuppyUrl, data:formData);
       widget.puppyDetails = PuppyDetails.fromJson(jsonDecode(response.toString()));
       setState(() {
         _isLoading = false;
