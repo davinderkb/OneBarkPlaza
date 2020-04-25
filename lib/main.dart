@@ -4,7 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:one_bark_plaza/add_puppy.dart';
-import 'package:one_bark_plaza/orders.dart';
+import 'package:one_bark_plaza/orders_page.dart';
 import 'package:one_bark_plaza/update_profile.dart';
 import 'package:one_bark_plaza/util/constants.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';

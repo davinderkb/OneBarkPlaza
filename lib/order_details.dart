@@ -143,10 +143,9 @@ class OrderItem{
   OrderItem(this._stockUnitId, this._name, this._image, this._cost,
       this._quantity, this._price, this._tax, this._commission){
     try {
-      this._totalPrice = (int.parse(this._price) + int.parse(this._tax) +
-          int.parse(this.commission)).toString();
+      this._totalPrice = (price + tax + commission).toString();
     }catch(e){
-      this._totalPrice = "0";
+      this._totalPrice = "0.0";
     }
   }
 
@@ -156,15 +155,39 @@ class OrderItem{
 
   get image => _image;
 
-  get cost => _cost;
+  double get cost {
+    try{
+      return double.parse(_cost);
+    }catch(e){
+      return 0.0;
+    }
+  }
 
   get quantity => _quantity;
 
-  get price => _price;
+  double get price {
+    try{
+      return double.parse(_price);
+    }catch(e){
+      return 0.0;
+    }
+  }
 
-  get tax => _tax;
+  double get tax {
+    try{
+      return double.parse(_tax);
+    }catch(e){
+      return 0.0;
+    }
+  }
 
-  get commission => _commission;
+  double get commission {
+    try{
+      return double.parse(_commission);
+    }catch(e){
+      return 0.0;
+    }
+  }
 
   get totalPrice => _totalPrice;
 
