@@ -611,7 +611,7 @@ class EditPuppyState extends State<EditPuppy> {
                                     Padding(
                                         padding:
                                         const EdgeInsets.fromLTRB(
-                                            00, 0, 20, 0),
+                                            00, 0, 00, 0),
                                         child: Container(
                                           height: 40,
                                           width: 40,
@@ -674,7 +674,7 @@ class EditPuppyState extends State<EditPuppy> {
                                     Padding(
                                         padding:
                                         const EdgeInsets.fromLTRB(
-                                            00, 0, 20, 0),
+                                            00, 0, 0, 0),
                                         child: Container(
                                           height: 40,
                                           width: 40,
@@ -1190,7 +1190,7 @@ class EditPuppyState extends State<EditPuppy> {
                                     Padding(
                                         padding:
                                         const EdgeInsets.fromLTRB(
-                                            00, 0, 20, 0),
+                                            00, 0, 0, 0),
                                         child: Container(
                                           height: 40,
                                           width: 40,
@@ -1741,7 +1741,7 @@ class EditPuppyState extends State<EditPuppy> {
                         SizedBox(height: 30,),
                         Center(
                           child: FlatButton.icon(
-                            color: maleColor,
+                            color: greenColor,
                             icon: Icon(Icons.save, color:Colors.white, size: 20,),
                             shape: RoundedRectangleBorder(
                                 borderRadius: new BorderRadius.only(
@@ -1754,7 +1754,7 @@ class EditPuppyState extends State<EditPuppy> {
                                   color: Colors.white,
                                 )),
                             padding:
-                                EdgeInsets.fromLTRB(120.0, 24.0, 120.0, 24.0),
+                                EdgeInsets.fromLTRB(120.0, 16.0, 120.0, 16.0),
                             onPressed: () {
                               FocusScope.of(context).unfocus();
                               onSave(context);
@@ -1882,10 +1882,10 @@ class EditPuppyState extends State<EditPuppy> {
         builder: (BuildContext context, Widget child) {
           return Theme(
             data: ThemeData.light().copyWith(
-              primaryColor: Colors.blue,//Head background
-              accentColor: Colors.blue,
+              primaryColor: Colors.green,//Head background
+              accentColor: Colors.green,
               buttonTheme: ButtonTheme.of(context).copyWith(
-                colorScheme: ColorScheme.fromSwatch(accentColor: Colors.blue, primarySwatch: Colors.blue),
+                colorScheme: ColorScheme.fromSwatch(accentColor: Colors.green, primarySwatch: Colors.green),
               ),
             ),
             child: child,
@@ -1908,10 +1908,10 @@ class EditPuppyState extends State<EditPuppy> {
         builder: (BuildContext context, Widget child) {
           return Theme(
             data: ThemeData.light().copyWith(
-              primaryColor: Colors.blue,//Head background
-              accentColor: Colors.blue,
+              primaryColor: Colors.green,//Head background
+              accentColor: Colors.green,
               buttonTheme: ButtonTheme.of(context).copyWith(
-                colorScheme: ColorScheme.fromSwatch(accentColor: Colors.blue, primarySwatch: Colors.blue),
+                colorScheme: ColorScheme.fromSwatch(accentColor: Colors.green, primarySwatch:Colors.green),
               ),
             ),
             child: child,

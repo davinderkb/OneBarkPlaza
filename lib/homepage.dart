@@ -25,7 +25,7 @@ import 'package:one_bark_plaza/util/utility.dart';
 
 import 'edit_puppy.dart';
 import 'filter.dart';
-final blueColor = Color(0xff4C8BF5);
+final customColor = Color(0xff7FA432);//Color(0xff4C8BF5);
 TextStyle style = TextStyle(
     fontFamily: 'NunitoSans', fontSize: 14.0, color: Color(0xff707070));
 class HomePage extends StatefulWidget {
@@ -108,7 +108,7 @@ class HomePageState extends State<HomePage> {
     final _width = MediaQuery.of(context).size.width;
     final _height = MediaQuery.of(context).size.height;
     final puppyDetailsFontSize = 11.0;
-    final greenColor = Color(0xff7FA432);
+
     minPrice = 0.0;
     maxPrice = 10000.0;
 
@@ -120,7 +120,7 @@ class HomePageState extends State<HomePage> {
         alignment: Alignment.bottomCenter,
         child: SpinKitRipple(
           borderWidth: 100.0,
-          color: blueColor,
+          color: customColor,
           size: 120,
         ))
         : isDeleteSuccess
@@ -129,7 +129,7 @@ class HomePageState extends State<HomePage> {
         backgroundColor: Colors.white,
         appBar: new AppBar(
           //iconTheme: new IconThemeData(color: Color(0xff262B31)),
-          iconTheme: new IconThemeData(color: blueColor),
+          iconTheme: new IconThemeData(color: customColor),
           title: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               mainAxisSize: MainAxisSize.max,
@@ -150,8 +150,8 @@ class HomePageState extends State<HomePage> {
                     onPressed: () {
                       Navigator.push(context, MaterialPageRoute(builder: (context) => AddPuppy()));
                     },
-                    disabledColor: blueColor,
-                    color: blueColor,
+                    disabledColor: customColor,
+                    color: customColor,
                     shape: RoundedRectangleBorder(
                         borderRadius: new BorderRadius.only(
                           bottomLeft: Radius.circular(40.0),
@@ -191,7 +191,7 @@ class HomePageState extends State<HomePage> {
                           fontFamily: 'NunitoSans',
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
-                          color: blueColor),
+                          color: customColor),
                       textAlign: TextAlign.center,
                     )
                   ]),
@@ -219,7 +219,7 @@ class HomePageState extends State<HomePage> {
                               return Container(
                                 alignment: Alignment.center,
                                 child: SpinKitFadingCircle(
-                                  color: blueColor,
+                                  color: customColor,
                                   size: 50.0,
                                 ),
                               );
@@ -326,7 +326,7 @@ class HomePageState extends State<HomePage> {
                                                         placeholder:
                                                             (context, url) =>
                                                                 SpinKitCircle(
-                                                          color: blueColor,
+                                                          color: customColor,
                                                           size: 30.0,
                                                         ),
                                                         errorWidget: (context,url, error) =>
@@ -355,9 +355,9 @@ class HomePageState extends State<HomePage> {
                                                                   fontFamily:
                                                                       'NunitoSans',
                                                                   fontSize:
-                                                                      15,
+                                                                      14,
                                                                   color:
-                                                                      blueColor,
+                                                                      Colors.black87,
                                                                   fontWeight:
                                                                       FontWeight
                                                                           .bold)),
@@ -454,7 +454,7 @@ class HomePageState extends State<HomePage> {
                                                               height:_height>_width?_width/10 : _height/8,
                                                               child: Image.asset(
                                                                 "assets/images/ic_menuOverflow.png",
-                                                                height: 16, color: blueColor,),
+                                                                height: 16, color: customColor,),
                                                             ),
                                                             itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
                                                               PopupMenuItem<String>(
@@ -492,11 +492,11 @@ class HomePageState extends State<HomePage> {
                                                             fontFamily:
                                                                 'NunitoSans',
                                                             fontSize:
-                                                                13,
-                                                            color: blueColor,
+                                                                12,
+                                                            color: customColor,
                                                             fontWeight:
                                                                 FontWeight
-                                                                    .normal)),
+                                                                    .bold)),
                                                     Row(
                                                       children: <Widget>[
                                                         Text(
@@ -510,7 +510,7 @@ class HomePageState extends State<HomePage> {
                                                                 Color(0xff707070),
                                                                 fontWeight:
                                                                     FontWeight
-                                                                        .normal)),
+                                                                        .bold)),
 
                                                       ],
                                                     ),
@@ -528,31 +528,36 @@ class HomePageState extends State<HomePage> {
                                                                     Color(0xff707070),
                                                                 fontWeight:
                                                                     FontWeight
-                                                                        .normal)),
+                                                                        .bold)),
 
                                                       ],
                                                     ),
-                                                    FlatButton(
-                                                      padding: _height>_width?EdgeInsets.fromLTRB(40,0,40,0):EdgeInsets.fromLTRB(100,12,100,12),
-                                                      child: Text(
-                                                        'View',
-                                                        textAlign: TextAlign.start,
-                                                        style: TextStyle(fontFamily:"NunitoSans",fontSize: 10, color: Colors.white),
+                                                    SizedBox(
+                                                      width: _width / 3,
+                                                      child: FlatButton(
+                                                        child: Text(
+                                                          'View',
+                                                          textAlign: TextAlign.start,
+                                                          style: TextStyle(fontSize: 12, color: Colors.white),
+                                                        ),
+                                                        onPressed: () {
+                                                          Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext context) =>ViewPuppy(data[index],false)));
+                                                        },
+                                                        disabledColor: customColor,
+                                                        color: customColor,
+                                                        shape: RoundedRectangleBorder(
+                                                            borderRadius: new BorderRadius.only(
+                                                              bottomLeft: Radius.circular(40.0),
+                                                              topRight: Radius.circular(40.0),
+                                                              topLeft: Radius.circular(10.0),
+                                                              bottomRight: Radius.circular(40.0),
+                                                            ),
+                                                            side: BorderSide(
+                                                              color: Colors.white,
+                                                            )),
                                                       ),
-                                                      onPressed: () {
-                                                        Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext context) =>ViewPuppy(data[index],false)));
-                                                      },
-                                                      disabledColor: blueColor,
-                                                      color: blueColor,
-                                                      shape: RoundedRectangleBorder(
-                                                          borderRadius: new BorderRadius.only(
-                                                            bottomLeft: Radius.circular(40.0),
-                                                            topRight: Radius.circular(40.0),
-                                                            topLeft: Radius.circular(40.0),
-                                                            bottomRight: Radius.circular(40.0),
-                                                          ),
-                                                          ),
-                                                    )
+                                                    ),
+
                                                   ],
                                                 ),
                                               ),
@@ -592,7 +597,7 @@ class HomePageState extends State<HomePage> {
                           mainAxisSize: MainAxisSize.max,
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: <Widget>[
-                            Icon(Icons.sort, size: 18,color:blueColor),
+                            Icon(Icons.sort, size: 18,color:customColor),
                             SizedBox(width: 12,),
                             Text(
                               "Sort",
@@ -600,7 +605,7 @@ class HomePageState extends State<HomePage> {
                                   fontFamily: 'NunitoSans',
                                   fontSize: 16,
                                   fontWeight: FontWeight.bold,
-                                  color: blueColor),
+                                  color: customColor),
                               textAlign: TextAlign.center,
                             )
                           ],
@@ -635,7 +640,7 @@ class HomePageState extends State<HomePage> {
                           mainAxisSize: MainAxisSize.max,
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: <Widget>[
-                            Image.asset("assets/images/ic_filter.png", color: blueColor, width: 18,),
+                            Image.asset("assets/images/ic_filter.png", color: customColor, width: 18,),
                             SizedBox(width: 12,),
                             Text(
                               "Filter",
@@ -643,7 +648,7 @@ class HomePageState extends State<HomePage> {
                                   fontFamily: 'NunitoSans',
                                   fontSize: 16,
                                   fontWeight: FontWeight.bold,
-                                  color: blueColor),
+                                  color: customColor),
                               textAlign: TextAlign.center,
                             )
                           ],
@@ -727,7 +732,7 @@ class HomePageState extends State<HomePage> {
 
               child: Padding(
                 padding: const EdgeInsets.fromLTRB(30,0,0,0),
-                child: Container(alignment:Alignment.topLeft,child: Text('Price - high to low', style:style.copyWith(fontWeight: isSortPriceHighToLow ? FontWeight.bold:FontWeight.normal),textAlign: TextAlign.left, )),
+                child: Container(alignment:Alignment.topLeft,child: Text('Price - high to low', style:style.copyWith(fontWeight: isSortPriceHighToLow ? FontWeight.bold:FontWeight.bold),textAlign: TextAlign.left, )),
               ),
               onPressed: () {
                 Navigator.pop(context);
@@ -740,7 +745,7 @@ class HomePageState extends State<HomePage> {
             CupertinoActionSheetAction(
               child: Padding(
                 padding: const EdgeInsets.fromLTRB(30,0,0,0),
-                child: Container(alignment:Alignment.topLeft,child: Text('Price - low to high', style:style.copyWith(fontWeight: isSortPriceLowToHigh ? FontWeight.bold:FontWeight.normal),textAlign: TextAlign.left)),
+                child: Container(alignment:Alignment.topLeft,child: Text('Price - low to high', style:style.copyWith(fontWeight: isSortPriceLowToHigh ? FontWeight.bold:FontWeight.bold),textAlign: TextAlign.left)),
               ),
               onPressed: () {
                 Navigator.pop(context);
@@ -753,7 +758,7 @@ class HomePageState extends State<HomePage> {
             CupertinoActionSheetAction(
               child: Padding(
                 padding: const EdgeInsets.fromLTRB(30,0,0,0),
-                child: Container(alignment:Alignment.topLeft,child: Text('Age - high to low', style:style.copyWith(fontWeight: isSortAgeHighToLow ? FontWeight.bold:FontWeight.normal),textAlign: TextAlign.left)),
+                child: Container(alignment:Alignment.topLeft,child: Text('Age - high to low', style:style.copyWith(fontWeight: isSortAgeHighToLow ? FontWeight.bold:FontWeight.bold),textAlign: TextAlign.left)),
               ),
               onPressed: () {
                 Navigator.pop(context);
@@ -766,7 +771,7 @@ class HomePageState extends State<HomePage> {
             CupertinoActionSheetAction(
               child: Padding(
                 padding: const EdgeInsets.fromLTRB(30,0,0,0),
-                child: Container(alignment:Alignment.topLeft,child: Text('Age - low to high', style:style.copyWith(fontWeight: isSortAgeLowToHigh ? FontWeight.bold:FontWeight.normal),textAlign: TextAlign.left)),
+                child: Container(alignment:Alignment.topLeft,child: Text('Age - low to high', style:style.copyWith(fontWeight: isSortAgeLowToHigh ? FontWeight.bold:FontWeight.bold),textAlign: TextAlign.left)),
               ),
               onPressed: () {
                 Navigator.pop(context);

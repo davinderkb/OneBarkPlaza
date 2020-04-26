@@ -54,7 +54,7 @@ class MainActivityState extends State<MainActivity>{
     return MaterialApp(
       title: 'One Bark Plaza',
       theme: ThemeData(
-        primarySwatch: Colors.orange,
+        primarySwatch: Colors.lightGreen,
 
       ),
       home: isLoggedIn?HomePage():LoginPage(),
@@ -85,15 +85,15 @@ class MainNavigationDrawerState extends State<MainNavigationDrawer>{
     final iconSize = 24.0;
     final _width = MediaQuery.of(context).size.width;
     final _height = MediaQuery.of(context).size.height;
-    var drawerContentColor = Color(0xff0072FF);
-    var drawerHeaderColorLightBlue = Color(0xffFFFFFF);
+    var drawerContentColor = Colors.white;
+    var drawerHeaderColorLightBlue = Colors.black;
     var drawerAvatarBackgroundColor = Color(0xffFEF8F5);
-    var drawerBackground = Color(0xffFFFFFF);
+    var drawerBackground = Colors.black;
     TextStyle listTileTextStyle = TextStyle(color:drawerContentColor,fontSize: 14, fontWeight:FontWeight.bold,fontFamily: 'NunitoSans');
 
 
     return Theme(
-        data: Theme.of(context).copyWith(canvasColor: Colors.white),
+        data: Theme.of(context).copyWith(canvasColor: Colors.black),
       child: Container(
         width: _width/1.2,
         decoration: BoxDecoration(
@@ -103,7 +103,7 @@ class MainNavigationDrawerState extends State<MainNavigationDrawer>{
         child: new Drawer(
           child: ListTileTheme(
             textColor: drawerContentColor,
-            iconColor:  drawerContentColor,
+            iconColor:  Colors.black87,
             dense:true,
             child: ListView(
               // Important: Remove any padding from the ListView.
@@ -151,7 +151,7 @@ class MainNavigationDrawerState extends State<MainNavigationDrawer>{
                                       Row(
                                         mainAxisAlignment: MainAxisAlignment.center,
                                         children: <Widget>[
-                                          Text(data["name"],style: TextStyle(color:Colors.black,fontSize: 15, fontWeight:FontWeight.bold, fontFamily: 'NunitoSans')),
+                                          Text(data["name"],style: TextStyle(color:Colors.grey,fontSize: 15, fontWeight:FontWeight.bold, fontFamily: 'NunitoSans')),
                                         ],
                                       ),
                                       Text(data["email"],style: TextStyle(color:Colors.grey,fontSize: 12, fontFamily: 'NunitoSans')),
@@ -210,14 +210,14 @@ class MainNavigationDrawerState extends State<MainNavigationDrawer>{
                                           child: Container(
                                               height: 25,
                                               width: 25,
-                                              child: Icon(Icons.edit, color: drawerContentColor,),
+                                              child: Icon(Icons.edit, color: greenColor,),
                                               decoration: new BoxDecoration(
-                                                color: drawerAvatarBackgroundColor,
+                                                color: Colors.white,
                                                 shape: BoxShape.circle,
                                                 boxShadow: [
                                                   BoxShadow(
                                                     color: Colors.grey,
-                                                    offset: Offset(0.0, 1.0), //(x,y)
+                                                    offset: Offset(-1.0, -1.0), //(x,y)
                                                     blurRadius: 2.0,
                                                   ),
                                                 ],
@@ -239,7 +239,7 @@ class MainNavigationDrawerState extends State<MainNavigationDrawer>{
 
                 ListTile(
                   title: Text("All Puppies",style: listTileTextStyle,),
-                  leading: Image.asset("assets/images/ic_allpuppies.png",  width: iconSize,),
+                  leading: Image.asset("assets/images/ic_allpuppies.png",  width: iconSize,color: Colors.white,),
                   onTap: () {
                     // Update the state of the app
                     // ...
@@ -249,53 +249,53 @@ class MainNavigationDrawerState extends State<MainNavigationDrawer>{
                   },
                 ),
                 SizedBox(height: 4,),
-                new Divider(height: 1.0, color: Colors.grey),
+                new Divider(height: 1.0, color: greenColor),
                 SizedBox(height: 4,),
                 ListTile(
                   title: Text("Add Puppy",style: listTileTextStyle,),
-                  leading: Image.asset("assets/images/ic_addpuppy.png",  width: iconSize,),
+                  leading: Image.asset("assets/images/ic_addpuppy.png",  width: iconSize,color: Colors.white,),
                   onTap: () {
                     Navigator.of(context).push(MaterialPageRoute(
                         builder: (BuildContext context) =>AddPuppy()));
                   },
                 ),
                 SizedBox(height: 4,),
-                new Divider(height: 1.0, color: Colors.grey),
+                new Divider(height: 1.0, color: greenColor),
                 SizedBox(height: 4,),
                 ListTile(
                   title: Text("Orders",style:listTileTextStyle,),
-                  leading: Image.asset("assets/images/ic_orders.png",  width: iconSize),
+                  leading: Image.asset("assets/images/ic_orders.png",  width: iconSize,color: Colors.white,),
                   onTap: () {
                     Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext context) =>Orders()));
                   },
                 ),
                 SizedBox(height: 4,),
-                new Divider(height: 1.0, color: Colors.grey),
+                new Divider(height: 1.0, color: greenColor),
                 SizedBox(height: 4,),
                 ListTile(
                   title: Text("Payment Options",style: listTileTextStyle,),
-                  leading: Image.asset("assets/images/ic_billing.png",  width: iconSize),
+                  leading: Image.asset("assets/images/ic_billing.png",  width: iconSize, color: Colors.white,),
                   onTap: () {
                     Toast.show("Payment Options, to-do", context);
                     ;
                   },
                 ),SizedBox(height: 4,),
-                new Divider(height: 1.0, color: Colors.grey),
+                new Divider(height: 1.0, color: greenColor),
                 SizedBox(height: 4,),
                 ListTile(
                   title: Text("Payment History",style: listTileTextStyle,),
-                  leading:Image.asset("assets/images/ic_payment_history.png",  width: iconSize),
+                  leading:Image.asset("assets/images/ic_payment_history.png",  width: iconSize, color: Colors.white,),
                   onTap: () async {
                     Toast.show("Paymnet History, to-do", context);
 
                   },
                 ),
                 SizedBox(height: 4,),
-                new Divider(height: 1.0, color: Colors.grey),
+                new Divider(height: 1.0, color: greenColor),
                 SizedBox(height: 4,),
                 ListTile(
                   title: Text(Constants.LOGOUT,style: listTileTextStyle,),
-                  leading: Image.asset("assets/images/ic_logout.png",  width: iconSize),
+                  leading: Image.asset("assets/images/ic_logout.png",  width: iconSize, color: Colors.white,),
                   onTap: () async {
                     await cleanUpSharedPref();
                     //Navigator.popUntil(context, ModalRoute.withName('/'));

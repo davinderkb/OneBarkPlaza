@@ -17,7 +17,6 @@ import 'package:toast/toast.dart';
 import 'homepage.dart';
 
 final greenColor = Color(0xff7FA432);
-final blueColor = Color(0xff4C8BF5);
 class AddPuppySuccessful extends StatefulWidget {
 int puppyId;
 

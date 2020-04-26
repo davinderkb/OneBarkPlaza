@@ -254,10 +254,15 @@ class OrdersState extends State<Orders> {
                                             },
                                             child: Card(
                                               //color: Color(0xffFFF8E1), // FFF8E1 amber , F1F8E9 green, FBE9E7 orange
-                                                    elevation:5,
+                                                    elevation:1,
                                                     shape: RoundedRectangleBorder(
                                                       borderRadius:
-                                                      new BorderRadius.circular(8.0),
+                                                      new BorderRadius.only(
+                                                        bottomLeft: Radius.circular(12.0),
+                                                        topRight: Radius.circular(0.0),
+                                                        topLeft: Radius.circular(0.0),
+                                                        bottomRight: Radius.circular(12.0),
+                                                      ),
                                                     ),
                                                     child: Container(
                                                       width: _width  ,
@@ -270,6 +275,12 @@ class OrdersState extends State<Orders> {
 
                                                               children: <Widget>[
                                                                 Container(
+                                                                      decoration: BoxDecoration(
+                                                                      color: Colors.transparent,
+
+                                                                      border: Border(top: BorderSide(color: Colors.white,width: 0,))
+                                                                      //color: Colors.green,
+                                                                      ),
                                                                   child: Column(
                                                                     children: <Widget>[
                                                                       Divider(color: Colors.transparent,),
@@ -293,16 +304,22 @@ class OrdersState extends State<Orders> {
                                                                                 mainAxisAlignment: MainAxisAlignment.start,
                                                                                 crossAxisAlignment: CrossAxisAlignment.start,
                                                                                 children: <Widget>[
-                                                                                  Text("Order No. "+data[index].orderId,style: TextStyle(fontFamily:'NunitoSans',fontSize:14,color:orderHeaderColor, fontWeight:FontWeight.normal)),
-                                                                                  Text("No. of Items: "+data[index].items.length.toString(),style: TextStyle(fontFamily:'NunitoSans',fontSize:11,color:Colors.grey, fontWeight:FontWeight.normal)),
+                                                                                  Row(
+                                                                                    children: <Widget>[
+                                                                                      Text("Order Id",style:TextStyle(fontFamily:'NunitoSans',fontSize:13,color:Color(0xff707070),fontWeight:FontWeight.bold)),
+                                                                                      Text(" #"+data[index].orderId,style:TextStyle(fontFamily:'NunitoSans',fontSize:12,color:Colors.grey,fontWeight:FontWeight.bold)),
+                                                                                    ],
+                                                                                  ),
+
+                                                                                  Text("Total Items: "+data[index].items.length.toString(),style: TextStyle(fontFamily:'NunitoSans',fontSize:12,color:Colors.grey, fontWeight:FontWeight.bold)),
                                                                                 ],
                                                                               ),
                                                                               Column(
                                                                                 mainAxisAlignment: MainAxisAlignment.start,
-                                                                                crossAxisAlignment: CrossAxisAlignment.start,
+                                                                                crossAxisAlignment: CrossAxisAlignment.end,
                                                                                 children: <Widget>[
-                                                                                  Text("Received on",style: TextStyle(fontFamily:'NunitoSans',fontSize:14,color:orderHeaderColor, fontWeight:FontWeight.normal)),
-                                                                                  Text(data[index].orderDateString,style: TextStyle(fontFamily:'NunitoSans',fontSize:11,color:Colors.grey, fontWeight:FontWeight.normal)),
+                                                                                  Text("Received on",style: TextStyle(fontFamily:'NunitoSans',fontSize:13,color:Color(0xff707070), fontWeight:FontWeight.bold)),
+                                                                                  Text(data[index].orderDateString,style: TextStyle(fontFamily:'NunitoSans',fontSize:11,color:Colors.grey, fontWeight:FontWeight.bold)),
                                                                                 ],
                                                                               ),
                                                                             ],
@@ -379,22 +396,49 @@ class OrdersState extends State<Orders> {
                                                                                             fontFamily:
                                                                                             'NunitoSans',
                                                                                             fontSize:
-                                                                                            15,
+                                                                                            13,
                                                                                             color:
-                                                                                            Colors.black87,
+                                                                                            Color(0xff707070),
                                                                                             fontWeight:
                                                                                             FontWeight
-                                                                                                .normal)),
+                                                                                                .bold)),
                                                                                   ),
 
                                                                                 ],
                                                                               ),
-
                                                                               Row(
                                                                                 children: <Widget>[
                                                                                   Text(
-                                                                                      "SKU: "+data[index].items[i].stockUnitId
-                                                                                          +"  |  Qty: " + data[index].items[i].quantity,
+                                                                                      "Price: ",
+                                                                                      style: TextStyle(
+                                                                                          fontFamily:
+                                                                                          'NunitoSans',
+                                                                                          fontSize:
+                                                                                          puppyDetailsFontSize,
+                                                                                          color:
+                                                                                          Color(0xff707070),
+                                                                                          fontWeight:
+                                                                                          FontWeight
+                                                                                              .normal)),
+                                                                                  Text(
+                                                                                      "\$"+double.parse(data[index].items[i].cost.toString()).toString(),
+                                                                                      style: TextStyle(
+                                                                                          fontFamily:
+                                                                                          'NunitoSans',
+                                                                                          fontSize:
+                                                                                          puppyDetailsFontSize,
+                                                                                          color:
+                                                                                          Color(0xff707070),
+                                                                                          fontWeight:
+                                                                                          FontWeight
+                                                                                              .bold)),
+
+                                                                                ],
+                                                                              ),
+                                                                              Row(
+                                                                                children: <Widget>[
+                                                                                  Text(
+                                                                                      "Quantity: " + data[index].items[i].quantity,
                                                                                       style: TextStyle(
                                                                                           fontFamily:
                                                                                           'NunitoSans',
@@ -408,24 +452,7 @@ class OrdersState extends State<Orders> {
 
                                                                                 ],
                                                                               ),
-                                                                              Row(
-                                                                                children: <Widget>[
-                                                                                  Text(
-                                                                                      "\$ " +
-                                                                                          double.parse(data[index].items[i].cost.toString()).toString(),
-                                                                                      style: TextStyle(
-                                                                                          fontFamily:
-                                                                                          'NunitoSans',
-                                                                                          fontSize:
-                                                                                          puppyDetailsFontSize,
-                                                                                          color:
-                                                                                          Color(0xff707070),
-                                                                                          fontWeight:
-                                                                                          FontWeight
-                                                                                              .normal)),
 
-                                                                                ],
-                                                                              ),
 
 
                                                                             ],
@@ -440,9 +467,30 @@ class OrdersState extends State<Orders> {
                                                                 children: <Widget>[
                                                                   Expanded(
                                                                       child: Container(
-                                                                        width: 40,
+                                                                        width: 54,
                                                                             alignment: Alignment.center,
-                                                                            child:  Icon(Icons.navigate_next, color:greenColor, size: 32,)
+                                                                            child:  Padding(
+                                                                              padding: const EdgeInsets.fromLTRB(0,0,8,0),
+                                                                              child: Container(width:42,
+                                                                                  child: Icon(Icons.navigate_next, color:greenColor, size: 24,),
+                                                                                decoration: BoxDecoration(
+                                                                                  color: Colors.white,
+                                                                                  border: Border.all(color: greenColor, width: 2),
+                                                                                  borderRadius:BorderRadius.all(Radius.circular(16)),
+                                                                                  boxShadow: [
+                                                                                    BoxShadow(
+                                                                                      color: Colors.grey,
+                                                                                      blurRadius: 2, // soften the shadow
+                                                                                      offset: Offset(
+                                                                                        1, // Move to right 10  horizontally
+                                                                                        1.0, // Move to bottom 10 Vertically
+                                                                                      ),
+                                                                                    )
+                                                                                  ],
+                                                                                ),
+
+                                                                              ),
+                                                                            )
                                                                       )
                                                                   ),
                                                                 ],
@@ -466,23 +514,34 @@ class OrdersState extends State<Orders> {
                                                           padding: const EdgeInsets.fromLTRB(8,0,8,0),
                                                           child: Row(
                                                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                            crossAxisAlignment: CrossAxisAlignment.end,
                                                             children: <Widget>[
                                                               Column(
-                                                                mainAxisAlignment: MainAxisAlignment.start,
+                                                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                                                 crossAxisAlignment: CrossAxisAlignment.start,
                                                                 children: <Widget>[
-                                                                  Text("Payment Mode ",style: TextStyle(fontFamily:'NunitoSans',fontSize:14,color:orderHeaderColor, fontWeight:FontWeight.normal)),
-                                                                  Text("Cash on delivery",style: TextStyle(fontFamily:'NunitoSans',fontSize:11,color:Colors.grey, fontWeight:FontWeight.normal)),
+                                                                  Text("Total Earned: ",style: TextStyle(fontFamily:'NunitoSans',fontSize:11,color:Colors.grey, fontWeight:FontWeight.bold)),
+                                                                  Text("\$ "+data[index].vendorEarning.toString(),style: TextStyle(fontFamily:'NunitoSans',fontSize:13,color:Color(0xff707070), fontWeight:FontWeight.bold)),
                                                                 ],
                                                               ),
-                                                              Column(
-                                                                mainAxisAlignment: MainAxisAlignment.start,
-                                                                crossAxisAlignment: CrossAxisAlignment.start,
+                                                              Row(
+                                                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                                crossAxisAlignment: CrossAxisAlignment.end,
                                                                 children: <Widget>[
-                                                                  Text("Total Earned",style: TextStyle(fontFamily:'NunitoSans',fontSize:14,color:orderHeaderColor, fontWeight:FontWeight.normal)),
-                                                                  Text("\$ "+data[index].vendorEarning.toString(),style: TextStyle(fontFamily:'NunitoSans',fontSize:11,color:Colors.grey, fontWeight:FontWeight.normal)),
+                                                                  Container(
+                                                                      alignment: Alignment.center,
+                                                                      width:  _height>_width? _width/3.5 : _height/2,
+                                                                      padding: EdgeInsets.fromLTRB(0,6,0,6),
+                                                                      decoration: BoxDecoration(
+                                                                        border: Border.all(color: Colors.grey, width: 1.5),
+                                                                        borderRadius:BorderRadius.all(Radius.circular(24)),
+                                                                      ),
+
+                                                                      child:Text(data[index].orderStatus,style: TextStyle(fontFamily:'NunitoSans',fontSize:13,color:Color(0xff707070), fontWeight:FontWeight.bold))
+                                                                  )
                                                                 ],
                                                               ),
+
                                                             ],
                                                           ),
                                                         ),

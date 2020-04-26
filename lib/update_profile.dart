@@ -10,14 +10,13 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
-import 'package:one_bark_plaza/add_puppy_success.dart';
 import 'package:one_bark_plaza/homepage.dart';
 import 'package:one_bark_plaza/image_picker_handler.dart';
 import 'package:one_bark_plaza/util/constants.dart';
 import 'package:one_bark_plaza/util/utility.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:toast/toast.dart';
-final blueColor = Color(0xff4C8BF5);
+final customColor = Color(0xff7FA432);
 var updateProfileUrl = 'https://obpdevstage.wpengine.com/wp-json/obp/v1/profile';
 
 class UpdateProfile extends StatefulWidget {
@@ -83,7 +82,7 @@ class UpdateProfileState extends State<UpdateProfile> with TickerProviderStateMi
           backgroundColor: Colors.white,
           appBar: new AppBar(
             leading: new IconButton(
-                icon: new Icon(Icons.arrow_back, color: Colors.blueAccent),
+                icon: new Icon(Icons.arrow_back, color: customColor),
                 onPressed: () {
                   if(isAnyFieldChanged()){
                     showDialog<void>(
@@ -95,13 +94,13 @@ class UpdateProfileState extends State<UpdateProfile> with TickerProviderStateMi
                           content: Text("\nAll unsaved changes would be lost. Do you want to exit this page?"),
                           actions: <Widget>[
                             CupertinoDialogAction(
-                              child: Text('No'),
+                              child: Text('No',style: TextStyle(color:customColor)),
                               onPressed: () {
                                 Navigator.of(context).pop();
                               },
                             ),
                             CupertinoDialogAction(
-                              child: Text('Yes'),
+                              child: Text('Yes', style: TextStyle(color:customColor)),
                               onPressed: (){
                                 Navigator.of(context).pop();
                                 Navigator.of(context).pop();
@@ -127,7 +126,7 @@ class UpdateProfileState extends State<UpdateProfile> with TickerProviderStateMi
                         fontFamily: 'NunitoSans',
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
-                        color: Colors.blueAccent),
+                        color: customColor),
                     textAlign: TextAlign.center,
                   ),
                 ]),
@@ -142,7 +141,7 @@ class UpdateProfileState extends State<UpdateProfile> with TickerProviderStateMi
               alignment: Alignment.bottomCenter,
               child: SpinKitRipple(
                 borderWidth: 100.0,
-                color: Colors.blueAccent,
+                color: customColor,
                 size: 120,
               )):
           SingleChildScrollView(
@@ -191,7 +190,7 @@ class UpdateProfileState extends State<UpdateProfile> with TickerProviderStateMi
                                         decoration: new BoxDecoration(
                                           color: Color(0xffFEF8F5),
                                           shape: BoxShape.circle,
-                                          border:  Border.all(width: 3, color: Colors.blueAccent),
+                                          border:  Border.all(width: 3, color: customColor),
                                           boxShadow: [
                                             BoxShadow(
                                               color: Colors.grey,
@@ -214,7 +213,7 @@ class UpdateProfileState extends State<UpdateProfile> with TickerProviderStateMi
                                       child: Container(
                                           height: 42,
                                           width: 42,
-                                          child: Icon(Icons.edit, color: Colors.blueAccent,),
+                                          child: Icon(Icons.edit, color: customColor,),
                                           decoration: new BoxDecoration(
                                             color: Color(0xffFEF8F5),
                                             shape: BoxShape.circle,
@@ -311,7 +310,7 @@ class UpdateProfileState extends State<UpdateProfile> with TickerProviderStateMi
                               child:  Container(
                                 width: _width-60,
                                 child: CupertinoButton(
-                                  color: Colors.blueAccent,
+                                  color: customColor,
                                   borderRadius: BorderRadius.circular(30),
                                   padding: EdgeInsets.fromLTRB(0.0, 24.0, 0.0,24.0),
                                   onPressed: () {
@@ -398,13 +397,13 @@ class UpdateProfileState extends State<UpdateProfile> with TickerProviderStateMi
             content: Text("\nAll unsaved changes would be lost. Do you want to exit this page?"),
             actions: <Widget>[
               CupertinoDialogAction(
-                child: Text('No'),
+                child: Text('No', style: TextStyle(color:customColor)),
                 onPressed: () {
                   Navigator.of(context).pop();
                 },
               ),
               CupertinoDialogAction(
-                child: Text('Yes'),
+                child: Text('Yes', style: TextStyle(color:customColor),),
                 onPressed: (){
                   Navigator.of(context).pop();
                   Navigator.of(context).pop();

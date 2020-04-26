@@ -103,10 +103,10 @@ class _OrderDetailsPageState extends State<OrderDetailsPage> {
                                 fontSize:
                                 12,
                                 color:
-                                Colors.black87,
+                                Color(0xff707070),
                                 fontWeight:
                                 FontWeight
-                                    .normal)),
+                                    .bold)),
                         Text(
                              widget.orderDetails.orderStatus,
                             style: TextStyle(
@@ -198,27 +198,27 @@ class _OrderDetailsPageState extends State<OrderDetailsPage> {
                                             children: <Widget>[
                                               Row(
                                                 children: <Widget>[
-                                                  Container(width:_width/3,child: Text("Order Id ",style: TextStyle(fontFamily:'NunitoSans',fontSize:12,color:Colors.grey, fontWeight:FontWeight.normal))),
-                                                  Text("#"+widget.orderDetails.orderId +" ("+"Items in this order #"+ widget.orderDetails.items.length.toString()+")",style: TextStyle(fontFamily:'NunitoSans',fontSize:12,color:Colors.black87, fontWeight:FontWeight.normal)),
+                                                  Container(width:_width/3,child: Text("Order Id ",style: TextStyle(fontFamily:'NunitoSans',fontSize:12,color:Colors.grey, fontWeight:FontWeight.bold))),
+                                                  Text("#"+widget.orderDetails.orderId +" ("+ widget.orderDetails.items.length.toString()+" Items in this Order)",style: TextStyle(fontFamily:'NunitoSans',fontSize:12,color:Color(0xff707070), fontWeight:FontWeight.bold)),
                                                 ],
                                               ),
 
                                               Row(
                                                 children: <Widget>[
-                                                  Container(width:_width/3,child: Text("Order Date",style: TextStyle(fontFamily:'NunitoSans',fontSize:12,color:Colors.grey, fontWeight:FontWeight.normal))),
-                                                  Text(widget.orderDetails.orderDateString,style: TextStyle(fontFamily:'NunitoSans',fontSize:12,color:Colors.black87, fontWeight:FontWeight.normal)),
+                                                  Container(width:_width/3,child: Text("Order Date",style: TextStyle(fontFamily:'NunitoSans',fontSize:12,color:Colors.grey, fontWeight:FontWeight.bold))),
+                                                  Text(widget.orderDetails.orderDateString,style: TextStyle(fontFamily:'NunitoSans',fontSize:12,color:Color(0xff707070), fontWeight:FontWeight.bold)),
                                                 ],
                                               ),
                                               Row(
                                                 mainAxisAlignment: MainAxisAlignment.start,
                                                 crossAxisAlignment: CrossAxisAlignment.start,
                                                 children: <Widget>[
-                                                  Container(width:_width/3, child: Text("Billing Address ",style: TextStyle(fontFamily:'NunitoSans',fontSize:12,color:Colors.grey, fontWeight:FontWeight.normal))),
+                                                  Container(width:_width/3, child: Text("Billing Address ",style: TextStyle(fontFamily:'NunitoSans',fontSize:12,color:Colors.grey, fontWeight:FontWeight.bold))),
                                                   Text(widget.orderDetails.billingAddress.firstName +" " +widget.orderDetails.billingAddress.lastName+"\n"
                                                       +widget.orderDetails.billingAddress.address + "\n"
                                                       +widget.orderDetails.billingAddress.city +", "+widget.orderDetails.billingAddress.state +"-"+widget.orderDetails.billingAddress.postcode+"\n"
                                                       +widget.orderDetails.billingAddress.country,
-                                                      style: TextStyle(fontFamily:'NunitoSans',fontSize:12,color:Colors.black87, fontWeight:FontWeight.normal)
+                                                      style: TextStyle(fontFamily:'NunitoSans',fontSize:12,color:Color(0xff707070), fontWeight:FontWeight.bold)
                                                   ),
                                                 ],
                                               ),
@@ -226,12 +226,12 @@ class _OrderDetailsPageState extends State<OrderDetailsPage> {
                                                 mainAxisAlignment: MainAxisAlignment.start,
                                                 crossAxisAlignment: CrossAxisAlignment.start,
                                                 children: <Widget>[
-                                                  Container(width:_width/3, child: Text("Shipping Address ",style: TextStyle(fontFamily:'NunitoSans',fontSize:12,color:Colors.grey, fontWeight:FontWeight.normal))),
+                                                  Container(width:_width/3, child: Text("Shipping Address ",style: TextStyle(fontFamily:'NunitoSans',fontSize:12,color:Colors.grey, fontWeight:FontWeight.bold))),
                                                   Text(widget.orderDetails.shippingAddress.firstName +" " +widget.orderDetails.shippingAddress.lastName+"\n"
                                                       +widget.orderDetails.shippingAddress.address + "\n"
                                                       +widget.orderDetails.shippingAddress.city +", "+widget.orderDetails.shippingAddress.state +"-"+widget.orderDetails.shippingAddress.postcode+"\n"
                                                       +widget.orderDetails.shippingAddress.country,
-                                                      style: TextStyle(fontFamily:'NunitoSans',fontSize:12,color:Colors.black87, fontWeight:FontWeight.normal)
+                                                      style: TextStyle(fontFamily:'NunitoSans',fontSize:12,color:Color(0xff707070), fontWeight:FontWeight.bold)
                                                   ),
                                                 ],
                                               ),
@@ -326,7 +326,7 @@ class _OrderDetailsPageState extends State<OrderDetailsPage> {
                                                                       fontSize:
                                                                       13,
                                                                       color:
-                                                                      Colors.black87,
+                                                                      Color(0xff707070),
                                                                       fontWeight:
                                                                       FontWeight
                                                                           .bold)),
@@ -340,7 +340,7 @@ class _OrderDetailsPageState extends State<OrderDetailsPage> {
                                                                       Color(0xff707070),
                                                                       fontWeight:
                                                                       FontWeight
-                                                                          .normal)),
+                                                                          .bold)),
 
 
                                                             ],
@@ -349,8 +349,8 @@ class _OrderDetailsPageState extends State<OrderDetailsPage> {
                                                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                                             crossAxisAlignment: CrossAxisAlignment.start,
                                                             children: <Widget>[
-                                                              Text("Price",style: TextStyle(fontFamily:'NunitoSans',fontSize:12,color:Colors.grey, fontWeight:FontWeight.normal)),
-                                                              Text("\$ "+ widget.orderDetails.items[i].price.toString(),style: TextStyle(fontFamily:'NunitoSans',fontSize:12,color:Colors.black87, fontWeight:FontWeight.bold)),
+                                                              Text("Price",style: TextStyle(fontFamily:'NunitoSans',fontSize:12,color:Colors.grey, fontWeight:FontWeight.bold)),
+                                                              Text("\$ "+ widget.orderDetails.items[i].price.toString(),style: TextStyle(fontFamily:'NunitoSans',fontSize:12,color:Color(0xff707070), fontWeight:FontWeight.bold)),
                                                             ],
                                                           ),
                                                           Row(
@@ -367,7 +367,7 @@ class _OrderDetailsPageState extends State<OrderDetailsPage> {
                                                                       Colors.grey,
                                                                       fontWeight:
                                                                       FontWeight
-                                                                          .normal)),
+                                                                          .bold)),
                                                               Text(
                                                                   "x " + widget.orderDetails.items[i].quantity,
                                                                   style: TextStyle(
@@ -385,16 +385,16 @@ class _OrderDetailsPageState extends State<OrderDetailsPage> {
                                                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                                             crossAxisAlignment: CrossAxisAlignment.start,
                                                             children: <Widget>[
-                                                              Text("Commision",style: TextStyle(fontFamily:'NunitoSans',fontSize:12,color:Colors.grey, fontWeight:FontWeight.normal)),
-                                                              Text("\$ "+totalCommission.toString(),style: TextStyle(fontFamily:'NunitoSans',fontSize:12,color:Colors.black87, fontWeight:FontWeight.normal)),
+                                                              Text("Commision",style: TextStyle(fontFamily:'NunitoSans',fontSize:12,color:Colors.grey, fontWeight:FontWeight.bold)),
+                                                              Text("\$ "+totalCommission.toString(),style: TextStyle(fontFamily:'NunitoSans',fontSize:12,color:Color(0xff707070), fontWeight:FontWeight.bold)),
                                                             ],
                                                           ),
                                                           Row(
                                                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                                             crossAxisAlignment: CrossAxisAlignment.start,
                                                             children: <Widget>[
-                                                              Text("Sale Tax",style: TextStyle(fontFamily:'NunitoSans',fontSize:12,color:Colors.grey, fontWeight:FontWeight.normal)),
-                                                              Text("\$ "+widget.orderDetails.items[i].tax.toString(),style: TextStyle(fontFamily:'NunitoSans',fontSize:12,color:Colors.black87, fontWeight:FontWeight.normal)),
+                                                              Text("Sale Tax",style: TextStyle(fontFamily:'NunitoSans',fontSize:12,color:Colors.grey, fontWeight:FontWeight.bold)),
+                                                              Text("\$ "+widget.orderDetails.items[i].tax.toString(),style: TextStyle(fontFamily:'NunitoSans',fontSize:12,color:Color(0xff707070), fontWeight:FontWeight.bold)),
                                                             ],
                                                           ),
                                                           Divider(),
@@ -402,8 +402,8 @@ class _OrderDetailsPageState extends State<OrderDetailsPage> {
                                                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                                             crossAxisAlignment: CrossAxisAlignment.start,
                                                             children: <Widget>[
-                                                              Text("Total",style: TextStyle(fontFamily:'NunitoSans',fontSize:12,color:Colors.grey, fontWeight:FontWeight.normal)),
-                                                              Text("\$ "+(widget.orderDetails.items[i].price + widget.orderDetails.items[i].commission + widget.orderDetails.items[i].tax).toString(),style: TextStyle(fontFamily:'NunitoSans',fontSize:12,color:Colors.black87, fontWeight:FontWeight.bold)),
+                                                              Text("Total",style: TextStyle(fontFamily:'NunitoSans',fontSize:12,color:Colors.grey, fontWeight:FontWeight.bold)),
+                                                              Text("\$ "+(widget.orderDetails.items[i].price + widget.orderDetails.items[i].commission + widget.orderDetails.items[i].tax).toString(),style: TextStyle(fontFamily:'NunitoSans',fontSize:12,color:Color(0xff707070), fontWeight:FontWeight.bold)),
                                                             ],
                                                           ),
                                                         ],
@@ -441,32 +441,32 @@ class _OrderDetailsPageState extends State<OrderDetailsPage> {
                                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                         crossAxisAlignment: CrossAxisAlignment.start,
                                         children: <Widget>[
-                                          Text("Payment Mode ",style: TextStyle(fontFamily:'NunitoSans',fontSize:12,color:Colors.grey, fontWeight:FontWeight.normal)),
-                                          Text("Cash on Delivery",style: TextStyle(fontFamily:'NunitoSans',fontSize:12,color:Colors.black87, fontWeight:FontWeight.normal)),
+                                          Text("Payment Mode ",style: TextStyle(fontFamily:'NunitoSans',fontSize:12,color:Colors.grey, fontWeight:FontWeight.bold)),
+                                          Text("Cash on Delivery",style: TextStyle(fontFamily:'NunitoSans',fontSize:12,color:Color(0xff707070), fontWeight:FontWeight.bold)),
                                         ],
                                       ),
                                       Row(
                                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                         crossAxisAlignment: CrossAxisAlignment.start,
                                         children: <Widget>[
-                                          Text("Price",style: TextStyle(fontFamily:'NunitoSans',fontSize:12,color:Colors.grey, fontWeight:FontWeight.normal)),
-                                          Text("\$ "+totalPrice.toString(),style: TextStyle(fontFamily:'NunitoSans',fontSize:12,color:Colors.black87, fontWeight:FontWeight.normal)),
+                                          Text("Price",style: TextStyle(fontFamily:'NunitoSans',fontSize:12,color:Colors.grey, fontWeight:FontWeight.bold)),
+                                          Text("\$ "+totalPrice.toString(),style: TextStyle(fontFamily:'NunitoSans',fontSize:12,color:Color(0xff707070), fontWeight:FontWeight.bold)),
                                         ],
                                       ),
                                       Row(
                                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                         crossAxisAlignment: CrossAxisAlignment.start,
                                         children: <Widget>[
-                                          Text("Commision",style: TextStyle(fontFamily:'NunitoSans',fontSize:12,color:Colors.grey, fontWeight:FontWeight.normal)),
-                                          Text("\$ "+totalCommission.toString(),style: TextStyle(fontFamily:'NunitoSans',fontSize:12,color:Colors.black87, fontWeight:FontWeight.normal)),
+                                          Text("Commision",style: TextStyle(fontFamily:'NunitoSans',fontSize:12,color:Colors.grey, fontWeight:FontWeight.bold)),
+                                          Text("\$ "+totalCommission.toString(),style: TextStyle(fontFamily:'NunitoSans',fontSize:12,color:Color(0xff707070), fontWeight:FontWeight.bold)),
                                         ],
                                       ),
                                       Row(
                                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                         crossAxisAlignment: CrossAxisAlignment.start,
                                         children: <Widget>[
-                                          Text("Total Tax",style: TextStyle(fontFamily:'NunitoSans',fontSize:12,color:Colors.grey, fontWeight:FontWeight.normal)),
-                                          Text("\$ "+totalTax.toString(),style: TextStyle(fontFamily:'NunitoSans',fontSize:12,color:Colors.black87, fontWeight:FontWeight.normal)),
+                                          Text("Total Tax",style: TextStyle(fontFamily:'NunitoSans',fontSize:12,color:Colors.grey, fontWeight:FontWeight.bold)),
+                                          Text("\$ "+totalTax.toString(),style: TextStyle(fontFamily:'NunitoSans',fontSize:12,color:Color(0xff707070), fontWeight:FontWeight.bold)),
                                         ],
                                       ),
                                       Divider(),
@@ -474,8 +474,8 @@ class _OrderDetailsPageState extends State<OrderDetailsPage> {
                                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                         crossAxisAlignment: CrossAxisAlignment.start,
                                         children: <Widget>[
-                                          Text("Total",style: TextStyle(fontFamily:'NunitoSans',fontSize:12,color:Colors.grey, fontWeight:FontWeight.normal)),
-                                          Text("\$ "+(totalPrice+totalTax+totalCommission).toString(),style: TextStyle(fontFamily:'NunitoSans',fontSize:12,color:Colors.black87, fontWeight:FontWeight.bold)),
+                                          Text("Total",style: TextStyle(fontFamily:'NunitoSans',fontSize:12,color:Colors.grey, fontWeight:FontWeight.bold)),
+                                          Text("\$ "+(totalPrice+totalTax+totalCommission).toString(),style: TextStyle(fontFamily:'NunitoSans',fontSize:12,color:Color(0xff707070), fontWeight:FontWeight.bold)),
                                         ],
                                       ),
 

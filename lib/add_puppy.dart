@@ -28,7 +28,7 @@ import 'package:toast/toast.dart';
 import 'package:image/image.dart' as I;
 import 'choose_breed_dialog.dart';
 final greenColor = Color(0xff7FA432);
-final blueColor = Color(0xff4C8BF5);
+final customColor = Color(0xff7FA432);//Color(0xff4C8BF5);
 var addPuppyUrl = 'https://obpdevstage.wpengine.com/wp-json/obp/v1/create_puppy';
 
 class AddPuppy extends StatefulWidget {
@@ -325,13 +325,13 @@ class AddPuppyState extends State<AddPuppy> {
                       content: Text("\nAny entries in the form would be lost. Do you want to exit this page?"),
                       actions: <Widget>[
                         CupertinoDialogAction(
-                          child: Text('No'),
+                          child: Text('No',style: TextStyle(color:customColor)),
                           onPressed: () {
                             Navigator.of(context).pop();
                           },
                         ),
                         CupertinoDialogAction(
-                          child: Text('Yes'),
+                          child: Text('Yes',style: TextStyle(color:customColor)),
                           onPressed: (){
                             Navigator.of(context).pop();
                             Navigator.of(context).pop();
@@ -537,7 +537,7 @@ class AddPuppyState extends State<AddPuppy> {
                                         Padding(
                                             padding:
                                             const EdgeInsets.fromLTRB(
-                                                00, 0, 20, 0),
+                                                00, 0, 00, 0),
                                             child: Container(
                                               height: 40,
                                               width: 40,
@@ -636,7 +636,7 @@ class AddPuppyState extends State<AddPuppy> {
                                         Padding(
                                             padding:
                                             const EdgeInsets.fromLTRB(
-                                                00, 0, 20, 0),
+                                                00, 0, 0, 0),
                                             child: Container(
                                               height: 40,
                                               width: 40,
@@ -1122,7 +1122,7 @@ class AddPuppyState extends State<AddPuppy> {
                                         Padding(
                                             padding:
                                             const EdgeInsets.fromLTRB(
-                                                00, 0, 20, 0),
+                                                00, 0, 0, 0),
                                             child: Container(
                                               height: 40,
                                               width: 40,
@@ -1608,9 +1608,9 @@ class AddPuppyState extends State<AddPuppy> {
                             SizedBox(height: 30,),
                             Center(
                               child:  CupertinoButton(
-                                color: maleColor,
+                                color: greenColor,
                                 borderRadius: BorderRadius.circular(100),
-                                padding: EdgeInsets.fromLTRB(120.0, 24.0, 120.0,24.0),
+                                padding: EdgeInsets.fromLTRB(120.0, 16.0, 120.0,16.0),
                                 onPressed: () {
                                   FocusScope.of(context).unfocus();
                                   onFinishClick(context);
@@ -1726,10 +1726,10 @@ class AddPuppyState extends State<AddPuppy> {
         builder: (BuildContext context, Widget child) {
           return Theme(
             data: ThemeData.light().copyWith(
-              primaryColor: Colors.blue,//Head background
-              accentColor: Colors.blue,
+              primaryColor: Colors.green,//Head background
+              accentColor: Colors.green,
               buttonTheme: ButtonTheme.of(context).copyWith(
-                colorScheme: ColorScheme.fromSwatch(accentColor: Colors.blue, primarySwatch: Colors.blue),
+                colorScheme: ColorScheme.fromSwatch(accentColor: Colors.green, primarySwatch: Colors.green),
               ),
             ),
             child: child,
@@ -1751,10 +1751,10 @@ class AddPuppyState extends State<AddPuppy> {
         builder: (BuildContext context, Widget child) {
           return Theme(
             data: ThemeData.light().copyWith(
-              primaryColor: Colors.blue,//Head background
-              accentColor: Colors.blue,
+              primaryColor:Colors.green,//Head background
+              accentColor: Colors.green,
               buttonTheme: ButtonTheme.of(context).copyWith(
-                colorScheme: ColorScheme.fromSwatch(accentColor: Colors.blue, primarySwatch: Colors.blue),
+                colorScheme: ColorScheme.fromSwatch(accentColor: Colors.green, primarySwatch: Colors.green),
               ),
             ),
             child: child,
@@ -1796,13 +1796,13 @@ class AddPuppyState extends State<AddPuppy> {
           content: Text("\nAny entries in the form would be lost. Do you want to exit this page?"),
           actions: <Widget>[
             CupertinoDialogAction(
-              child: Text('No'),
+              child: Text('No', style: TextStyle(color:greenColor),),
               onPressed: () {
                 Navigator.of(context).pop();
               },
             ),
             CupertinoDialogAction(
-              child: Text('Yes'),
+              child: Text('Yes', style: TextStyle(color:greenColor),),
               onPressed: (){
                 Navigator.of(context).pop();
                 Navigator.of(context).pop();
