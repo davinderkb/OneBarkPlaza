@@ -94,13 +94,13 @@ class UpdateProfileState extends State<UpdateProfile> with TickerProviderStateMi
                           content: Text("\nAll unsaved changes would be lost. Do you want to exit this page?"),
                           actions: <Widget>[
                             CupertinoDialogAction(
-                              child: Text('No',style: TextStyle(color:customColor)),
+                              child: Text('No',style: TextStyle(color:customColor, fontWeight:FontWeight.bold)),
                               onPressed: () {
                                 Navigator.of(context).pop();
                               },
                             ),
                             CupertinoDialogAction(
-                              child: Text('Yes', style: TextStyle(color:customColor)),
+                              child: Text('Yes', style: TextStyle(color:customColor, fontWeight:FontWeight.bold)),
                               onPressed: (){
                                 Navigator.of(context).pop();
                                 Navigator.of(context).pop();

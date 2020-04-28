@@ -732,7 +732,7 @@ class HomePageState extends State<HomePage> {
 
               child: Padding(
                 padding: const EdgeInsets.fromLTRB(30,0,0,0),
-                child: Container(alignment:Alignment.topLeft,child: Text('Price - high to low', style:style.copyWith(fontWeight: isSortPriceHighToLow ? FontWeight.bold:FontWeight.bold),textAlign: TextAlign.left, )),
+                child: Container(alignment:Alignment.topLeft,child: Text('Price - high to low', style:style.copyWith(fontWeight: isSortPriceHighToLow ? FontWeight.bold:FontWeight.normal),textAlign: TextAlign.left, )),
               ),
               onPressed: () {
                 Navigator.pop(context);
@@ -745,7 +745,7 @@ class HomePageState extends State<HomePage> {
             CupertinoActionSheetAction(
               child: Padding(
                 padding: const EdgeInsets.fromLTRB(30,0,0,0),
-                child: Container(alignment:Alignment.topLeft,child: Text('Price - low to high', style:style.copyWith(fontWeight: isSortPriceLowToHigh ? FontWeight.bold:FontWeight.bold),textAlign: TextAlign.left)),
+                child: Container(alignment:Alignment.topLeft,child: Text('Price - low to high', style:style.copyWith(fontWeight: isSortPriceLowToHigh ? FontWeight.bold:FontWeight.normal),textAlign: TextAlign.left)),
               ),
               onPressed: () {
                 Navigator.pop(context);
@@ -758,7 +758,7 @@ class HomePageState extends State<HomePage> {
             CupertinoActionSheetAction(
               child: Padding(
                 padding: const EdgeInsets.fromLTRB(30,0,0,0),
-                child: Container(alignment:Alignment.topLeft,child: Text('Age - high to low', style:style.copyWith(fontWeight: isSortAgeHighToLow ? FontWeight.bold:FontWeight.bold),textAlign: TextAlign.left)),
+                child: Container(alignment:Alignment.topLeft,child: Text('Age - high to low', style:style.copyWith(fontWeight: isSortAgeHighToLow ? FontWeight.bold:FontWeight.normal),textAlign: TextAlign.left)),
               ),
               onPressed: () {
                 Navigator.pop(context);
@@ -771,7 +771,7 @@ class HomePageState extends State<HomePage> {
             CupertinoActionSheetAction(
               child: Padding(
                 padding: const EdgeInsets.fromLTRB(30,0,0,0),
-                child: Container(alignment:Alignment.topLeft,child: Text('Age - low to high', style:style.copyWith(fontWeight: isSortAgeLowToHigh ? FontWeight.bold:FontWeight.bold),textAlign: TextAlign.left)),
+                child: Container(alignment:Alignment.topLeft,child: Text('Age - low to high', style:style.copyWith(fontWeight: isSortAgeLowToHigh ? FontWeight.bold:FontWeight.normal),textAlign: TextAlign.left)),
               ),
               onPressed: () {
                 Navigator.pop(context);
