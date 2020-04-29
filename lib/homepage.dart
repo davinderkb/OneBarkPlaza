@@ -586,8 +586,6 @@ class HomePageState extends State<HomePage> {
                     onTap: (){
                       if(setOfPuppies !=null && setOfPuppies.length>0){
                         onSortClick(context);
-                      } else{
-                        Toast.show("Let the page loading finish and then try this option", context);
                       }
                       },
                     child: Container(
@@ -627,8 +625,6 @@ class HomePageState extends State<HomePage> {
                         else{
                           Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext context) =>filter));
                         }
-                      } else{
-                          Toast.show("Let the page loading finish and then try this option", context);
                       }
 
 

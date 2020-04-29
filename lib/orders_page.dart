@@ -84,12 +84,13 @@ class OrdersState extends State<Orders> {
   var orderHeaderColor = Colors.black87;
   bool _isLoading = false;
   Future<List<OrderDetails>> futureListOfOrders;
+  Set<OrderDetails> setOfOrders =  new Set<OrderDetails>();
   RefreshController _refreshControllerOnErrorReload = RefreshController(initialRefresh: false);
   RefreshController _refreshController = RefreshController(initialRefresh: false);
-  var isSortPriceHighToLow = false;
-  var isSortPriceLowToHigh = false;
-  var isSortAgeHighToLow = false;
-  var isSortAgeLowToHigh = false;
+  var isSortEarningHighToLow = false;
+  var isSortEarningLowToHigh = false;
+  var isSortDateRecentFirst = false;
+  var isSortDateOldestFirst = false;
 
   final greenColor = Color(0xff7FA432);
 
@@ -99,6 +100,8 @@ class OrdersState extends State<Orders> {
   double maxPrice;
 
   bool isDeleteSuccess = false;
+
+
 
 
 
@@ -232,13 +235,13 @@ class OrdersState extends State<Orders> {
                                 );
                               }
                               var data = snapshot.data as List<OrderDetails>;
-                             /* getMinMaxPrice(data);
+                             /*getMinMaxPrice(data);
                               data = applyBreedFilter(data);
                               data = applyGenderFilter(data);
-                              data = applyPriceRangeFilter(data);
-                              applySorting(data);*/
+                              data = applyPriceRangeFilter(data);*/
+                              applySorting(data);
 
-
+                              setOfOrders.addAll(data);
                               return new ListView.builder(
                                 reverse: false,
                                 scrollDirection: Axis.vertical,
@@ -467,16 +470,17 @@ class OrdersState extends State<Orders> {
                                                                 children: <Widget>[
                                                                   Expanded(
                                                                       child: Container(
-                                                                        width: 54,
+
                                                                             alignment: Alignment.center,
                                                                             child:  Padding(
                                                                               padding: const EdgeInsets.fromLTRB(0,0,8,0),
                                                                               child: Container(width:42,
+                                                                                  height:42,
                                                                                   child: Icon(Icons.navigate_next, color:greenColor, size: 24,),
                                                                                 decoration: BoxDecoration(
                                                                                   color: Colors.white,
                                                                                   border: Border.all(color: greenColor, width: 2),
-                                                                                  borderRadius:BorderRadius.all(Radius.circular(16)),
+                                                                                  borderRadius:BorderRadius.all(Radius.circular(40)),
                                                                                   boxShadow: [
                                                                                     BoxShadow(
                                                                                       color: Colors.grey,
@@ -530,11 +534,11 @@ class OrdersState extends State<Orders> {
                                                                 children: <Widget>[
                                                                   Container(
                                                                       alignment: Alignment.center,
-                                                                      width:  _height>_width? _width/3.5 : _height/2,
-                                                                      padding: EdgeInsets.fromLTRB(0,6,0,6),
+
+                                                                      padding: EdgeInsets.fromLTRB(12,6,12,6),
                                                                       decoration: BoxDecoration(
                                                                         border: Border.all(color: Colors.grey, width: 1.5),
-                                                                        borderRadius:BorderRadius.all(Radius.circular(24)),
+                                                                        borderRadius:BorderRadius.all(Radius.circular(4)),
                                                                       ),
 
                                                                       child:Text(data[index].orderStatus,style: TextStyle(fontFamily:'NunitoSans',fontSize:13,color:Color(0xff707070), fontWeight:FontWeight.bold))
@@ -579,10 +583,8 @@ class OrdersState extends State<Orders> {
               children: <Widget>[
                 InkWell(
                   onTap: (){
-                    if(false){
+                    if(setOfOrders !=null && setOfOrders.length>0){
                       onSortClick(context);
-                    } else{
-                      Toast.show("Let the page loading finish and then try this option", context);
                     }
                   },
                   child: Container(
@@ -615,15 +617,8 @@ class OrdersState extends State<Orders> {
                 ),
                 InkWell(
                   onTap: (){
-                    if(false){
-                      if(filter == null){
-                        Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext context) =>filter = Filter(null, null, minPrice, maxPrice)));;
-                      }
-                      else{
-                        Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext context) =>filter));
-                      }
-                    } else{
-                      Toast.show("Let the page loading finish and then try this option", context);
+                    if(setOfOrders !=null && setOfOrders.length>0){
+                      onFilterClick(context);
                     }
 
 
@@ -666,15 +661,15 @@ class OrdersState extends State<Orders> {
     }
   }
 
-  void applySorting(List<PuppyDetails> data) {
-    if(isSortPriceHighToLow)
-      data.sort((a, b) => double.parse(b.puppyPrice).compareTo(double.parse(a.puppyPrice)));
-    if(isSortPriceLowToHigh)
-      data.sort((a, b) => double.parse(a.puppyPrice).compareTo(double.parse(b.puppyPrice)));
-    if(isSortAgeHighToLow)
-      data.sort((a, b) => int.parse(b.ageInWeeks).compareTo(int.parse(a.ageInWeeks)));
-    if(isSortAgeLowToHigh)
-      data.sort((a, b) => int.parse(a.ageInWeeks).compareTo(int.parse(b.ageInWeeks)));
+  void applySorting(List<OrderDetails> data) {
+    if(isSortEarningHighToLow)
+      data.sort((a, b) => b.vendorEarning.compareTo(a.vendorEarning));
+    if(isSortEarningLowToHigh)
+      data.sort((a, b) => a.vendorEarning.compareTo(b.vendorEarning));
+    if(isSortDateRecentFirst)
+      data.sort((a, b) =>b.orderDate.millisecondsSinceEpoch.compareTo(a.orderDate.millisecondsSinceEpoch));
+    if(isSortDateOldestFirst)
+      data.sort((a, b) => a.orderDate.millisecondsSinceEpoch.compareTo(b.orderDate.millisecondsSinceEpoch));
   }
 
   List<PuppyDetails> applyPriceRangeFilter(List<PuppyDetails> data) {
@@ -720,58 +715,80 @@ class OrdersState extends State<Orders> {
   void onSortClick(BuildContext context) {
     final act = CupertinoActionSheet(
 
-      title: Container(alignment:Alignment.topLeft,child: Text('SORT BY', style: TextStyle( fontFamily: "NunitoSans", fontWeight: FontWeight.normal, fontSize: 12), textAlign: TextAlign.left,)),
+      title: Container(alignment:Alignment.center,child: Text('SORT BY', style: TextStyle( fontFamily: "NunitoSans", fontWeight: FontWeight.bold, fontSize: 12), textAlign: TextAlign.left,)),
       actions: <Widget>[
         CupertinoActionSheetAction(
 
-          child: Padding(
-            padding: const EdgeInsets.fromLTRB(30,0,0,0),
-            child: Container(alignment:Alignment.topLeft,child: Text('Price - high to low', style:style.copyWith(fontWeight: isSortPriceHighToLow ? FontWeight.normal:FontWeight.normal),textAlign: TextAlign.left, )),
-          ),
+          child: Container(alignment:Alignment.center,child: Text('Earning - high to low', style:style.copyWith(fontWeight: isSortEarningHighToLow ? FontWeight.bold:FontWeight.normal),textAlign: TextAlign.left, )),
           onPressed: () {
             Navigator.pop(context);
             setState(() {
               setAllSortingFalse();
-              isSortPriceHighToLow = true;
+              isSortEarningHighToLow = true;
             });
           },
         ),
         CupertinoActionSheetAction(
-          child: Padding(
-            padding: const EdgeInsets.fromLTRB(30,0,0,0),
-            child: Container(alignment:Alignment.topLeft,child: Text('Price - low to high', style:style.copyWith(fontWeight: isSortPriceLowToHigh ? FontWeight.normal:FontWeight.normal),textAlign: TextAlign.left)),
-          ),
+          child: Container(alignment:Alignment.center,child: Text('Earning - low to high', style:style.copyWith(fontWeight: isSortEarningLowToHigh ? FontWeight.bold:FontWeight.normal),textAlign: TextAlign.left)),
           onPressed: () {
             Navigator.pop(context);
             setState(() {
               setAllSortingFalse();
-              isSortPriceLowToHigh = true;
+              isSortEarningLowToHigh = true;
             });
           },
         ),
         CupertinoActionSheetAction(
-          child: Padding(
-            padding: const EdgeInsets.fromLTRB(30,0,0,0),
-            child: Container(alignment:Alignment.topLeft,child: Text('Age - high to low', style:style.copyWith(fontWeight: isSortAgeHighToLow ? FontWeight.normal:FontWeight.normal),textAlign: TextAlign.left)),
-          ),
+          child: Container(alignment:Alignment.center,child: Text('Date - Recent first', style:style.copyWith(fontWeight: isSortDateRecentFirst ? FontWeight.bold:FontWeight.normal),textAlign: TextAlign.left)),
           onPressed: () {
             Navigator.pop(context);
             setState(() {
               setAllSortingFalse();
-              isSortAgeHighToLow = true;
+              isSortDateRecentFirst = true;
             });
           },
         ),
         CupertinoActionSheetAction(
-          child: Padding(
-            padding: const EdgeInsets.fromLTRB(30,0,0,0),
-            child: Container(alignment:Alignment.topLeft,child: Text('Age - low to high', style:style.copyWith(fontWeight: isSortAgeLowToHigh ? FontWeight.normal:FontWeight.normal),textAlign: TextAlign.left)),
-          ),
+          child: Container(alignment:Alignment.center,child: Text('Date - Oldest first', style:style.copyWith(fontWeight: isSortDateOldestFirst ? FontWeight.bold:FontWeight.normal),textAlign: TextAlign.left)),
           onPressed: () {
             Navigator.pop(context);
             setState(() {
               setAllSortingFalse();
-              isSortAgeLowToHigh = true;
+              isSortDateOldestFirst = true;
+            });
+          },
+        ),
+      ],
+    );
+    showCupertinoModalPopup(
+
+        context: context,
+        builder: (BuildContext context) => act);
+  }
+
+  void onFilterClick(BuildContext context) {
+    final act = CupertinoActionSheet(
+
+      title: Container(alignment:Alignment.center,child: Text('FILTER BY', style: TextStyle( fontFamily: "NunitoSans", fontWeight: FontWeight.bold, fontSize: 12), textAlign: TextAlign.left,)),
+      actions: <Widget>[
+        CupertinoActionSheetAction(
+
+          child: Container(alignment:Alignment.center,child: Text('Order Status', style:style.copyWith(fontWeight:FontWeight.bold),textAlign: TextAlign.left, )),
+          onPressed: () {
+            Navigator.pop(context);
+            setState(() {
+              setAllSortingFalse();
+              isSortEarningHighToLow = true;
+            });
+          },
+        ),
+        CupertinoActionSheetAction(
+          child: Container(alignment:Alignment.center,child: Text('Time Period', style:style.copyWith(fontWeight: FontWeight.bold),textAlign: TextAlign.left)),
+          onPressed: () {
+            Navigator.pop(context);
+            setState(() {
+              setAllSortingFalse();
+              isSortEarningLowToHigh = true;
             });
           },
         ),
@@ -784,10 +801,10 @@ class OrdersState extends State<Orders> {
   }
 
   void setAllSortingFalse() {
-    isSortPriceHighToLow = false;
-    isSortPriceLowToHigh = false;
-    isSortAgeHighToLow = false;
-    isSortAgeLowToHigh = false;
+    isSortEarningHighToLow = false;
+    isSortEarningLowToHigh = false;
+    isSortDateRecentFirst = false;
+    isSortDateOldestFirst = false;
   }
 
   void getMinMaxPrice(List<PuppyDetails> data) {
