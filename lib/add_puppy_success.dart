@@ -146,7 +146,7 @@ class AddPuppySuccessfulState extends State<AddPuppySuccessful> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String userId =  prefs.getString(Constants.SHARED_PREF_USER_ID);
     var dio = Dio();
-    var getPuppyUrl = 'https://obpdevstage.wpengine.com/wp-json/obp/v1/puppy';
+    var getPuppyUrl = 'https://onebarkplaza.com/wp-json/obp/v1/puppy';
     FormData formData = new FormData.fromMap({
       "user_id": userId,
       "puppy_id": widget.puppyId,

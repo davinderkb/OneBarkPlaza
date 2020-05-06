@@ -242,7 +242,7 @@ class LoginPageState extends State<LoginPage>{
     });
     var dio = Dio();
 
-    var loginUrl = 'https://obpdevstage.wpengine.com/wp-json/obp/v1/login';
+    var loginUrl = 'https://onebarkplaza.com/wp-json/obp/v1/login';
     FormData formData = new FormData.fromMap({
       "username": userNameController.text.trim(),
       "password": passwordController.text

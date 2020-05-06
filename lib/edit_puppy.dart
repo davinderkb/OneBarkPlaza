@@ -1841,7 +1841,7 @@ class EditPuppyState extends State<EditPuppy> {
           : "",
     });
     try{
-      dynamic response = await dio.post("https://obpdevstage.wpengine.com/wp-json/obp/v1/update_puppy",data:formData);
+      dynamic response = await dio.post("https://onebarkplaza.com/wp-json/obp/v1/update_puppy",data:formData);
       if (response.statusCode == 200) {
         dynamic responseList = jsonDecode(response.toString());
         if (responseList["success"] == "Puppy successfully Edit!") {

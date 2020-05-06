@@ -29,7 +29,7 @@ import 'package:image/image.dart' as I;
 import 'choose_breed_dialog.dart';
 final greenColor = Color(0xff7FA432);
 final customColor = Color(0xff7FA432);//Color(0xff4C8BF5);
-var addPuppyUrl = 'https://obpdevstage.wpengine.com/wp-json/obp/v1/create_puppy';
+var addPuppyUrl = 'https://onebarkplaza.com/wp-json/obp/v1/create_puppy';
 
 class AddPuppy extends StatefulWidget {
   AddPuppyState addPuppyState;
@@ -1686,7 +1686,7 @@ class AddPuppyState extends State<AddPuppy> {
       "flight-doc" : _flightTicketPath!=null?flightTicketFile:""
     });
     try{
-      dynamic response = await dio.post("https://obpdevstage.wpengine.com/wp-json/obp/v1/create_puppy",data:formData);
+      dynamic response = await dio.post("https://onebarkplaza.com/wp-json/obp/v1/create_puppy",data:formData);
       if (response.toString() != '[]') {
         dynamic responseList = jsonDecode(response.toString());
         if (responseList["success"] == "Puppy successfully created!") {

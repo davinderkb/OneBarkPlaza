@@ -44,7 +44,7 @@ class HomePage extends StatefulWidget {
 }
 
 var puppyDetailsUrl =
-    'https://obpdevstage.wpengine.com/wp-json/obp/v1/puppies/';
+    'https://onebarkplaza.com/wp-json/obp/v1/puppies/';
 Future<List<PuppyDetails>> _puppiesList(BuildContext context) async {
   var dio = Dio();
   SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -402,7 +402,7 @@ class HomePageState extends State<HomePage> {
                                                                             SharedPreferences prefs = await SharedPreferences.getInstance();
                                                                             String userId =  prefs.getString(Constants.SHARED_PREF_USER_ID);
                                                                             var dio = Dio();
-                                                                            var deletePuppyUrl = 'https://obpdevstage.wpengine.com/wp-json/obp-api/delete_puppy';
+                                                                            var deletePuppyUrl = 'https://onebarkplaza.com/wp-json/obp-api/delete_puppy';
                                                                             FormData formData = new FormData.fromMap({
                                                                               "user_id": userId,
                                                                               "puppy_id": data[index].puppyId,

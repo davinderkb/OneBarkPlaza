@@ -28,7 +28,7 @@ import 'package:one_bark_plaza/util/utility.dart';
 import 'edit_puppy.dart';
 import 'filter.dart';
 final blueColor = Color(0xff4C8BF5);
-TextStyle style = TextStyle(fontFamily: 'NunitoSans', fontSize: 14.0, color: Color(0xff707070));
+TextStyle style = TextStyle(fontFamily: 'NunitoSans', fontSize: 14.0, color: Color(0xff707070), fontWeight: FontWeight.bold);
 class Orders extends StatefulWidget {
   OrdersState orderPageState;
 
@@ -38,8 +38,8 @@ class Orders extends StatefulWidget {
   }
 }
 
-var getAllOrdersUrl = 'https://obpdevstage.wpengine.com/wp-json/obp/v1/orders';
-var getSingleOrderUrl = 'https://obpdevstage.wpengine.com/wp-json/obp/v1/order';
+var getAllOrdersUrl = 'https://onebarkplaza.com/wp-json/obp/v1/orders';
+var getSingleOrderUrl = 'https://onebarkplaza.com/wp-json/obp/v1/order';
 Future<List<OrderDetails>> ordersList(BuildContext context) async {
   var dio = Dio();
   SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -719,7 +719,7 @@ class OrdersState extends State<Orders> {
       actions: <Widget>[
         CupertinoActionSheetAction(
 
-          child: Container(alignment:Alignment.center,child: Text('Earning - high to low', style:style.copyWith(fontWeight: isSortEarningHighToLow ? FontWeight.bold:FontWeight.normal),textAlign: TextAlign.left, )),
+          child: Container(alignment:Alignment.center,child: Text('Earning - high to low', style:style.copyWith(color: isSortEarningHighToLow ? greenColor:Colors.black87),textAlign: TextAlign.left, )),
           onPressed: () {
             Navigator.pop(context);
             setState(() {

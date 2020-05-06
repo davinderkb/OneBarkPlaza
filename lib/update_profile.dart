@@ -17,7 +17,7 @@ import 'package:one_bark_plaza/util/utility.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:toast/toast.dart';
 final customColor = Color(0xff7FA432);
-var updateProfileUrl = 'https://obpdevstage.wpengine.com/wp-json/obp/v1/profile';
+var updateProfileUrl = 'https://onebarkplaza.com/wp-json/obp/v1/profile';
 
 class UpdateProfile extends StatefulWidget {
   String profilePic, gender, name;

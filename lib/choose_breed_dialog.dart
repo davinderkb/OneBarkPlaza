@@ -277,7 +277,7 @@ class ChoosBreedDailogState extends State<ChooseBreedDialog>{
   Future<List<Breed>> getAllBreeds(BuildContext context) async{
 
     var dio = Dio();
-    var allBreedsUrl = 'https://obpdevstage.wpengine.com/wp-json/obp/v1/breeds/';
+    var allBreedsUrl = 'https://onebarkplaza.com/wp-json/obp/v1/breeds/';
     FormData formData = new FormData.fromMap({});
     final list = List<Breed>();
     dynamic response = await dio.get(allBreedsUrl);
