@@ -28,7 +28,7 @@ import 'img.dart';
 import 'package:flutter_absolute_path/flutter_absolute_path.dart';
 import 'package:path_provider/path_provider.dart';
 
-final greenColor = Color(0xff7FA432);
+final obpBlueColor = Color(0XFF3DB6C6);
 final blueColor = Color(0xff4C8BF5);
 
 class EditPuppy extends StatefulWidget {
@@ -67,6 +67,7 @@ class EditPuppy extends StatefulWidget {
         puppyDetails.isKidFriendly,
         puppyDetails.isMicrochipped,
         puppyDetails.isSocialized,
+        puppyDetails.isSoldByObp,
         puppyDetails.coverPic
     );
   }
@@ -249,7 +250,7 @@ class EditPuppyState extends State<EditPuppy> {
         TextStyle(fontFamily: 'NunitoSans', fontSize: 14.0, color: hintColor);
     TextStyle labelStyle = TextStyle(
       fontFamily: 'NunitoSans',
-      color: greenColor,
+      color: obpBlueColor,
       fontSize: 12,
     );
     var maleColor = Color(0xff5cbaed);
@@ -261,14 +262,14 @@ class EditPuppyState extends State<EditPuppy> {
         alignment: Alignment.bottomCenter,
         child: SpinKitRipple(
           borderWidth: 100.0,
-          color: greenColor,
+          color: obpBlueColor,
           size: 120,
         )):Scaffold(
         key: globalKey,
         backgroundColor: Colors.transparent,
         appBar: new AppBar(
           leading: new IconButton(
-            icon: new Icon(Icons.arrow_back, color: greenColor),
+            icon: new Icon(Icons.arrow_back, color: obpBlueColor),
             onPressed: () => Navigator.of(context).maybePop(),
           ),
           title: Row(
@@ -282,7 +283,7 @@ class EditPuppyState extends State<EditPuppy> {
                       fontFamily: 'NunitoSans',
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
-                      color: greenColor),
+                      color: obpBlueColor),
                   textAlign: TextAlign.center,
                 ),
               ]),
@@ -332,7 +333,7 @@ class EditPuppyState extends State<EditPuppy> {
                                       alignment: Alignment.center,
                                       child: SpinKitRing(
                                         lineWidth: 2,
-                                        color: greenColor,
+                                        color: obpBlueColor,
                                         size: 50.0,
                                       ),
                                     );
@@ -452,7 +453,7 @@ class EditPuppyState extends State<EditPuppy> {
                                                     color: Color(0xffffffff),
                                                     borderRadius:
                                                     BorderRadius.all(Radius.circular(24)),
-                                                    border: Border.all(color:greenColor, width: 3.0, ),
+                                                    border: Border.all(color:obpBlueColor, width: 3.0, ),
                                                     boxShadow: [
                                                       BoxShadow(
                                                         color: Colors.grey,
@@ -469,7 +470,7 @@ class EditPuppyState extends State<EditPuppy> {
                                                   BorderRadius.circular(24.0),
                                                   child:Padding(
                                                     padding: const EdgeInsets.fromLTRB(35,27,27,27),
-                                                    child: Image.asset("assets/images/ic_dp.png", color: greenColor,),
+                                                    child: Image.asset("assets/images/ic_dp.png", color: obpBlueColor,),
                                                   ),
                                                 )),
                                           ),
@@ -497,12 +498,12 @@ class EditPuppyState extends State<EditPuppy> {
                           child: new RaisedButton.icon(
                               shape: RoundedRectangleBorder(
                                   borderRadius: new BorderRadius.circular(30.0),
-                                  side: BorderSide(color: greenColor, width: 2.0)
+                                  side: BorderSide(color: obpBlueColor, width: 2.0)
                               ),
                               onPressed: loadAssets,
                               color: Color(0xffffffff),
-                              icon: new Icon(Icons.image, color:greenColor, size:16),
-                              label: new Text("Add Images", style: TextStyle(color:greenColor,fontFamily:"NunitoSans", fontWeight: FontWeight.bold, fontSize: 13),)),
+                              icon: new Icon(Icons.image, color:obpBlueColor, size:16),
+                              label: new Text("Add Images", style: TextStyle(color:obpBlueColor,fontFamily:"NunitoSans", fontWeight: FontWeight.bold, fontSize: 13),)),
                         ):SizedBox(height: 0,),
                         SizedBox(height: 24),
                         Center(
@@ -526,19 +527,19 @@ class EditPuppyState extends State<EditPuppy> {
                                   labelStyle: labelStyle,
                                   focusedBorder: OutlineInputBorder(
                                     borderSide: BorderSide(
-                                        color: greenColor, width: 3.0),
+                                        color: obpBlueColor, width: 3.0),
                                     borderRadius:
                                         BorderRadius.circular(borderRadius),
                                   ),
                                   enabledBorder: OutlineInputBorder(
                                     borderSide: BorderSide(
-                                        color: greenColor, width: 2.0),
+                                        color: obpBlueColor, width: 2.0),
                                     borderRadius:
                                         BorderRadius.circular(borderRadius),
                                   ),
                                   border: OutlineInputBorder(
                                     borderSide: BorderSide(
-                                        color: greenColor, width: 2.0),
+                                        color: obpBlueColor, width: 2.0),
                                     borderRadius:
                                         BorderRadius.circular(borderRadius),
                                   )),
@@ -593,7 +594,7 @@ class EditPuppyState extends State<EditPuppy> {
                                   labelText: 'Breed',
                                   labelStyle: labelStyle,
                                   border: OutlineInputBorder(),
-                                  enabledBorder: OutlineInputBorder(borderRadius:  new BorderRadius.circular(30), borderSide: BorderSide(width: 2.0, color: greenColor) ),
+                                  enabledBorder: OutlineInputBorder(borderRadius:  new BorderRadius.circular(30), borderSide: BorderSide(width: 2.0, color: obpBlueColor) ),
                                 ),
                                 child: Row(
                                   mainAxisAlignment:
@@ -606,7 +607,7 @@ class EditPuppyState extends State<EditPuppy> {
                                       style: TextStyle(
                                           fontFamily: "NunitoSans",
                                           fontSize: 14,
-                                          color: greenColor),
+                                          color: obpBlueColor),
                                     ),
                                     Padding(
                                         padding:
@@ -615,7 +616,7 @@ class EditPuppyState extends State<EditPuppy> {
                                         child: Container(
                                           height: 40,
                                           width: 40,
-                                          child: _isBreedSelectedOnce?Icon(Icons.check, color: Colors.green):Icon(Icons.format_list_bulleted, color: greenColor),
+                                          child: _isBreedSelectedOnce?Icon(Icons.check, color: Colors.green):Icon(Icons.format_list_bulleted, color: obpBlueColor),
                                         )),
                                   ],
                                 ),
@@ -656,7 +657,7 @@ class EditPuppyState extends State<EditPuppy> {
                                   labelText: 'Date of Birth',
                                   labelStyle: labelStyle,
                                   border: OutlineInputBorder(),
-                                  enabledBorder: OutlineInputBorder(borderRadius:  new BorderRadius.circular(30), borderSide: BorderSide(width: 2.0, color: greenColor)),
+                                  enabledBorder: OutlineInputBorder(borderRadius:  new BorderRadius.circular(30), borderSide: BorderSide(width: 2.0, color: obpBlueColor)),
                                 ),
                                 child: Row(
                                   mainAxisAlignment:
@@ -669,7 +670,7 @@ class EditPuppyState extends State<EditPuppy> {
                                       style: TextStyle(
                                           fontFamily: "NunitoSans",
                                           fontSize: 14,
-                                          color: greenColor),
+                                          color: obpBlueColor),
                                     ),
                                     Padding(
                                         padding:
@@ -678,7 +679,7 @@ class EditPuppyState extends State<EditPuppy> {
                                         child: Container(
                                           height: 40,
                                           width: 40,
-                                          child: Icon(Icons.calendar_today, color: greenColor),
+                                          child: Icon(Icons.calendar_today, color: obpBlueColor),
                                         )),
                                   ],
                                 ),
@@ -769,15 +770,15 @@ class EditPuppyState extends State<EditPuppy> {
                                   labelText: 'Description',
                                   labelStyle: labelStyle,
                                   focusedBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(color: greenColor, width: 3.0),
+                                    borderSide: BorderSide(color: obpBlueColor, width: 3.0),
                                     borderRadius: BorderRadius.circular(borderRadius),
                                   ),
                                   enabledBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(color: greenColor, width: 2.0),
+                                    borderSide: BorderSide(color: obpBlueColor, width: 2.0),
                                     borderRadius: BorderRadius.circular(borderRadius),
                                   ),
                                   border: OutlineInputBorder(
-                                    borderSide: BorderSide(color: greenColor, width: 2.0),
+                                    borderSide: BorderSide(color: obpBlueColor, width: 2.0),
                                     borderRadius: BorderRadius.circular(borderRadius),
                                   )
                               ),
@@ -812,15 +813,15 @@ class EditPuppyState extends State<EditPuppy> {
                                         labelText: 'Color',
                                         labelStyle: labelStyle,
                                         focusedBorder: OutlineInputBorder(
-                                          borderSide: BorderSide(color: greenColor, width: 3.0),
+                                          borderSide: BorderSide(color: obpBlueColor, width: 3.0),
                                           borderRadius: BorderRadius.circular(borderRadius),
                                         ),
                                         enabledBorder: OutlineInputBorder(
-                                          borderSide: BorderSide(color: greenColor, width: 2.0),
+                                          borderSide: BorderSide(color: obpBlueColor, width: 2.0),
                                           borderRadius: BorderRadius.circular(borderRadius),
                                         ),
                                         border: OutlineInputBorder(
-                                          borderSide: BorderSide(color: greenColor, width: 2.0),
+                                          borderSide: BorderSide(color: obpBlueColor, width: 2.0),
                                           borderRadius: BorderRadius.circular(borderRadius),
                                         )
                                     ),
@@ -847,15 +848,15 @@ class EditPuppyState extends State<EditPuppy> {
                                         labelText: 'Weight',
                                         labelStyle: labelStyle,
                                         focusedBorder: OutlineInputBorder(
-                                          borderSide: BorderSide(color: greenColor, width: 3.0),
+                                          borderSide: BorderSide(color: obpBlueColor, width: 3.0),
                                           borderRadius: BorderRadius.circular(borderRadius),
                                         ),
                                         enabledBorder: OutlineInputBorder(
-                                          borderSide: BorderSide(color: greenColor, width: 2.0),
+                                          borderSide: BorderSide(color: obpBlueColor, width: 2.0),
                                           borderRadius: BorderRadius.circular(borderRadius),
                                         ),
                                         border: OutlineInputBorder(
-                                          borderSide: BorderSide(color: greenColor, width: 2.0),
+                                          borderSide: BorderSide(color: obpBlueColor, width: 2.0),
                                           borderRadius: BorderRadius.circular(borderRadius),
                                         )
                                     ),
@@ -895,15 +896,15 @@ class EditPuppyState extends State<EditPuppy> {
                                         labelText: "Dad's Weight",
                                         labelStyle: labelStyle,
                                         focusedBorder: OutlineInputBorder(
-                                          borderSide: BorderSide(color: greenColor, width: 3.0),
+                                          borderSide: BorderSide(color: obpBlueColor, width: 3.0),
                                           borderRadius: BorderRadius.circular(borderRadius),
                                         ),
                                         enabledBorder: OutlineInputBorder(
-                                          borderSide: BorderSide(color: greenColor, width: 2.0),
+                                          borderSide: BorderSide(color: obpBlueColor, width: 2.0),
                                           borderRadius: BorderRadius.circular(borderRadius),
                                         ),
                                         border: OutlineInputBorder(
-                                          borderSide: BorderSide(color: greenColor, width: 2.0),
+                                          borderSide: BorderSide(color: obpBlueColor, width: 2.0),
                                           borderRadius: BorderRadius.circular(borderRadius),
                                         )
                                     ),
@@ -931,15 +932,15 @@ class EditPuppyState extends State<EditPuppy> {
                                         labelText: "Mom's Weight",
                                         labelStyle: labelStyle,
                                         focusedBorder: OutlineInputBorder(
-                                          borderSide: BorderSide(color: greenColor, width: 3.0),
+                                          borderSide: BorderSide(color: obpBlueColor, width: 3.0),
                                           borderRadius: BorderRadius.circular(borderRadius),
                                         ),
                                         enabledBorder: OutlineInputBorder(
-                                          borderSide: BorderSide(color: greenColor, width: 2.0),
+                                          borderSide: BorderSide(color: obpBlueColor, width: 2.0),
                                           borderRadius: BorderRadius.circular(borderRadius),
                                         ),
                                         border: OutlineInputBorder(
-                                          borderSide: BorderSide(color: greenColor, width: 2.0),
+                                          borderSide: BorderSide(color: obpBlueColor, width: 2.0),
                                           borderRadius: BorderRadius.circular(borderRadius),
                                         )
                                     ),
@@ -973,15 +974,15 @@ class EditPuppyState extends State<EditPuppy> {
                                   labelText: 'Asking Price',
                                   labelStyle: labelStyle,
                                   focusedBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(color: greenColor, width: 3.0),
+                                    borderSide: BorderSide(color: obpBlueColor, width: 3.0),
                                     borderRadius: BorderRadius.circular(borderRadius),
                                   ),
                                   enabledBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(color: greenColor, width: 2.0),
+                                    borderSide: BorderSide(color: obpBlueColor, width: 2.0),
                                     borderRadius: BorderRadius.circular(borderRadius),
                                   ),
                                   border: OutlineInputBorder(
-                                    borderSide: BorderSide(color: greenColor, width: 2.0),
+                                    borderSide: BorderSide(color: obpBlueColor, width: 2.0),
                                     borderRadius: BorderRadius.circular(borderRadius),
                                   )
                               ),
@@ -1012,15 +1013,15 @@ class EditPuppyState extends State<EditPuppy> {
                                   labelText: 'Shipping Cost',
                                   labelStyle: labelStyle,
                                   focusedBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(color: greenColor, width: 3.0),
+                                    borderSide: BorderSide(color: obpBlueColor, width: 3.0),
                                     borderRadius: BorderRadius.circular(borderRadius),
                                   ),
                                   enabledBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(color: greenColor, width: 2.0),
+                                    borderSide: BorderSide(color: obpBlueColor, width: 2.0),
                                     borderRadius: BorderRadius.circular(borderRadius),
                                   ),
                                   border: OutlineInputBorder(
-                                    borderSide: BorderSide(color: greenColor, width: 2.0),
+                                    borderSide: BorderSide(color: obpBlueColor, width: 2.0),
                                     borderRadius: BorderRadius.circular(borderRadius),
                                   )
                               ),
@@ -1049,15 +1050,15 @@ class EditPuppyState extends State<EditPuppy> {
                                   labelText: 'Registry',
                                   labelStyle: labelStyle,
                                   focusedBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(color: greenColor, width: 3.0),
+                                    borderSide: BorderSide(color: obpBlueColor, width: 3.0),
                                     borderRadius: BorderRadius.circular(borderRadius),
                                   ),
                                   enabledBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(color: greenColor, width: 2.0),
+                                    borderSide: BorderSide(color: obpBlueColor, width: 2.0),
                                     borderRadius: BorderRadius.circular(borderRadius),
                                   ),
                                   border: OutlineInputBorder(
-                                    borderSide: BorderSide(color: greenColor, width: 2.0),
+                                    borderSide: BorderSide(color: obpBlueColor, width: 2.0),
                                     borderRadius: BorderRadius.circular(borderRadius),
                                   )
                               ),
@@ -1086,15 +1087,15 @@ class EditPuppyState extends State<EditPuppy> {
                                   labelText: 'Vet Name',
                                   labelStyle: labelStyle,
                                   focusedBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(color: greenColor, width: 3.0),
+                                    borderSide: BorderSide(color: obpBlueColor, width: 3.0),
                                     borderRadius: BorderRadius.circular(borderRadius),
                                   ),
                                   enabledBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(color: greenColor, width: 2.0),
+                                    borderSide: BorderSide(color: obpBlueColor, width: 2.0),
                                     borderRadius: BorderRadius.circular(borderRadius),
                                   ),
                                   border: OutlineInputBorder(
-                                    borderSide: BorderSide(color: greenColor, width: 2.0),
+                                    borderSide: BorderSide(color: obpBlueColor, width: 2.0),
                                     borderRadius: BorderRadius.circular(borderRadius),
                                   )
                               ),
@@ -1123,15 +1124,15 @@ class EditPuppyState extends State<EditPuppy> {
                                   labelText: 'Vet Address',
                                   labelStyle: labelStyle,
                                   focusedBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(color: greenColor, width: 3.0),
+                                    borderSide: BorderSide(color: obpBlueColor, width: 3.0),
                                     borderRadius: BorderRadius.circular(borderRadius),
                                   ),
                                   enabledBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(color: greenColor, width: 2.0),
+                                    borderSide: BorderSide(color: obpBlueColor, width: 2.0),
                                     borderRadius: BorderRadius.circular(borderRadius),
                                   ),
                                   border: OutlineInputBorder(
-                                    borderSide: BorderSide(color: greenColor, width: 2.0),
+                                    borderSide: BorderSide(color: obpBlueColor, width: 2.0),
                                     borderRadius: BorderRadius.circular(borderRadius),
                                   )
                               ),
@@ -1172,7 +1173,7 @@ class EditPuppyState extends State<EditPuppy> {
                                   labelText: 'Check-up Date',
                                   labelStyle: labelStyle,
                                   border: OutlineInputBorder(),
-                                  enabledBorder: OutlineInputBorder(borderRadius:  new BorderRadius.circular(30), borderSide: BorderSide(width: 2.0, color: greenColor)),
+                                  enabledBorder: OutlineInputBorder(borderRadius:  new BorderRadius.circular(30), borderSide: BorderSide(width: 2.0, color: obpBlueColor)),
                                 ),
                                 child: Row(
                                   mainAxisAlignment:
@@ -1185,7 +1186,7 @@ class EditPuppyState extends State<EditPuppy> {
                                       style: TextStyle(
                                           fontFamily: "NunitoSans",
                                           fontSize: 14,
-                                          color: greenColor),
+                                          color: obpBlueColor),
                                     ),
                                     Padding(
                                         padding:
@@ -1194,7 +1195,7 @@ class EditPuppyState extends State<EditPuppy> {
                                         child: Container(
                                           height: 40,
                                           width: 40,
-                                          child: Icon(Icons.calendar_today, color: greenColor),
+                                          child: Icon(Icons.calendar_today, color: obpBlueColor),
                                         )),
                                   ],
                                 ),
@@ -1229,7 +1230,7 @@ class EditPuppyState extends State<EditPuppy> {
                                   labelText: 'Vet Check Report',
                                   labelStyle: labelStyle,
                                   border: OutlineInputBorder(),
-                                  enabledBorder: OutlineInputBorder(borderRadius:  new BorderRadius.circular(30), borderSide: BorderSide(width:2.0, color: greenColor)),
+                                  enabledBorder: OutlineInputBorder(borderRadius:  new BorderRadius.circular(30), borderSide: BorderSide(width:2.0, color: obpBlueColor)),
                                 ),
                                 child: Container(
 
@@ -1306,7 +1307,7 @@ class EditPuppyState extends State<EditPuppy> {
                                                       filter: ImageFilter.blur(sigmaX:2.0,sigmaY:2.0),
                                                       child: SpinKitRing(
                                                         lineWidth: 2,
-                                                        color: greenColor,
+                                                        color: obpBlueColor,
                                                         size: 50,
                                                       ),
                                                     ),
@@ -1391,7 +1392,7 @@ class EditPuppyState extends State<EditPuppy> {
                                             BorderRadius.circular(24.0),
                                             child:Padding(
                                               padding: const EdgeInsets.fromLTRB(0,0,12 ,0),
-                                              child: Icon(Icons.file_upload, color: greenColor,),
+                                              child: Icon(Icons.file_upload, color: obpBlueColor,),
                                             ),
                                           ),
                                         ],
@@ -1431,7 +1432,7 @@ class EditPuppyState extends State<EditPuppy> {
                                   labelText: 'Flight Ticket',
                                   labelStyle: labelStyle,
                                   border: OutlineInputBorder(),
-                                  enabledBorder: OutlineInputBorder(borderRadius:  new BorderRadius.circular(30), borderSide: BorderSide(width:2.0, color: greenColor)),
+                                  enabledBorder: OutlineInputBorder(borderRadius:  new BorderRadius.circular(30), borderSide: BorderSide(width:2.0, color: obpBlueColor)),
                                 ),
                                 child: Container(
 
@@ -1507,7 +1508,7 @@ class EditPuppyState extends State<EditPuppy> {
                                                         filter: ImageFilter.blur(sigmaX:2.0,sigmaY:2.0),
                                                         child: SpinKitRing(
                                                           lineWidth: 2,
-                                                          color: greenColor,
+                                                          color: obpBlueColor,
                                                           size: 50,
                                                         ),
                                                       ),
@@ -1592,7 +1593,7 @@ class EditPuppyState extends State<EditPuppy> {
                                             BorderRadius.circular(24.0),
                                             child:Padding(
                                               padding: const EdgeInsets.fromLTRB(0,0,12 ,0),
-                                              child: Icon(Icons.file_upload, color: greenColor,),
+                                              child: Icon(Icons.file_upload, color: obpBlueColor,),
                                             ),
                                           ),
                                         ],
@@ -1622,7 +1623,7 @@ class EditPuppyState extends State<EditPuppy> {
                                 MergeSemantics(
                                   child: ListTile(
                                     dense: true,
-                                    title: Text('Champion Bloodline', style: TextStyle(fontSize: 13,  color:  isChampionBloodline?greenColor : Color(0xffA9A9A9)),),
+                                    title: Text('Champion Bloodline', style: TextStyle(fontSize: 13,  color:  isChampionBloodline?obpBlueColor : Color(0xffA9A9A9)),),
                                     trailing: Transform.scale(
                                       scale: 0.75,
                                       child: CupertinoSwitch(
@@ -1645,7 +1646,7 @@ class EditPuppyState extends State<EditPuppy> {
                                 MergeSemantics(
                                   child: ListTile(
                                     dense: true,
-                                    title: Text('Family Raised', style: TextStyle(fontSize: 13,  color:  isFamilyRaised?greenColor : Color(0xffA9A9A9)),),
+                                    title: Text('Family Raised', style: TextStyle(fontSize: 13,  color:  isFamilyRaised?obpBlueColor : Color(0xffA9A9A9)),),
                                     trailing: Transform.scale(
                                       scale: 0.75,
                                       child: CupertinoSwitch(
@@ -1668,7 +1669,7 @@ class EditPuppyState extends State<EditPuppy> {
                                 MergeSemantics(
                                   child: ListTile(
                                     dense: true,
-                                    title: Text('Kid Friendly', style: TextStyle(fontSize: 13,  color:  isKidFriendly?greenColor : Color(0xffA9A9A9)),),
+                                    title: Text('Kid Friendly', style: TextStyle(fontSize: 13,  color:  isKidFriendly?obpBlueColor : Color(0xffA9A9A9)),),
                                     trailing: Transform.scale(
                                       scale: 0.75,
                                       child: CupertinoSwitch(
@@ -1691,7 +1692,7 @@ class EditPuppyState extends State<EditPuppy> {
                                 MergeSemantics(
                                   child: ListTile(
                                     dense: true,
-                                    title: Text('Microchipped', style: TextStyle(fontSize: 13,  color:  isMicrochipped?greenColor : Color(0xffA9A9A9)),),
+                                    title: Text('Microchipped', style: TextStyle(fontSize: 13,  color:  isMicrochipped?obpBlueColor : Color(0xffA9A9A9)),),
                                     trailing: Transform.scale(
                                       scale: 0.75,
                                       child: CupertinoSwitch(
@@ -1714,7 +1715,7 @@ class EditPuppyState extends State<EditPuppy> {
                                 MergeSemantics(
                                   child: ListTile(
                                     dense: true,
-                                    title: Text('Socialized', style: TextStyle(fontSize: 13,  color:  isSocialized?greenColor : Color(0xffA9A9A9)),),
+                                    title: Text('Socialized', style: TextStyle(fontSize: 13,  color:  isSocialized?obpBlueColor : Color(0xffA9A9A9)),),
                                     trailing: Transform.scale(
                                       scale: 0.75,
                                       child: CupertinoSwitch(
@@ -1741,7 +1742,7 @@ class EditPuppyState extends State<EditPuppy> {
                         SizedBox(height: 30,),
                         Center(
                           child: FlatButton.icon(
-                            color: greenColor,
+                            color: obpBlueColor,
                             icon: Icon(Icons.save, color:Colors.white, size: 20,),
                             shape: RoundedRectangleBorder(
                                 borderRadius: new BorderRadius.only(

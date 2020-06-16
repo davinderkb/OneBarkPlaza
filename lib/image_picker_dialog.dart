@@ -101,8 +101,8 @@ class ImagePickerDialog extends StatelessWidget {
                       child: roundedButton(
                           "Cancel",
                           EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 0.0),
-                          Colors.redAccent,
-                          const Color(0xFFFFFFFF), Icons.cancel, Colors.white),
+                          Color(0xfffffd19),
+                          Colors.black, Icons.cancel, Colors.black),
                     ),
                   ),
                 ],

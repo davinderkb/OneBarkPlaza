@@ -5,7 +5,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:one_bark_plaza/order_details.dart';
 
 import 'main.dart';
-final greenColor = Color(0xff7FA432);
+final obpBlueColor = Color(0XFF3DB6C6);
 class OrderDetailsPage extends StatefulWidget {
   OrderDetails orderDetails;
   OrderDetailsPage(OrderDetails orderDetails){
@@ -35,9 +35,9 @@ class _OrderDetailsPageState extends State<OrderDetailsPage> {
         backgroundColor: Colors.white,
         appBar: new AppBar(
           //iconTheme: new IconThemeData(color: Color(0xff262B31)),
-          iconTheme: new IconThemeData(color: greenColor),
+          iconTheme: new IconThemeData(color: obpBlueColor),
           leading: new IconButton(
-            icon: new Icon(Icons.arrow_back, color: greenColor),
+            icon: new Icon(Icons.arrow_back, color: obpBlueColor),
             onPressed: () => Navigator.of(context).maybePop(),
           ),
           title: Row(
@@ -51,21 +51,21 @@ class _OrderDetailsPageState extends State<OrderDetailsPage> {
                       fontFamily: 'NunitoSans',
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
-                      color: greenColor),
+                      color: obpBlueColor),
                   textAlign: TextAlign.center,
                 ),
                 Column(
                   mainAxisAlignment: MainAxisAlignment.end,
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: <Widget>[
-                    Text("\$ "+widget.orderDetails.vendorEarning.toString(),style: TextStyle(fontFamily:'NunitoSans',fontSize:14,color:greenColor, fontWeight:FontWeight.bold)),
+                    Text("\$ "+widget.orderDetails.vendorEarning.toString(),style: TextStyle(fontFamily:'NunitoSans',fontSize:14,color:obpBlueColor, fontWeight:FontWeight.bold)),
                     new Text(
                       "Total Earning",
                       style: new TextStyle(
                           fontFamily: 'NunitoSans',
                           fontSize: 11,
                           fontWeight: FontWeight.bold,
-                          color: greenColor),
+                          color: obpBlueColor),
                       textAlign: TextAlign.center,
                     ),
                   ],
@@ -114,7 +114,7 @@ class _OrderDetailsPageState extends State<OrderDetailsPage> {
                                 'NunitoSans',
                                 fontSize:15,
                                 color:
-                                greenColor,
+                                obpBlueColor,
                                 fontWeight:
                                 FontWeight
                                     .bold)),
@@ -133,8 +133,8 @@ class _OrderDetailsPageState extends State<OrderDetailsPage> {
                           Navigator.push(context, MaterialPageRoute(builder: (context) => null));
                         },
                         icon: Icon(Icons.edit, color: Colors.white, size: 11,),
-                        disabledColor: greenColor,
-                        color: greenColor,
+                        disabledColor: obpBlueColor,
+                        color: obpBlueColor,
                         shape: RoundedRectangleBorder(
                             borderRadius: new BorderRadius.only(
                               bottomLeft: Radius.circular(40.0),
@@ -293,7 +293,7 @@ class _OrderDetailsPageState extends State<OrderDetailsPage> {
                                                                   placeholder:
                                                                       (context, url) =>
                                                                       SpinKitCircle(
-                                                                        color: greenColor,
+                                                                        color: obpBlueColor,
                                                                         size: 30.0,
                                                                       ),
                                                                   errorWidget: (context,
@@ -512,8 +512,8 @@ class _OrderDetailsPageState extends State<OrderDetailsPage> {
                       onPressed: () {
                         Navigator.push(context, MaterialPageRoute(builder: (context) =>null));
                       },
-                      disabledColor: greenColor,
-                      color: greenColor,
+                      disabledColor: obpBlueColor,
+                      color: obpBlueColor,
                       shape: RoundedRectangleBorder(
                           borderRadius: new BorderRadius.only(
                             bottomLeft: Radius.circular(40.0),

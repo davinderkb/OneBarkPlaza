@@ -117,22 +117,22 @@ class ChoosBreedDailogState extends State<ChooseBreedDialog>{
                         },
                         textAlign: TextAlign.start,
                         controller: searchTextController,
-                        style: TextStyle(fontFamily:"NunitoSans",fontWeight: FontWeight.bold,color: Colors.lightGreen, fontSize: 15,),
+                        style: TextStyle(fontFamily:"NunitoSans",fontWeight: FontWeight.bold,color: Color(0xff3db6c6), fontSize: 15,),
                         decoration: InputDecoration(
                           border: InputBorder.none,
                           icon: Padding(
                             padding: const EdgeInsets.fromLTRB(16.0,2,0,0),
-                            child: Icon(Icons.find_in_page, color: Colors.lightGreen,size: 22,),
+                            child: Icon(Icons.find_in_page, color: Color(0xff3db6c6),size: 22,),
                           ),
                           contentPadding: EdgeInsets.fromLTRB(5.0, 0.0, 0.0, 0.0),
                           hintText: "Search",
-                          hintStyle: TextStyle(fontFamily:"NunitoSans",fontWeight: FontWeight.bold,color: Colors.lightGreen, fontSize: 15,),
+                          hintStyle: TextStyle(fontFamily:"NunitoSans",fontWeight: FontWeight.bold,color: Color(0xff3db6c6), fontSize: 15,),
 
                         ),
                       ),
                     ),
                   ),
-                  Container(height: 1.5, color:Colors.lightGreen),
+                  Container(height: 1.5, color:Color(0xff3db6c6)),
                   SizedBox(height: 8.0),
                   !widget.isLoadedOnce && searchTextController.text =="" ?
                   Expanded(
@@ -150,7 +150,7 @@ class ChoosBreedDailogState extends State<ChooseBreedDialog>{
                             return Container(
                               alignment: Alignment.center,
                               child: SpinKitFadingCircle(
-                                color: Colors.lightGreen,
+                                color: Color(0xff3db6c6),
                                 size: 50.0,
                               ),
                             );
@@ -200,7 +200,7 @@ class ChoosBreedDailogState extends State<ChooseBreedDialog>{
                                               0.0, 12.0, 0, 12),
                                           child: Text(data[index].name,style: style,),
                                         ),
-                                        Container(height: 1.0, color:Colors.grey),
+                                        Container(height: 1.0, color:Color(0xff3db6c6)),
 
                                       ],
                                     ),

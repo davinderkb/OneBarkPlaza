@@ -10,7 +10,7 @@ import 'package:one_bark_plaza/homepage.dart';
 import 'package:one_bark_plaza/puppy_details.dart';
 import 'package:one_bark_plaza/vertical_tabs.dart';
 
-final greenColor = Color(0xff7FA432);
+final obpBlueColor = Color(0XFF3DB6C6);
 final blueColor = Color(0xff4C8BF5);
 class Filter extends StatefulWidget {
   FilterState filterState;
@@ -77,7 +77,7 @@ class FilterState extends State<Filter> {
           preferredSize: Size.fromHeight(60.0),
           child: new AppBar(
             //iconTheme: new IconThemeData(color: Color(0xff262B31)),
-            iconTheme: new IconThemeData(color: Colors.pinkAccent),
+            iconTheme: new IconThemeData(color: Color(0xff3db6c6)),
             leading: Center(
               child: Padding(
                 padding: const EdgeInsets.fromLTRB(10,16,0,0),
@@ -143,7 +143,7 @@ class FilterState extends State<Filter> {
                         child: Text(
                           'CLEAR ALL',
                           textAlign: TextAlign.start,
-                          style: TextStyle(fontSize: 12, color: Colors.pinkAccent, fontWeight: FontWeight.bold),
+                          style: TextStyle(fontSize: 12, color: Color(0xff3db6c6), fontWeight: FontWeight.bold),
                         ),
                       ),
                     )
@@ -207,7 +207,7 @@ class FilterState extends State<Filter> {
                                     height: 48,
                                     child: Row(
                                       children: <Widget>[
-                                        Icon(Icons.check, size: 18, color: widget.setOfBreedFilter[index].isSelected? Colors.pink : Colors.grey),
+                                        Icon(Icons.check, size: 18, color: widget.setOfBreedFilter[index].isSelected? Color(0xff3db6c6): Colors.grey),
                                         SizedBox(width: 12),
                                         Flexible(child: Container(child: Text(widget.setOfBreedFilter[index].breedName, style: TextStyle(fontSize: 13, color: Colors.black54),)))
                                       ],
@@ -252,7 +252,7 @@ class FilterState extends State<Filter> {
                                         height: 48,
                                         child: Row(
                                           children: <Widget>[
-                                            Icon(Icons.check, size: 18, color: widget.genderFilter[index].isSelected? Colors.pink : Colors.grey),
+                                            Icon(Icons.check, size: 18, color: widget.genderFilter[index].isSelected? Color(0xff3db6c6): Colors.grey),
                                             SizedBox(width: 12),
                                             Flexible(child: Container(child: Text(widget.genderFilter[index].genderType, style: TextStyle(fontSize: 13, color: Colors.black54),)))
                                           ],
@@ -318,7 +318,7 @@ class FilterState extends State<Filter> {
 
                                     fontSize: 13,
                                     fontWeight: FontWeight.bold,
-                                    color: Colors.pinkAccent),
+                                    color: Color(0xff3db6c6)),
                                 textAlign: TextAlign.center,
                               )
                             ],
@@ -370,7 +370,7 @@ class FilterState extends State<Filter> {
 
                                     fontSize: 13,
                                     fontWeight: FontWeight.bold,
-                                    color: Colors.pinkAccent),
+                                    color: Color(0xff3db6c6)),
                                 textAlign: TextAlign.center,
                               )
                             ],
@@ -470,7 +470,7 @@ class _RangeSliderItemState extends State<RangeSliderItem> {
       title: widget.title,
       value: "\$$minValue - \$$maxValue",
       child: CupertinoRangeSlider(
-        activeColor: Colors.pinkAccent,
+        activeColor: Color(0xff3db6c6),
 
         minValue: minValue.roundToDouble(),
         maxValue: maxValue.roundToDouble(),

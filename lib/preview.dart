@@ -17,7 +17,7 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:toast/toast.dart';
 
-final greenColor = Color(0xff7FA432);
+final obpBlueColor = Color(0XFF3DB6C6);
 final blueColor = Color(0xff4C8BF5);
 class Preview extends StatefulWidget {
 
@@ -88,7 +88,7 @@ class PreviewState extends State<Preview> {
               ]),
           centerTitle: true,
           elevation: 0.0,
-          backgroundColor: greenColor,
+          backgroundColor: obpBlueColor,
         ),
         body:
         Padding(
@@ -130,7 +130,7 @@ class PreviewState extends State<Preview> {
                                   color: Color(0xffffffff),
                                   borderRadius:
                                   BorderRadius.all(Radius.circular(24)),
-                                  border: Border.all(color:greenColor, width: 1.0, ),
+                                  border: Border.all(color:obpBlueColor, width: 1.0, ),
                                   boxShadow: [
                                     BoxShadow(
                                       color: Colors.grey,
@@ -176,7 +176,7 @@ class PreviewState extends State<Preview> {
               ]),
           centerTitle: true,
           elevation: 0.0,
-          backgroundColor: greenColor,
+          backgroundColor: obpBlueColor,
         ),
         body:
         Padding(
@@ -188,7 +188,7 @@ class PreviewState extends State<Preview> {
                       color: Color(0xffffffff),
                       borderRadius:
                       BorderRadius.all(Radius.circular(24)),
-                      border: Border.all(color:greenColor, width: 1.0, ),
+                      border: Border.all(color:obpBlueColor, width: 1.0, ),
                       boxShadow: [
                         BoxShadow(
                           color: Colors.grey,

@@ -22,7 +22,7 @@ import 'package:path_provider/path_provider.dart';
 
 
 import 'homepage.dart';
-final greenColor = Color(0xff7FA432);
+final obpBlueColor = Color(0XFF3DB6C6);
 final blueColor = Color(0xff4C8BF5);
 final lightPinkBackground = Color(0xffFEF8F5);
 class ViewPuppy extends StatefulWidget {
@@ -89,7 +89,7 @@ class ViewPuppyState extends State<ViewPuppy> {
         appBar: new AppBar(
           backgroundColor: lightPinkBackground,
           leading: new IconButton(
-            icon: new Icon(Icons.arrow_back, color: greenColor),
+            icon: new Icon(Icons.arrow_back, color: obpBlueColor),
             onPressed: () {
               if(widget.isRefreshPop){
                 Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (BuildContext context) => HomePage()));
@@ -119,8 +119,8 @@ class ViewPuppyState extends State<ViewPuppy> {
                       Navigator.push(context, MaterialPageRoute(builder: (context) => EditPuppy(widget.puppyDetails)));
                     },
                     icon: Icon(Icons.edit, color: Colors.white, size: 14,),
-                    disabledColor: greenColor,
-                    color: greenColor,
+                    disabledColor: obpBlueColor,
+                    color: obpBlueColor,
                     shape: RoundedRectangleBorder(
                         borderRadius: new BorderRadius.only(
                           bottomLeft: Radius.circular(40.0),
@@ -197,7 +197,7 @@ class ViewPuppyState extends State<ViewPuppy> {
                                       fontSize:
                                       18,
                                       color:
-                                      greenColor,
+                                      obpBlueColor,
                                       fontWeight:
                                       FontWeight
                                           .normal)),
@@ -210,7 +210,7 @@ class ViewPuppyState extends State<ViewPuppy> {
                                     fontSize:
                                     18,
                                     color:
-                                    greenColor,
+                                    obpBlueColor,
                                     fontWeight:
                                     FontWeight
                                         .normal)),
@@ -310,7 +310,7 @@ class ViewPuppyState extends State<ViewPuppy> {
                                     Container(
                                         width: _width/2 -32,
                                         alignment: Alignment.topLeft,
-                                        child: Text(widget.puppyDetails.puppyWeight+" Kg", style: tableContentTextStyle,)
+                                        child: Text(widget.puppyDetails.puppyWeight+" lbs", style: tableContentTextStyle,)
                                     ),
                                   ],
                                 ),
@@ -369,7 +369,7 @@ class ViewPuppyState extends State<ViewPuppy> {
                                     Container(
                                         width: _width/2 -32,
                                         alignment: Alignment.topLeft,
-                                        child: Text(widget.puppyDetails.puppyMomWeight+" Kg", style: tableContentTextStyle,)
+                                        child: Text(widget.puppyDetails.puppyMomWeight+" lbs", style: tableContentTextStyle,)
                                     ),
                                   ],
                                 ),
@@ -388,7 +388,7 @@ class ViewPuppyState extends State<ViewPuppy> {
                                     Container(
                                         width: _width/2 -32,
                                         alignment: Alignment.topLeft,
-                                        child: Text(widget.puppyDetails.puppyDadWeight +" Kg", style: tableContentTextStyle,)
+                                        child: Text(widget.puppyDetails.puppyDadWeight +" lbs", style: tableContentTextStyle,)
                                     ),
                                   ],
                                 ),
@@ -571,7 +571,7 @@ class ViewPuppyState extends State<ViewPuppy> {
               children: <Widget>[
                 Image.asset("assets/images/ic_badge.png", height: 20,width: 20,),
                 SizedBox(width: 5,),
-                Text(badge, style: TextStyle(fontFamily: "NunitoSans", color: greenColor, fontSize: 13),),
+                Text(badge, style: TextStyle(fontFamily: "NunitoSans", color: obpBlueColor, fontSize: 13),),
               ],
             ),
           ),

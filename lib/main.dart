@@ -75,6 +75,8 @@ class MainNavigationDrawer extends StatefulWidget {
 class MainNavigationDrawerState extends State<MainNavigationDrawer>{
   dynamic user;
 
+  Color dividerColor = Color(0xfffffd19);
+
   @override
   void initState() {
     super.initState();
@@ -86,14 +88,14 @@ class MainNavigationDrawerState extends State<MainNavigationDrawer>{
     final _width = MediaQuery.of(context).size.width;
     final _height = MediaQuery.of(context).size.height;
     var drawerContentColor = Colors.white;
-    var drawerHeaderColorLightBlue = Colors.black;
+    var drawerHeaderColorLightBlue = Color(0xff3db6c6);
     var drawerAvatarBackgroundColor = Color(0xffFEF8F5);
-    var drawerBackground = Colors.black;
+    var drawerBackground = Color(0xff3db6c6);
     TextStyle listTileTextStyle = TextStyle(color:drawerContentColor,fontSize: 14, fontWeight:FontWeight.bold,fontFamily: 'NunitoSans');
 
 
     return Theme(
-        data: Theme.of(context).copyWith(canvasColor: Colors.black),
+        data: Theme.of(context).copyWith(canvasColor: Color(0xff3db6c6)),
       child: Container(
         width: _width/1.2,
         decoration: BoxDecoration(
@@ -103,7 +105,7 @@ class MainNavigationDrawerState extends State<MainNavigationDrawer>{
         child: new Drawer(
           child: ListTileTheme(
             textColor: drawerContentColor,
-            iconColor:  Colors.black87,
+            iconColor:  Color(0xff3db6c6),
             dense:true,
             child: ListView(
               // Important: Remove any padding from the ListView.
@@ -151,10 +153,10 @@ class MainNavigationDrawerState extends State<MainNavigationDrawer>{
                                       Row(
                                         mainAxisAlignment: MainAxisAlignment.center,
                                         children: <Widget>[
-                                          Text(data["name"],style: TextStyle(color:Colors.grey,fontSize: 15, fontWeight:FontWeight.bold, fontFamily: 'NunitoSans')),
+                                          Text(data["name"],style: TextStyle(color:Color(0xff464646),fontSize: 15, fontWeight:FontWeight.bold, fontFamily: 'NunitoSans')),
                                         ],
                                       ),
-                                      Text(data["email"],style: TextStyle(color:Colors.grey,fontSize: 12, fontFamily: 'NunitoSans')),
+                                      Text(data["email"],style: TextStyle(color:Color(0xff464646),fontSize: 12, fontFamily: 'NunitoSans')),
                                     ],
                                   ),
 
@@ -180,7 +182,7 @@ class MainNavigationDrawerState extends State<MainNavigationDrawer>{
                                             child: ClipRRect(
                                               borderRadius:BorderRadius.circular(300.0),
                                               child: FadeInImage.assetNetwork(
-                                                  placeholder: data["gender"]=="Male"
+                                                    placeholder: data["gender"]=="Male"
                                                       ? "assets/images/ic_profile_male.png"
                                                       : "assets/images/ic_profile_female.png",
                                                   image: data["profilePic"],
@@ -210,9 +212,9 @@ class MainNavigationDrawerState extends State<MainNavigationDrawer>{
                                           child: Container(
                                               height: 25,
                                               width: 25,
-                                              child: Icon(Icons.edit, color: greenColor,),
+                                              child: Icon(Icons.edit, color: Color(0xff464646),size: 20,),
                                               decoration: new BoxDecoration(
-                                                color: Colors.white,
+                                                color: Color(0xfffffd19),
                                                 shape: BoxShape.circle,
                                                 boxShadow: [
                                                   BoxShadow(
@@ -249,7 +251,7 @@ class MainNavigationDrawerState extends State<MainNavigationDrawer>{
                   },
                 ),
                 SizedBox(height: 4,),
-                new Divider(height: 1.0, color: greenColor),
+                new Divider(height: 1.0, color: dividerColor),
                 SizedBox(height: 4,),
                 ListTile(
                   title: Text("Add Puppy",style: listTileTextStyle,),
@@ -260,8 +262,8 @@ class MainNavigationDrawerState extends State<MainNavigationDrawer>{
                   },
                 ),
                 SizedBox(height: 4,),
-                new Divider(height: 1.0, color: greenColor),
-                SizedBox(height: 4,),
+                new Divider(height: 1.0, color: dividerColor),
+         /*       SizedBox(height: 4,),
                 ListTile(
                   title: Text("Orders",style:listTileTextStyle,),
                   leading: Image.asset("assets/images/ic_orders.png",  width: iconSize,color: Colors.white,),
@@ -270,7 +272,7 @@ class MainNavigationDrawerState extends State<MainNavigationDrawer>{
                   },
                 ),
                 SizedBox(height: 4,),
-                new Divider(height: 1.0, color: greenColor),
+                new Divider(height: 1.0, color: dividerColor),*/
                 SizedBox(height: 4,),
                 ListTile(
                   title: Text("Payment Options",style: listTileTextStyle,),
@@ -280,7 +282,7 @@ class MainNavigationDrawerState extends State<MainNavigationDrawer>{
                     ;
                   },
                 ),SizedBox(height: 4,),
-                new Divider(height: 1.0, color: greenColor),
+                new Divider(height: 1.0, color: dividerColor),
                 SizedBox(height: 4,),
                 ListTile(
                   title: Text("Payment History",style: listTileTextStyle,),
@@ -291,7 +293,7 @@ class MainNavigationDrawerState extends State<MainNavigationDrawer>{
                   },
                 ),
                 SizedBox(height: 4,),
-                new Divider(height: 1.0, color: greenColor),
+                new Divider(height: 1.0, color: dividerColor),
                 SizedBox(height: 4,),
                 ListTile(
                   title: Text(Constants.LOGOUT,style: listTileTextStyle,),

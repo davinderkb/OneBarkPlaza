@@ -9,6 +9,7 @@ class PuppyDetails {
   int _puppyId, _categoryId;
   List<ImageCustom> _gallery;
   DateTime _dob,_checkupDate;
+  bool _isSoldByObp;
   String _puppyName,
       _puppyPrice,
       _shippingCost,
@@ -30,6 +31,18 @@ class PuppyDetails {
       _checkUpDateString,
       _flightTicket
       ;
+
+  bool get isSoldByObp => _isSoldByObp;
+  bool get isSold{
+    if (_status=="sold" || _status == "soldobp"){
+      return true;
+    }
+    return false;
+  }
+
+  set isSoldByObp(bool value) {
+    _isSoldByObp = value;
+  }
 
   ImageCustom _coverPic;
 
@@ -100,7 +113,8 @@ class PuppyDetails {
       this._isFamilyRaised,
       this._isKidFriendly,
       this._isMicrochipped,
-      this._isSocialized){
+      this._isSocialized,
+      this._isSoldByObp){
     try{
       this._dob = new DateTime.fromMillisecondsSinceEpoch(_dobString.contains(".")?int.parse(_dobString.substring(0,_dobString.indexOf("."))):int.parse(_dobString));
       this._dobString = new DateFormat("MMM dd, yyyy").format(_dob);
@@ -162,6 +176,7 @@ class PuppyDetails {
       this._isKidFriendly,
       this._isMicrochipped,
       this._isSocialized,
+      this._isSoldByObp,
       this._coverPic);
 
   factory PuppyDetails.fromJson(dynamic json) {
@@ -205,6 +220,7 @@ class PuppyDetails {
         json['kid-friendly'].toString() == '1',
         json['microchipped'].toString() == '1',
         json['socialized'].toString() == '1',
+        json['sold-by-obp'].toString() == '1',
 
       );
     }

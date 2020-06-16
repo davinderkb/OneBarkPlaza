@@ -51,8 +51,9 @@ class ImagePickerHandler {
       ],
       androidUiSettings: AndroidUiSettings(
           toolbarTitle: 'Crop Image',
-          toolbarColor:  Colors.deepOrange,
+          toolbarColor:  Color(0xff3db6c6),
           toolbarWidgetColor: Colors.white,
+          activeControlsWidgetColor:Color(0xff3db6c6),
           initAspectRatio: CropAspectRatioPreset.original,
           lockAspectRatio: true),
       iosUiSettings: IOSUiSettings(

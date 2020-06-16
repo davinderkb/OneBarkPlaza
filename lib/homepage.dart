@@ -25,17 +25,17 @@ import 'package:one_bark_plaza/util/utility.dart';
 
 import 'edit_puppy.dart';
 import 'filter.dart';
-final customColor = Color(0xff7FA432);//Color(0xff4C8BF5);
+final customColor = Color(0xff3db6c6); //(0XFF3DB6C6);//Color(0xff4C8BF5);
 TextStyle style = TextStyle(
-    fontFamily: 'NunitoSans', fontSize: 14.0, color: Color(0xff707070));
+    fontFamily: 'NunitoSans', fontSize: 14.0, color: Color(0xff464646));
 class HomePage extends StatefulWidget {
   HomePageState homePageState;
-  bool isRedirectedFromDelete = false;
+  bool isRedirectedFromSoldByBreeder= false;
   HomePage() {
-    this.isRedirectedFromDelete = false;
+    this.isRedirectedFromSoldByBreeder= false;
   }
   HomePage.redirectedFromDelete(){
-    this.isRedirectedFromDelete = true;
+    this.isRedirectedFromSoldByBreeder= true;
   }
   @override
   HomePageState createState() {
@@ -54,10 +54,13 @@ Future<List<PuppyDetails>> _puppiesList(BuildContext context) async {
       "user_id": userId,
     });
     final list = List<PuppyDetails>();
-    dynamic response = await dio.post(puppyDetailsUrl,data:formData);
-    Map<String, dynamic> responseList = jsonDecode(response.toString());
-    for (dynamic item in responseList["breeder_puppies"]) {
-      list.add(PuppyDetails.fromJson(item));
+    try{
+      dynamic response = await dio.post(puppyDetailsUrl,data:formData);
+      Map<String, dynamic> responseList = jsonDecode(response.toString());
+      for (dynamic item in responseList["breeder_puppies"]) {
+        list.add(PuppyDetails.fromJson(item));
+      }
+    }catch(e){
     }
     return list;
   } else{
@@ -80,14 +83,14 @@ class HomePageState extends State<HomePage> {
   var isSortAgeHighToLow = false;
   var isSortAgeLowToHigh = false;
 
-  final greenColor = Color(0xff7FA432);
+  final obpColor = Color(0xff3db6c6);
 
   Filter filter;
 
   double minPrice;
   double maxPrice;
 
-  bool isDeleteSuccess = false;
+  bool isSoldByBreederSuccess = false;
 
 
 
@@ -96,8 +99,8 @@ class HomePageState extends State<HomePage> {
     super.initState();
     futureListOfPuppies = _puppiesList(context);
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      if(widget.isRedirectedFromDelete){
-        widget.isRedirectedFromDelete = false;
+      if(widget.isRedirectedFromSoldByBreeder){
+        widget.isRedirectedFromSoldByBreeder= false;
         Toast.show("Puppy Deleted Successfully", context);
       }
     } );
@@ -123,7 +126,7 @@ class HomePageState extends State<HomePage> {
           color: customColor,
           size: 120,
         ))
-        : isDeleteSuccess
+        : isSoldByBreederSuccess
         ? Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (BuildContext context) => HomePage.redirectedFromDelete()))
         : Scaffold(
         backgroundColor: Colors.white,
@@ -244,14 +247,14 @@ class HomePageState extends State<HomePage> {
                                         new RaisedButton(
                                             shape: RoundedRectangleBorder(
                                                 borderRadius: new BorderRadius.circular(30.0),
-                                                side: BorderSide(color: greenColor, width: 2.0)
+                                                side: BorderSide(color: obpColor, width: 2.0)
                                             ),
                                             onPressed: () async { checkConnectivityAndRefresh(context);},
                                             color:Colors.white,
                                             disabledColor: Colors.white,
                                             child: Padding(
                                               padding: const EdgeInsets.fromLTRB(8.0,0,8,0),
-                                              child: new Text("Try Again", style: TextStyle(color:greenColor,fontFamily:"NunitoSans", fontWeight: FontWeight.bold, fontSize: 13),),
+                                              child: new Text("Try Again", style: TextStyle(color:obpColor,fontFamily:"NunitoSans", fontWeight: FontWeight.bold, fontSize: 13),),
                                             )),
                                         SizedBox(height: 60),
                                       ],
@@ -339,225 +342,242 @@ class HomePageState extends State<HomePage> {
                                               ),
                                               SizedBox(width: 12,),
                                               Expanded(
-                                                child: Column(
-                                                  mainAxisSize: MainAxisSize.max,
-                                                  crossAxisAlignment:CrossAxisAlignment.start,
-                                                  mainAxisAlignment:MainAxisAlignment.start,
+                                                child: Row(
+                                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                  crossAxisAlignment: data[index].isSold?CrossAxisAlignment.center:CrossAxisAlignment.start,
                                                   children: <Widget>[
-                                                    Row(
-                                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                      children: <Widget>[
-                                                        Container(
-                                                          child: Text(
+                                                    Container(
+                                                      width:_width/3,
+                                                      child: Column(
+                                                        mainAxisSize: MainAxisSize.max,
+                                                        crossAxisAlignment:CrossAxisAlignment.start,
+                                                        mainAxisAlignment:MainAxisAlignment.start,
+                                                        children: <Widget>[
+                                                          SizedBox(height: 12,),
+                                                          Container(
+
+                                                            child: Text(
+                                                                data[index]
+                                                                    .puppyName,
+                                                                style: TextStyle(
+                                                                    fontFamily:
+                                                                        'NunitoSans',
+                                                                    fontSize:
+                                                                        14,
+                                                                    color:
+                                                                        Color(0xff464646),
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .bold)),
+                                                          ),
+                                                          Text(
                                                               data[index]
-                                                                  .puppyName,
+                                                                      .categoryName,
                                                               style: TextStyle(
                                                                   fontFamily:
                                                                       'NunitoSans',
                                                                   fontSize:
-                                                                      14,
-                                                                  color:
-                                                                      Colors.black87,
+                                                                      12,
+                                                                  color: customColor,
                                                                   fontWeight:
                                                                       FontWeight
                                                                           .bold)),
-                                                        ),
-                                                        Container(
-                                                          child: PopupMenuButton<String>(
-                                                            color: Color(0xfffff3e0),
-                                                            shape: RoundedRectangleBorder(
-                                                                borderRadius: new BorderRadius.only(
-                                                                  bottomLeft: Radius.circular(12.0),
-                                                                  topRight: Radius.circular(0.0),
-                                                                  topLeft: Radius.circular(12.0),
-                                                                  bottomRight: Radius.circular(12.0),
-                                                                ),
-                                                                side: BorderSide(
-                                                                  color: greenColor,
-                                                                )),
-                                                            // ignore: missing_return
-                                                            onSelected: (String value) {
-                                                              if(value == "Delete"){
-                                                                showDialog<void>(
-                                                                  context: context,
-                                                                  barrierDismissible: false, // user must tap button!
-                                                                  builder: (BuildContext context) {
-                                                                    return CupertinoAlertDialog(
-                                                                      title: Text('Are you sure?'),
-                                                                      content: Text('\nYou want to delete this puppy?'),
-                                                                      actions: <Widget>[
-                                                                        CupertinoDialogAction(
-                                                                          child: Text('No'),
-                                                                          onPressed: () {
-                                                                            Navigator.of(context).pop();
-                                                                          },
-                                                                        ),
-                                                                        CupertinoDialogAction(
-                                                                          child: Text('Yes'),
-                                                                          onPressed: () async{
-                                                                            Navigator.of(context).pop();
-                                                                            setState(() {
-                                                                              _isLoading = true;
-                                                                            });
-                                                                            SharedPreferences prefs = await SharedPreferences.getInstance();
-                                                                            String userId =  prefs.getString(Constants.SHARED_PREF_USER_ID);
-                                                                            var dio = Dio();
-                                                                            var deletePuppyUrl = 'https://onebarkplaza.com/wp-json/obp-api/delete_puppy';
-                                                                            FormData formData = new FormData.fromMap({
-                                                                              "user_id": userId,
-                                                                              "puppy_id": data[index].puppyId,
-                                                                            });
-                                                                            try{
-                                                                              dynamic response = await dio.post(deletePuppyUrl, data: formData);
-                                                                              dynamic responseList = jsonDecode(response.toString());
-                                                                              if (responseList.length > 0 && responseList[0] == "success"){
-                                                                                setState(() {
-                                                                                  _isLoading = false;
-                                                                                  isDeleteSuccess = true;
-                                                                                });
-                                                                              } else{
-                                                                                setState(() {
-                                                                                  _isLoading = false;
-                                                                                });
-                                                                                Toast.show("Request Failed. " + response.toString(), context);
-                                                                                Navigator.of(context).pop();
-                                                                              }
-                                                                            }catch(exception){
-                                                                              setState(() {
-                                                                                _isLoading = false;
-                                                                              });
-                                                                              Toast.show("Request Failed. "+exception.toString(), context);
+                                                          Row(
+                                                            children: <Widget>[
+                                                              Text(
+                                                          Utility.capitalize(data[index].gender)+"  |  "+data[index].ageInWeeks + " weeks Old",
+                                                                  style: TextStyle(
+                                                                      fontFamily:
+                                                                          'NunitoSans',
+                                                                      fontSize:
+                                                                          puppyDetailsFontSize,
+                                                                      color:
+                                                                      Color(0xff707070),
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .bold)),
 
-                                                                            }
-                                                                          },
-                                                                        ),
-                                                                      ],
-                                                                    );
-                                                                  },
-                                                                );
-                                                              } else {
-                                                                Navigator.push(context, MaterialPageRoute(builder: (context) => EditPuppy(data[index])));
-                                                              }
-                                                              setState(() {
-                                                                //_selection = value;
-                                                              });
-                                                            },
-                                                            child: Container(
-                                                              padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
-                                                              decoration: BoxDecoration(
-                                                                color: Colors.transparent,
-                                                                //color: Color(0xffFFFFFF),
-                                                                borderRadius:
-                                                                BorderRadius.all(Radius.circular(16)),
-                                                              ),
-                                                              width: _height>_width?_width/10 : _height/10,
-                                                              height:_height>_width?_width/10 : _height/8,
-                                                              child: Image.asset(
-                                                                "assets/images/ic_menuOverflow.png",
-                                                                height: 16, color: customColor,),
-                                                            ),
-                                                            itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
-                                                              PopupMenuItem<String>(
-                                                                height: 24,
-                                                                value: 'Edit',
-                                                                child: Row(
-                                                                  children: <Widget>[
-                                                                    Icon(Icons.edit, color: const Color(0xff7FA432), size: 15),
-                                                                    SizedBox(width: 12,),
-                                                                    Text('Edit', style: const TextStyle(fontFamily: "NunitoSans", fontSize: 12, color: const Color(0xff7FA432), fontWeight: FontWeight.bold)),
-                                                                  ]
-                                                                ),
-                                                              ),
-                                                              PopupMenuDivider(),
-                                                              PopupMenuItem<String>(
-                                                                height: 24,
-                                                                value: 'Delete',
-                                                                child: Row(
-                                                                    children: <Widget>[
-                                                                      Icon(Icons.delete, color: Colors.redAccent, size: 15),
-                                                                      SizedBox(width: 12,),
-                                                                      Text('Delete', style: const TextStyle(fontFamily: "NunitoSans", fontSize: 12, color: Colors.redAccent,fontWeight: FontWeight.bold)),
-                                                                    ]
-                                                                ),
-                                                              ),
                                                             ],
                                                           ),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                    Text(
-                                                        data[index]
-                                                                .categoryName,
-                                                        style: TextStyle(
-                                                            fontFamily:
-                                                                'NunitoSans',
-                                                            fontSize:
-                                                                12,
-                                                            color: customColor,
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .bold)),
-                                                    Row(
-                                                      children: <Widget>[
-                                                        Text(
-                                                    Utility.capitalize(data[index].gender)+"  |  "+data[index].ageInWeeks + " weeks Old",
-                                                            style: TextStyle(
-                                                                fontFamily:
-                                                                    'NunitoSans',
-                                                                fontSize:
-                                                                    puppyDetailsFontSize,
-                                                                color:
-                                                                Color(0xff707070),
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold)),
+                                                          Row(
+                                                            children: <Widget>[
+                                                              Text(
+                                                                  "\$ " +
+                                                                      double.parse(data[index].puppyPrice).toString(),
+                                                                  style: TextStyle(
+                                                                      fontFamily:
+                                                                          'NunitoSans',
+                                                                      fontSize:
+                                                                          puppyDetailsFontSize,
+                                                                      color:
+                                                                          Color(0xff707070),
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .bold)),
 
-                                                      ],
-                                                    ),
-                                                    Row(
-                                                      children: <Widget>[
-                                                        Text(
-                                                            "\$ " +
-                                                                double.parse(data[index].puppyPrice).toString(),
-                                                            style: TextStyle(
-                                                                fontFamily:
-                                                                    'NunitoSans',
-                                                                fontSize:
-                                                                    puppyDetailsFontSize,
-                                                                color:
-                                                                    Color(0xff707070),
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold)),
-
-                                                      ],
-                                                    ),
-                                                    SizedBox(
-                                                      width: _width / 3,
-                                                      child: FlatButton(
-                                                        child: Text(
-                                                          'View',
-                                                          textAlign: TextAlign.start,
-                                                          style: TextStyle(fontSize: 12, color: Colors.white),
-                                                        ),
-                                                        onPressed: () {
-                                                          Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext context) =>ViewPuppy(data[index],false)));
-                                                        },
-                                                        disabledColor: customColor,
-                                                        color: customColor,
-                                                        shape: RoundedRectangleBorder(
-                                                            borderRadius: new BorderRadius.only(
-                                                              bottomLeft: Radius.circular(40.0),
-                                                              topRight: Radius.circular(40.0),
-                                                              topLeft: Radius.circular(10.0),
-                                                              bottomRight: Radius.circular(40.0),
+                                                            ],
+                                                          ),
+                                                          SizedBox(
+                                                            width: _width / 3,
+                                                            child: FlatButton(
+                                                              child: Text(
+                                                                'View',
+                                                                textAlign: TextAlign.start,
+                                                                style: TextStyle(fontSize: 12, color: Colors.white),
+                                                              ),
+                                                              onPressed: () {
+                                                                Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext context) =>ViewPuppy(data[index],false)));
+                                                              },
+                                                              disabledColor: customColor,
+                                                              color: customColor,
+                                                              shape: RoundedRectangleBorder(
+                                                                  borderRadius: new BorderRadius.only(
+                                                                    bottomLeft: Radius.circular(40.0),
+                                                                    topRight: Radius.circular(40.0),
+                                                                    topLeft: Radius.circular(10.0),
+                                                                    bottomRight: Radius.circular(40.0),
+                                                                  ),
+                                                                  side: BorderSide(
+                                                                    color: Colors.white,
+                                                                  )),
                                                             ),
-                                                            side: BorderSide(
-                                                              color: Colors.white,
-                                                            )),
+                                                          ),
+
+                                                        ],
                                                       ),
                                                     ),
+                                                    data[index].isSold?
+                                                    Container(
+                                                        width: _width/5,
+                                                        //color: Color(0xfffffd19),
+                                                        child:Padding(
+                                                          padding: const EdgeInsets.all(8.0),
+                                                          child: new Image.asset("assets/images/sold.png",)
+                                                        )
+                                                    ) : Container(
+                                                      height: 100,
+                                                      alignment: Alignment.topCenter,
+                                                      child: PopupMenuButton<String>(
+                                                        color:  Color(0xfffffd19),
+                                                        shape: RoundedRectangleBorder(
+                                                            borderRadius: new BorderRadius.only(
+                                                              bottomLeft: Radius.circular(12.0),
+                                                              topRight: Radius.circular(0.0),
+                                                              topLeft: Radius.circular(12.0),
+                                                              bottomRight: Radius.circular(12.0),
+                                                            ),
+                                                            side: BorderSide(
+                                                              color: obpColor,
+                                                            )),
+                                                        // ignore: missing_return
+                                                        onSelected: (String value) {
+                                                          if(value == "Sold by Breeder"){
+                                                            showDialog<void>(
+                                                              context: context,
+                                                              barrierDismissible: false, // user must tap button!
+                                                              builder: (BuildContext context) {
+                                                                return CupertinoAlertDialog(
+                                                                  title: Text('Sold?'),
+                                                                  content: Text('\nYou want to mark this puppy sold?'),
+                                                                  actions: <Widget>[
+                                                                    CupertinoDialogAction(
+                                                                      child: Text('No'),
+                                                                      onPressed: () {
+                                                                        Navigator.of(context).pop();
+                                                                      },
+                                                                    ),
+                                                                    CupertinoDialogAction(
+                                                                      child: Text('Yes'),
+                                                                      onPressed: () async{
+                                                                        Navigator.of(context).pop();
+                                                                        setState(() {
+                                                                          _isLoading = true;
+                                                                        });
+                                                                        SharedPreferences prefs = await SharedPreferences.getInstance();
+                                                                        String userId =  prefs.getString(Constants.SHARED_PREF_USER_ID);
+                                                                        var dio = Dio();
+                                                                        var soldByBreederUrl = 'https://onebarkplaza.com/wp-json/obp/v1/update_puppy_status';
+                                                                        FormData formData = new FormData.fromMap({
+                                                                          "user_id": userId,
+                                                                          "puppy_id": data[index].puppyId,
+                                                                          "status": "sold"
+                                                                        });
+                                                                        try{
+                                                                          dynamic response = await dio.post(soldByBreederUrl, data: formData);
+                                                                          dynamic responseList = jsonDecode(response.toString());
+                                                                          if (responseList.length > 0 && responseList[0] == "success"){
+                                                                            setState(() {
+                                                                              _isLoading = false;
+                                                                              isSoldByBreederSuccess = true;
+                                                                            });
+                                                                          } else{
+                                                                            setState(() {
+                                                                              _isLoading = false;
+                                                                            });
+                                                                            Toast.show("Request Failed. " + response.toString(), context);
+                                                                            Navigator.of(context).pop();
+                                                                          }
+                                                                        }catch(exception){
+                                                                          setState(() {
+                                                                            _isLoading = false;
+                                                                          });
+                                                                          Toast.show("Request Failed. "+exception.toString(), context);
 
+                                                                        }
+                                                                      },
+                                                                    ),
+                                                                  ],
+                                                                );
+                                                              },
+                                                            );
+                                                          } else {
+                                                            Navigator.push(context, MaterialPageRoute(builder: (context) => EditPuppy(data[index])));
+                                                          }
+                                                          setState(() {
+                                                            //_selection = value;
+                                                          });
+                                                        },
+                                                        child: Container(
+                                                          padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
+                                                          decoration: BoxDecoration(
+                                                            color: Colors.transparent,
+                                                            //color: Color(0xffFFFFFF),
+                                                            borderRadius:
+                                                            BorderRadius.all(Radius.circular(16)),
+                                                          ),
+                                                          width: _height>_width?_width/10 : _height/10,
+                                                          height:_height>_width?_width/10 : _height/8,
+                                                          child: Image.asset(
+                                                            "assets/images/ic_menuOverflow.png",
+                                                            height: 16, color: customColor,),
+                                                        ),
+                                                        itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
+                                                          PopupMenuItem<String>(
+                                                            height: 24,
+                                                            value: 'Edit',
+                                                            child: Row(
+                                                                children: <Widget>[
+                                                                  Icon(Icons.edit, color: const Color(0xff3db6c6), size: 15),
+                                                                  SizedBox(width: 12,),
+                                                                  Text('Edit', style: const TextStyle(fontFamily: "NunitoSans", fontSize: 12, color: const Color(0xff3db6c6), fontWeight: FontWeight.bold)),
+                                                                ]
+                                                            ),
+                                                          ),
+                                                          PopupMenuDivider(),
+                                                          PopupMenuItem<String>(
+                                                            height: 24,
+                                                            value: 'Sold by Breeder',
+                                                            child: Row(
+                                                                children: <Widget>[
+                                                                  Icon(Icons.unarchive, color:Colors.deepOrangeAccent, size: 16),
+                                                                  SizedBox(width: 12,),
+                                                                  Text('Sold by Breeder', style: const TextStyle(fontFamily: "NunitoSans", fontSize: 12, color: Color(0xff3db6c6),fontWeight: FontWeight.bold)),
+                                                                ]
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ),
                                                   ],
                                                 ),
                                               ),

@@ -92,7 +92,7 @@ class OrdersState extends State<Orders> {
   var isSortDateRecentFirst = false;
   var isSortDateOldestFirst = false;
 
-  final greenColor = Color(0xff7FA432);
+  final obpBlueColor = Color(0XFF3DB6C6);
 
   Filter filter;
 
@@ -115,7 +115,7 @@ class OrdersState extends State<Orders> {
     final _width = MediaQuery.of(context).size.width;
     final _height = MediaQuery.of(context).size.height;
     final puppyDetailsFontSize = 11.0;
-    final greenColor = Color(0xff7FA432);
+    final obpBlueColor = Color(0XFF3DB6C6);
     minPrice = 0.0;
     maxPrice = 10000.0;
 
@@ -127,14 +127,14 @@ class OrdersState extends State<Orders> {
         alignment: Alignment.bottomCenter,
         child: SpinKitRipple(
           borderWidth: 100.0,
-          color: greenColor,
+          color: obpBlueColor,
           size: 120,
         ))
         : Scaffold(
         backgroundColor: Colors.white,
         appBar: new AppBar(
           //iconTheme: new IconThemeData(color: Color(0xff262B31)),
-          iconTheme: new IconThemeData(color: greenColor),
+          iconTheme: new IconThemeData(color: obpBlueColor),
           title: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -146,7 +146,7 @@ class OrdersState extends State<Orders> {
                       fontFamily: 'NunitoSans',
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
-                      color: greenColor),
+                      color: obpBlueColor),
                   textAlign: TextAlign.center,
                 ),
               ]),
@@ -188,7 +188,7 @@ class OrdersState extends State<Orders> {
                               return Container(
                                 alignment: Alignment.center,
                                 child: SpinKitFadingCircle(
-                                  color: greenColor,
+                                  color: obpBlueColor,
                                   size: 50.0,
                                 ),
                               );
@@ -213,14 +213,14 @@ class OrdersState extends State<Orders> {
                                           new RaisedButton(
                                               shape: RoundedRectangleBorder(
                                                   borderRadius: new BorderRadius.circular(30.0),
-                                                  side: BorderSide(color: greenColor, width: 2.0)
+                                                  side: BorderSide(color: obpBlueColor, width: 2.0)
                                               ),
                                               onPressed: () async { checkConnectivityAndRefresh(context);},
                                               color:Colors.white,
                                               disabledColor: Colors.white,
                                               child: Padding(
                                                 padding: const EdgeInsets.fromLTRB(8.0,0,8,0),
-                                                child: new Text("Try Again", style: TextStyle(color:greenColor,fontFamily:"NunitoSans", fontWeight: FontWeight.normal, fontSize: 13),),
+                                                child: new Text("Try Again", style: TextStyle(color:obpBlueColor,fontFamily:"NunitoSans", fontWeight: FontWeight.normal, fontSize: 13),),
                                               )),
                                           SizedBox(height: 60),
                                         ],
@@ -370,7 +370,7 @@ class OrdersState extends State<Orders> {
                                                                                                   placeholder:
                                                                                                       (context, url) =>
                                                                                                       SpinKitCircle(
-                                                                                                        color: greenColor,
+                                                                                                        color: obpBlueColor,
                                                                                                         size: 30.0,
                                                                                                       ),
                                                                                                   errorWidget: (context,
@@ -476,10 +476,10 @@ class OrdersState extends State<Orders> {
                                                                               padding: const EdgeInsets.fromLTRB(0,0,8,0),
                                                                               child: Container(width:42,
                                                                                   height:42,
-                                                                                  child: Icon(Icons.navigate_next, color:greenColor, size: 24,),
+                                                                                  child: Icon(Icons.navigate_next, color:obpBlueColor, size: 24,),
                                                                                 decoration: BoxDecoration(
                                                                                   color: Colors.white,
-                                                                                  border: Border.all(color: greenColor, width: 2),
+                                                                                  border: Border.all(color: obpBlueColor, width: 2),
                                                                                   borderRadius:BorderRadius.all(Radius.circular(40)),
                                                                                   boxShadow: [
                                                                                     BoxShadow(
@@ -594,7 +594,7 @@ class OrdersState extends State<Orders> {
                         mainAxisSize: MainAxisSize.max,
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
-                          Icon(Icons.sort, size: 18,color:greenColor),
+                          Icon(Icons.sort, size: 18,color:obpBlueColor),
                           SizedBox(width: 12,),
                           Text(
                             "Sort",
@@ -602,7 +602,7 @@ class OrdersState extends State<Orders> {
                                 fontFamily: 'NunitoSans',
                                 fontSize: 16,
                                 fontWeight: FontWeight.bold,
-                                color: greenColor),
+                                color: obpBlueColor),
                             textAlign: TextAlign.center,
                           )
                         ],
@@ -630,7 +630,7 @@ class OrdersState extends State<Orders> {
                         mainAxisSize: MainAxisSize.max,
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
-                          Image.asset("assets/images/ic_filter.png", color: greenColor, width: 18,),
+                          Image.asset("assets/images/ic_filter.png", color: obpBlueColor, width: 18,),
                           SizedBox(width: 12,),
                           Text(
                             "Filter",
@@ -638,7 +638,7 @@ class OrdersState extends State<Orders> {
                                 fontFamily: 'NunitoSans',
                                 fontSize: 16,
                                 fontWeight: FontWeight.bold,
-                                color: greenColor),
+                                color: obpBlueColor),
                             textAlign: TextAlign.center,
                           )
                         ],
@@ -719,7 +719,7 @@ class OrdersState extends State<Orders> {
       actions: <Widget>[
         CupertinoActionSheetAction(
 
-          child: Container(alignment:Alignment.center,child: Text('Earning - high to low', style:style.copyWith(color: isSortEarningHighToLow ? greenColor:Colors.black87),textAlign: TextAlign.left, )),
+          child: Container(alignment:Alignment.center,child: Text('Earning - high to low', style:style.copyWith(color: isSortEarningHighToLow ? obpBlueColor:Colors.black87),textAlign: TextAlign.left, )),
           onPressed: () {
             Navigator.pop(context);
             setState(() {

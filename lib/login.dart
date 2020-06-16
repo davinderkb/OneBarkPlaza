@@ -50,17 +50,17 @@ class LoginPageState extends State<LoginPage>{
 
           contentPadding: EdgeInsets.fromLTRB(18.0, 20.0, 18.0, 20.0),
           labelText: "Username",
-          labelStyle: TextStyle(color: Color(0xffF69601)),
+          labelStyle: TextStyle(color: Color(0xffFFFd19)),
           enabledBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: Color(0xffF69601), width: 2.0),
+            borderSide: BorderSide(color: Color(0xffFFFd19), width: 2.0),
             borderRadius: BorderRadius.circular(30.0),
           ),
           focusedBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: Color(0xffF69601), width: 2.0),
+            borderSide: BorderSide(color: Color(0xffFFFd19), width: 2.0),
             borderRadius: BorderRadius.circular(30.0),
           ),
           border: OutlineInputBorder(
-            borderSide: BorderSide(color: Color(0xffF69601), width: 2.0),
+            borderSide: BorderSide(color: Color(0xffFFFd19), width: 2.0),
             borderRadius: BorderRadius.circular(30.0),
           )
       ),
@@ -72,17 +72,17 @@ class LoginPageState extends State<LoginPage>{
       decoration: InputDecoration(
           contentPadding: EdgeInsets.fromLTRB(18.0, 20.0, 18.0, 20.0),
           labelText: "Password",
-          labelStyle: TextStyle(color: Color(0xffF69601)),
+          labelStyle: TextStyle(color: Color(0xffFFFd19)),
           enabledBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: Color(0xffF69601), width: 2.0),
+            borderSide: BorderSide(color: Color(0xffFFFd19), width: 2.0),
             borderRadius: BorderRadius.circular(30.0),
           ),
           focusedBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: Color(0xffF69601), width: 2.0),
+            borderSide: BorderSide(color: Color(0xffFFFd19), width: 2.0),
             borderRadius: BorderRadius.circular(30.0),
           ),
           border: OutlineInputBorder(
-            borderSide: BorderSide(color: Color(0xffF69601), width: 2.0),
+            borderSide: BorderSide(color: Color(0xffFFFd19), width: 2.0),
             borderRadius: BorderRadius.circular(30.0),
           )
       ),
@@ -97,13 +97,13 @@ class LoginPageState extends State<LoginPage>{
     final forgotPasswordLink = Text(
       'Click here',
       textAlign: TextAlign.right,
-      style: TextStyle(fontSize: 13, color: Color(0xffF69601), decoration: TextDecoration.underline,fontWeight: FontWeight.bold),
+      style: TextStyle(fontSize: 13, color: Color(0xffFFFd19), decoration: TextDecoration.underline,fontWeight: FontWeight.bold),
     );
 
     final loginButton = Material(
       borderRadius: BorderRadius.circular(50.0),
 
-      color: Color(0xff308FA4),
+      color: Color(0xff3db6c6),
       child: MaterialButton(
         minWidth: _width - 100,
 
@@ -171,7 +171,7 @@ class LoginPageState extends State<LoginPage>{
                         onTapUp: outContact,
                         child: Icon(
                           Icons.remove_red_eye,
-                          color: Color(0xffF69601), size:35
+                          color: Color(0xffFFFd19), size:35
                         ),
                       ),
                     ),
@@ -201,7 +201,7 @@ class LoginPageState extends State<LoginPage>{
                   alignment: Alignment.center,
                   child: SpinKitRipple(
                     borderWidth: 100.0,
-                    color: Color(0xffF69601),
+                    color: Color(0xffFFFd19),
                     size: 120,
                   )),
             ):SizedBox()
@@ -219,7 +219,7 @@ class LoginPageState extends State<LoginPage>{
         initiateLoginRequest(context);
       } else {
         Toast.show("Enter Password", context,
-            textColor: Color(0xffF69601),
+            textColor: Color(0xffFFFd19),
             duration: Toast.LENGTH_LONG,
             gravity: Toast.BOTTOM,
             backgroundColor: Color(0xffeb5050),
@@ -227,7 +227,7 @@ class LoginPageState extends State<LoginPage>{
       }
     } else {
       Toast.show("Enter valid email", context,
-          textColor: Color(0xffF69601),
+          textColor: Color(0xffFFFd19),
           duration: Toast.LENGTH_LONG,
           gravity: Toast.BOTTOM,
           backgroundColor: Color(0xffeb5050),
@@ -257,7 +257,7 @@ class LoginPageState extends State<LoginPage>{
           Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (BuildContext context) => HomePage()));
         } else {
           Toast.show("Authentication Failed. " +response.toString(), context,
-              textColor: Color(0xffF69601),
+              textColor: Color(0xffFFFd19),
               duration: Toast.LENGTH_LONG,
               gravity: Toast.BOTTOM,
               backgroundColor: Color(0xffEB5050),
@@ -265,7 +265,7 @@ class LoginPageState extends State<LoginPage>{
         }
       } else {
         Toast.show("Authentication Failed "+response.toString(), context,
-            textColor: Color(0xffF69601),
+            textColor: Color(0xffFFFd19),
             duration: Toast.LENGTH_LONG,
             gravity: Toast.BOTTOM,
             backgroundColor: Color(0xffEB5050),
@@ -276,7 +276,7 @@ class LoginPageState extends State<LoginPage>{
       });
     }catch(exception){
       Toast.show("Request Failed. "+exception.toString(), context,
-          textColor: Color(0xffF69601),
+          textColor: Color(0xffFFFd19),
           duration: Toast.LENGTH_LONG,
           gravity: Toast.BOTTOM,
           backgroundColor: Color(0xffEB5050),
