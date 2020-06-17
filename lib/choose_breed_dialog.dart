@@ -27,7 +27,7 @@ class ChooseBreedDialog extends StatefulWidget {
 class ChoosBreedDailogState extends State<ChooseBreedDialog>{
   Future<List<Breed>> futureListOfCategories;
   TextEditingController searchTextController = new TextEditingController();
-  TextStyle style = TextStyle(fontFamily: 'NunitoSans', fontWeight: FontWeight.bold, fontSize: 13.0, color: Colors.black);
+  TextStyle style = TextStyle(fontFamily: 'Lato', fontWeight: FontWeight.bold, fontSize: 13.0, color: Colors.black);
 
   List<Breed> filteredItems = List<Breed>();
   @override
@@ -117,7 +117,7 @@ class ChoosBreedDailogState extends State<ChooseBreedDialog>{
                         },
                         textAlign: TextAlign.start,
                         controller: searchTextController,
-                        style: TextStyle(fontFamily:"NunitoSans",fontWeight: FontWeight.bold,color: Color(0xff3db6c6), fontSize: 15,),
+                        style: TextStyle(fontFamily:"Lato",fontWeight: FontWeight.bold,color: Color(0xff3db6c6), fontSize: 15,),
                         decoration: InputDecoration(
                           border: InputBorder.none,
                           icon: Padding(
@@ -126,7 +126,7 @@ class ChoosBreedDailogState extends State<ChooseBreedDialog>{
                           ),
                           contentPadding: EdgeInsets.fromLTRB(5.0, 0.0, 0.0, 0.0),
                           hintText: "Search",
-                          hintStyle: TextStyle(fontFamily:"NunitoSans",fontWeight: FontWeight.bold,color: Color(0xff3db6c6), fontSize: 15,),
+                          hintStyle: TextStyle(fontFamily:"Lato",fontWeight: FontWeight.bold,color: Color(0xff3db6c6), fontSize: 15,),
 
                         ),
                       ),
@@ -288,11 +288,9 @@ class ChoosBreedDailogState extends State<ChooseBreedDialog>{
     }
     if (response.toString() == "[]" || response.toString() == "") {
       Toast.show("Category fetch failed", context,
-          textColor: Colors.white,
           duration: Toast.LENGTH_SHORT,
           gravity: Toast.BOTTOM,
-          backgroundColor: Colors.transparent,
-          backgroundRadius: 16);
+          backgroundRadius: 16,backgroundColor: Colors.black87, textColor: Color(0xffFFFd19));
     }
 
     return list;

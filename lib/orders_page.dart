@@ -28,7 +28,7 @@ import 'package:one_bark_plaza/util/utility.dart';
 import 'edit_puppy.dart';
 import 'filter.dart';
 final blueColor = Color(0xff4C8BF5);
-TextStyle style = TextStyle(fontFamily: 'NunitoSans', fontSize: 14.0, color: Color(0xff707070), fontWeight: FontWeight.bold);
+TextStyle style = TextStyle(fontFamily: 'Lato', fontSize: 14.0, color: Color(0xff707070), fontWeight: FontWeight.bold);
 class Orders extends StatefulWidget {
   OrdersState orderPageState;
 
@@ -69,14 +69,14 @@ Future<List<OrderDetails>> ordersList(BuildContext context) async {
               order["order_date"] is int || order["order_date"] is String || order["order_date"] is double? order["order_date"].toString(): "",
               json));
         }else
-          Toast.show("Error while fetching Order Details for Order "+order["order_id"], context);
+          Toast.show("Error while fetching Order Details for Order "+order["order_id"], context,backgroundColor: Colors.black87, textColor: Color(0xffFFFd19));
       }
       return list;
     }
     else
-      Toast.show("Error while fetching Orders", context);
+      Toast.show("Error while fetching Orders", context,backgroundColor: Colors.black87, textColor: Color(0xffFFFd19));
   } else{
-    Toast.show("Something went wrong, Try again", context);
+    Toast.show("Something went wrong, Try again", context,backgroundColor: Colors.black87, textColor: Color(0xffFFFd19));
   }
 }
 
@@ -143,7 +143,7 @@ class OrdersState extends State<Orders> {
                 new Text(
                   "Orders",
                   style: new TextStyle(
-                      fontFamily: 'NunitoSans',
+                      fontFamily: 'Lato',
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
                       color: obpBlueColor),
@@ -206,9 +206,9 @@ class OrdersState extends State<Orders> {
                                         children: <Widget>[
                                           Image.asset("assets/images/ic_noInternet.png", height: 60,width:70, color: Color(0xffebebeb),),
                                           SizedBox(height: 24),
-                                          Text("You're offline", style: TextStyle(fontFamily: 'NunitoSans', fontWeight: FontWeight.normal, fontSize: 16.0, color:  Color(0xff707070))),
+                                          Text("You're offline", style: TextStyle(fontFamily: 'Lato', fontWeight: FontWeight.normal, fontSize: 16.0, color:  Color(0xff707070))),
                                           SizedBox(height: 12),
-                                          Text("Connect to the internet and try again", style: TextStyle(fontFamily: 'NunitoSans', fontSize: 14.0, color: Color(0xff707070))),
+                                          Text("Connect to the internet and try again", style: TextStyle(fontFamily: 'Lato', fontSize: 14.0, color: Color(0xff707070))),
                                           SizedBox(height: 36,),
                                           new RaisedButton(
                                               shape: RoundedRectangleBorder(
@@ -220,7 +220,7 @@ class OrdersState extends State<Orders> {
                                               disabledColor: Colors.white,
                                               child: Padding(
                                                 padding: const EdgeInsets.fromLTRB(8.0,0,8,0),
-                                                child: new Text("Try Again", style: TextStyle(color:obpBlueColor,fontFamily:"NunitoSans", fontWeight: FontWeight.normal, fontSize: 13),),
+                                                child: new Text("Try Again", style: TextStyle(color:obpBlueColor,fontFamily:"Lato", fontWeight: FontWeight.normal, fontSize: 13),),
                                               )),
                                           SizedBox(height: 60),
                                         ],
@@ -309,20 +309,20 @@ class OrdersState extends State<Orders> {
                                                                                 children: <Widget>[
                                                                                   Row(
                                                                                     children: <Widget>[
-                                                                                      Text("Order Id",style:TextStyle(fontFamily:'NunitoSans',fontSize:13,color:Color(0xff707070),fontWeight:FontWeight.bold)),
-                                                                                      Text(" #"+data[index].orderId,style:TextStyle(fontFamily:'NunitoSans',fontSize:12,color:Colors.grey,fontWeight:FontWeight.bold)),
+                                                                                      Text("Order Id",style:TextStyle(fontFamily:'Lato',fontSize:13,color:Color(0xff707070),fontWeight:FontWeight.bold)),
+                                                                                      Text(" #"+data[index].orderId,style:TextStyle(fontFamily:'Lato',fontSize:12,color:Colors.grey,fontWeight:FontWeight.bold)),
                                                                                     ],
                                                                                   ),
 
-                                                                                  Text("Total Items: "+data[index].items.length.toString(),style: TextStyle(fontFamily:'NunitoSans',fontSize:12,color:Colors.grey, fontWeight:FontWeight.bold)),
+                                                                                  Text("Total Items: "+data[index].items.length.toString(),style: TextStyle(fontFamily:'Lato',fontSize:12,color:Colors.grey, fontWeight:FontWeight.bold)),
                                                                                 ],
                                                                               ),
                                                                               Column(
                                                                                 mainAxisAlignment: MainAxisAlignment.start,
                                                                                 crossAxisAlignment: CrossAxisAlignment.end,
                                                                                 children: <Widget>[
-                                                                                  Text("Received on",style: TextStyle(fontFamily:'NunitoSans',fontSize:13,color:Color(0xff707070), fontWeight:FontWeight.bold)),
-                                                                                  Text(data[index].orderDateString,style: TextStyle(fontFamily:'NunitoSans',fontSize:11,color:Colors.grey, fontWeight:FontWeight.bold)),
+                                                                                  Text("Received on",style: TextStyle(fontFamily:'Lato',fontSize:13,color:Color(0xff707070), fontWeight:FontWeight.bold)),
+                                                                                  Text(data[index].orderDateString,style: TextStyle(fontFamily:'Lato',fontSize:11,color:Colors.grey, fontWeight:FontWeight.bold)),
                                                                                 ],
                                                                               ),
                                                                             ],
@@ -397,7 +397,7 @@ class OrdersState extends State<Orders> {
                                                                                         data[index].items[i].name,
                                                                                         style: TextStyle(
                                                                                             fontFamily:
-                                                                                            'NunitoSans',
+                                                                                            'Lato',
                                                                                             fontSize:
                                                                                             13,
                                                                                             color:
@@ -415,7 +415,7 @@ class OrdersState extends State<Orders> {
                                                                                       "Price: ",
                                                                                       style: TextStyle(
                                                                                           fontFamily:
-                                                                                          'NunitoSans',
+                                                                                          'Lato',
                                                                                           fontSize:
                                                                                           puppyDetailsFontSize,
                                                                                           color:
@@ -427,7 +427,7 @@ class OrdersState extends State<Orders> {
                                                                                       "\$"+double.parse(data[index].items[i].cost.toString()).toString(),
                                                                                       style: TextStyle(
                                                                                           fontFamily:
-                                                                                          'NunitoSans',
+                                                                                          'Lato',
                                                                                           fontSize:
                                                                                           puppyDetailsFontSize,
                                                                                           color:
@@ -444,7 +444,7 @@ class OrdersState extends State<Orders> {
                                                                                       "Quantity: " + data[index].items[i].quantity,
                                                                                       style: TextStyle(
                                                                                           fontFamily:
-                                                                                          'NunitoSans',
+                                                                                          'Lato',
                                                                                           fontSize:
                                                                                           puppyDetailsFontSize,
                                                                                           color:
@@ -524,8 +524,8 @@ class OrdersState extends State<Orders> {
                                                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                                                 crossAxisAlignment: CrossAxisAlignment.start,
                                                                 children: <Widget>[
-                                                                  Text("Total Earned: ",style: TextStyle(fontFamily:'NunitoSans',fontSize:11,color:Colors.grey, fontWeight:FontWeight.bold)),
-                                                                  Text("\$ "+data[index].vendorEarning.toString(),style: TextStyle(fontFamily:'NunitoSans',fontSize:13,color:Color(0xff707070), fontWeight:FontWeight.bold)),
+                                                                  Text("Total Earned: ",style: TextStyle(fontFamily:'Lato',fontSize:11,color:Colors.grey, fontWeight:FontWeight.bold)),
+                                                                  Text("\$ "+data[index].vendorEarning.toString(),style: TextStyle(fontFamily:'Lato',fontSize:13,color:Color(0xff707070), fontWeight:FontWeight.bold)),
                                                                 ],
                                                               ),
                                                               Row(
@@ -541,7 +541,7 @@ class OrdersState extends State<Orders> {
                                                                         borderRadius:BorderRadius.all(Radius.circular(4)),
                                                                       ),
 
-                                                                      child:Text(data[index].orderStatus,style: TextStyle(fontFamily:'NunitoSans',fontSize:13,color:Color(0xff707070), fontWeight:FontWeight.bold))
+                                                                      child:Text(data[index].orderStatus,style: TextStyle(fontFamily:'Lato',fontSize:13,color:Color(0xff707070), fontWeight:FontWeight.bold))
                                                                   )
                                                                 ],
                                                               ),
@@ -599,7 +599,7 @@ class OrdersState extends State<Orders> {
                           Text(
                             "Sort",
                             style: new TextStyle(
-                                fontFamily: 'NunitoSans',
+                                fontFamily: 'Lato',
                                 fontSize: 16,
                                 fontWeight: FontWeight.bold,
                                 color: obpBlueColor),
@@ -635,7 +635,7 @@ class OrdersState extends State<Orders> {
                           Text(
                             "Filter",
                             style: new TextStyle(
-                                fontFamily: 'NunitoSans',
+                                fontFamily: 'Lato',
                                 fontSize: 16,
                                 fontWeight: FontWeight.bold,
                                 color: obpBlueColor),
@@ -657,7 +657,7 @@ class OrdersState extends State<Orders> {
       Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (BuildContext context) =>Orders()));
     }
     else {
-      Toast.show("Internet is still down.. Keep trying", context);
+      Toast.show("Internet is still down.. Keep trying", context,backgroundColor: Colors.black87, textColor: Color(0xffFFFd19));
     }
   }
 
@@ -715,7 +715,7 @@ class OrdersState extends State<Orders> {
   void onSortClick(BuildContext context) {
     final act = CupertinoActionSheet(
 
-      title: Container(alignment:Alignment.center,child: Text('SORT BY', style: TextStyle( fontFamily: "NunitoSans", fontWeight: FontWeight.bold, fontSize: 12), textAlign: TextAlign.left,)),
+      title: Container(alignment:Alignment.center,child: Text('SORT BY', style: TextStyle( fontFamily: "Lato", fontWeight: FontWeight.bold, fontSize: 12), textAlign: TextAlign.left,)),
       actions: <Widget>[
         CupertinoActionSheetAction(
 
@@ -769,7 +769,7 @@ class OrdersState extends State<Orders> {
   void onFilterClick(BuildContext context) {
     final act = CupertinoActionSheet(
 
-      title: Container(alignment:Alignment.center,child: Text('FILTER BY', style: TextStyle( fontFamily: "NunitoSans", fontWeight: FontWeight.bold, fontSize: 12), textAlign: TextAlign.left,)),
+      title: Container(alignment:Alignment.center,child: Text('FILTER BY', style: TextStyle( fontFamily: "Lato", fontWeight: FontWeight.bold, fontSize: 12), textAlign: TextAlign.left,)),
       actions: <Widget>[
         CupertinoActionSheetAction(
 

@@ -27,7 +27,7 @@ import 'edit_puppy.dart';
 import 'filter.dart';
 final customColor = Color(0xff3db6c6); //(0XFF3DB6C6);//Color(0xff4C8BF5);
 TextStyle style = TextStyle(
-    fontFamily: 'NunitoSans', fontSize: 14.0, color: Color(0xff464646));
+    fontFamily: 'Lato', fontSize: 14.0, color: Color(0xff464646));
 class HomePage extends StatefulWidget {
   HomePageState homePageState;
   bool isRedirectedFromSoldByBreeder= false;
@@ -64,7 +64,7 @@ Future<List<PuppyDetails>> _puppiesList(BuildContext context) async {
     }
     return list;
   } else{
-    Toast.show("Something went wrong, Try logout and re-login", context);
+    Toast.show("Something went wrong, Try logout and re-login", context,backgroundColor: Colors.black87, textColor: Color(0xffFFFd19));
   }
 
 }
@@ -73,6 +73,7 @@ class HomePageState extends State<HomePage> {
   bool _isLoading = false;
   Future<List<PuppyDetails>> futureListOfPuppies;
   Set<String> setOfPuppies = new Set<String>();
+  Set<String> setOfStatus = new Set<String>();
   Set<String> filterBreedSet;
   RefreshController _refreshControllerOnErrorReload =
       RefreshController(initialRefresh: false);
@@ -94,6 +95,7 @@ class HomePageState extends State<HomePage> {
 
 
 
+
   @override
   void initState() {
     super.initState();
@@ -101,7 +103,7 @@ class HomePageState extends State<HomePage> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if(widget.isRedirectedFromSoldByBreeder){
         widget.isRedirectedFromSoldByBreeder= false;
-        Toast.show("Puppy Deleted Successfully", context);
+        Toast.show("Puppy Deleted Successfully", context,backgroundColor: Colors.black87, textColor: Color(0xffFFFd19));
       }
     } );
 
@@ -189,9 +191,9 @@ class HomePageState extends State<HomePage> {
                       width: 32,
                     ),
                     new Text(
-                      "All Puppies",
+                      "Puppies",
                       style: new TextStyle(
-                          fontFamily: 'NunitoSans',
+                          fontFamily: 'Lato',
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
                           color: customColor),
@@ -240,9 +242,9 @@ class HomePageState extends State<HomePage> {
                                       children: <Widget>[
                                         Image.asset("assets/images/ic_noInternet.png", height: 60,width:70, color: Color(0xffebebeb),),
                                         SizedBox(height: 24),
-                                        Text("You're offline", style: TextStyle(fontFamily: 'NunitoSans', fontWeight: FontWeight.bold, fontSize: 16.0, color:  Color(0xff707070))),
+                                        Text("You're offline", style: TextStyle(fontFamily: 'Lato', fontWeight: FontWeight.bold, fontSize: 16.0, color:  Color(0xff707070))),
                                         SizedBox(height: 12),
-                                        Text("Connect to the internet and try again", style: TextStyle(fontFamily: 'NunitoSans', fontSize: 14.0, color: Color(0xff707070))),
+                                        Text("Connect to the internet and try again", style: TextStyle(fontFamily: 'Lato', fontSize: 14.0, color: Color(0xff707070))),
                                         SizedBox(height: 36,),
                                         new RaisedButton(
                                             shape: RoundedRectangleBorder(
@@ -254,7 +256,7 @@ class HomePageState extends State<HomePage> {
                                             disabledColor: Colors.white,
                                             child: Padding(
                                               padding: const EdgeInsets.fromLTRB(8.0,0,8,0),
-                                              child: new Text("Try Again", style: TextStyle(color:obpColor,fontFamily:"NunitoSans", fontWeight: FontWeight.bold, fontSize: 13),),
+                                              child: new Text("Try Again", style: TextStyle(color:obpColor,fontFamily:"Lato", fontWeight: FontWeight.bold, fontSize: 13),),
                                             )),
                                         SizedBox(height: 60),
                                       ],
@@ -271,12 +273,13 @@ class HomePageState extends State<HomePage> {
                               var data = snapshot.data as List<PuppyDetails>;
                               getMinMaxPrice(data);
                               data = applyBreedFilter(data);
+                              data = applyStatusFilter(data);
                               data = applyGenderFilter(data);
                               data = applyPriceRangeFilter(data);
                               applySorting(data);
-
                               for(PuppyDetails item in data){
                                 setOfPuppies.add(item.categoryName.toString());
+                                setOfStatus.add(item.statusString);
                               }
                               return new ListView.builder(
                                 reverse: false,
@@ -361,7 +364,7 @@ class HomePageState extends State<HomePage> {
                                                                     .puppyName,
                                                                 style: TextStyle(
                                                                     fontFamily:
-                                                                        'NunitoSans',
+                                                                        'Lato',
                                                                     fontSize:
                                                                         14,
                                                                     color:
@@ -370,25 +373,27 @@ class HomePageState extends State<HomePage> {
                                                                         FontWeight
                                                                             .bold)),
                                                           ),
+                                                          SizedBox(height: 4,),
                                                           Text(
                                                               data[index]
                                                                       .categoryName,
                                                               style: TextStyle(
                                                                   fontFamily:
-                                                                      'NunitoSans',
+                                                                      'Lato',
                                                                   fontSize:
                                                                       12,
                                                                   color: customColor,
                                                                   fontWeight:
                                                                       FontWeight
                                                                           .bold)),
+                                                          SizedBox(height: 4,),
                                                           Row(
                                                             children: <Widget>[
                                                               Text(
                                                           Utility.capitalize(data[index].gender)+"  |  "+data[index].ageInWeeks + " weeks Old",
                                                                   style: TextStyle(
                                                                       fontFamily:
-                                                                          'NunitoSans',
+                                                                          'Lato',
                                                                       fontSize:
                                                                           puppyDetailsFontSize,
                                                                       color:
@@ -399,6 +404,7 @@ class HomePageState extends State<HomePage> {
 
                                                             ],
                                                           ),
+                                                          SizedBox(height: 4,),
                                                           Row(
                                                             children: <Widget>[
                                                               Text(
@@ -406,7 +412,7 @@ class HomePageState extends State<HomePage> {
                                                                       double.parse(data[index].puppyPrice).toString(),
                                                                   style: TextStyle(
                                                                       fontFamily:
-                                                                          'NunitoSans',
+                                                                          'Lato',
                                                                       fontSize:
                                                                           puppyDetailsFontSize,
                                                                       color:
@@ -417,6 +423,7 @@ class HomePageState extends State<HomePage> {
 
                                                             ],
                                                           ),
+                                                          SizedBox(height: 4,),
                                                           SizedBox(
                                                             width: _width / 3,
                                                             child: FlatButton(
@@ -448,11 +455,21 @@ class HomePageState extends State<HomePage> {
                                                     ),
                                                     data[index].isSold?
                                                     Container(
-                                                        width: _width/5,
+
                                                         //color: Color(0xfffffd19),
-                                                        child:Padding(
-                                                          padding: const EdgeInsets.all(8.0),
-                                                          child: new Image.asset("assets/images/sold.png",)
+                                                        child:Container(
+                                                          padding: const EdgeInsets.all(8),
+                                                          decoration: BoxDecoration(
+                                                            color: Color(0xffFFFd19),
+                                                            //color: Color(0xffFFFFFF),
+                                                            shape: BoxShape.circle,
+                                                              border: Border.all(),
+                                                          ),
+
+                                                          child: Padding(
+                                                            padding: const EdgeInsets.all(10.0),
+                                                            child: Text("Sold\nOut", style: TextStyle(fontWeight:FontWeight.bold,fontSize:14, fontFamily: "Lato", color: Color(0xff464646)),),
+                                                          )
                                                         )
                                                     ) : Container(
                                                       height: 100,
@@ -514,14 +531,14 @@ class HomePageState extends State<HomePage> {
                                                                             setState(() {
                                                                               _isLoading = false;
                                                                             });
-                                                                            Toast.show("Request Failed. " + response.toString(), context);
+                                                                            Toast.show("Request Failed. " + response.toString(), context,backgroundColor: Colors.black87, textColor: Color(0xffFFFd19));
                                                                             Navigator.of(context).pop();
                                                                           }
                                                                         }catch(exception){
                                                                           setState(() {
                                                                             _isLoading = false;
                                                                           });
-                                                                          Toast.show("Request Failed. "+exception.toString(), context);
+                                                                          Toast.show("Request Failed. "+exception.toString(), context,backgroundColor: Colors.black87, textColor: Color(0xffFFFd19));
 
                                                                         }
                                                                       },
@@ -559,7 +576,7 @@ class HomePageState extends State<HomePage> {
                                                                 children: <Widget>[
                                                                   Icon(Icons.edit, color: const Color(0xff3db6c6), size: 15),
                                                                   SizedBox(width: 12,),
-                                                                  Text('Edit', style: const TextStyle(fontFamily: "NunitoSans", fontSize: 12, color: const Color(0xff3db6c6), fontWeight: FontWeight.bold)),
+                                                                  Text('Edit', style: const TextStyle(fontFamily: "Lato", fontSize: 12, color: const Color(0xff3db6c6), fontWeight: FontWeight.bold)),
                                                                 ]
                                                             ),
                                                           ),
@@ -571,7 +588,7 @@ class HomePageState extends State<HomePage> {
                                                                 children: <Widget>[
                                                                   Icon(Icons.unarchive, color:Colors.deepOrangeAccent, size: 16),
                                                                   SizedBox(width: 12,),
-                                                                  Text('Sold by Breeder', style: const TextStyle(fontFamily: "NunitoSans", fontSize: 12, color: Color(0xff3db6c6),fontWeight: FontWeight.bold)),
+                                                                  Text('Sold by Breeder', style: const TextStyle(fontFamily: "Lato", fontSize: 12, color: Color(0xff3db6c6),fontWeight: FontWeight.bold)),
                                                                 ]
                                                             ),
                                                           ),
@@ -620,7 +637,7 @@ class HomePageState extends State<HomePage> {
                             Text(
                               "Sort",
                               style: new TextStyle(
-                                  fontFamily: 'NunitoSans',
+                                  fontFamily: 'Lato',
                                   fontSize: 16,
                                   fontWeight: FontWeight.bold,
                                   color: customColor),
@@ -640,7 +657,7 @@ class HomePageState extends State<HomePage> {
                     onTap: (){
                       if(setOfPuppies !=null && setOfPuppies.length>0){
                         if(filter == null){
-                          Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext context) =>filter = Filter(setOfPuppies, widget.homePageState, minPrice, maxPrice)));;
+                          Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext context) =>filter = Filter(setOfPuppies, widget.homePageState, minPrice, maxPrice, setOfStatus)));;
                         }
                         else{
                           Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext context) =>filter));
@@ -661,12 +678,24 @@ class HomePageState extends State<HomePage> {
                             Text(
                               "Filter",
                               style: new TextStyle(
-                                  fontFamily: 'NunitoSans',
+                                  fontFamily: 'Lato',
                                   fontSize: 16,
                                   fontWeight: FontWeight.bold,
                                   color: customColor),
                               textAlign: TextAlign.center,
-                            )
+                            ),
+
+                            filter!=null && filter.isFilterApplied? Padding(
+                              padding: const EdgeInsets.fromLTRB(4,0,0,0),
+                              child: Container(
+                                  padding: const EdgeInsets.all(7),
+                                  decoration: BoxDecoration(
+                                    color: Colors.pinkAccent,
+                                    shape: BoxShape.circle,
+                                    border: Border.all(color: Color(0xfffffd19), width: 3),
+                                  ),
+                              ),
+                            ) : Container()
                           ],
                         )
                     ),
@@ -684,7 +713,7 @@ class HomePageState extends State<HomePage> {
         Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (BuildContext context) =>HomePage()));
     }
     else {
-        Toast.show("Internet is still down.. Keep trying", context);
+        Toast.show("Internet is still down.. Keep trying", context,backgroundColor: Colors.black87, textColor: Color(0xffFFFd19));
     }
   }
 
@@ -738,11 +767,23 @@ class HomePageState extends State<HomePage> {
     }
     return data;
   }
+  List<PuppyDetails> applyStatusFilter(List<PuppyDetails> data) {
+    if(filter != null && filter.selectedSetOfStatus.length>0 ){
+      var filteredData = new List<PuppyDetails>();
+      for(PuppyDetails item in data){
+        if(filter.selectedSetOfStatus.contains(item.statusString)){
+          filteredData.add(item);
+        }
+      }
+      data =filteredData;
+    }
+    return data;
+  }
 
   void onSortClick(BuildContext context) {
       final act = CupertinoActionSheet(
 
-          title: Container(alignment:Alignment.topLeft,child: Text('SORT BY', style: TextStyle( fontFamily: "NunitoSans", fontWeight: FontWeight.bold, fontSize: 12), textAlign: TextAlign.left,)),
+          title: Container(alignment:Alignment.topLeft,child: Text('SORT BY', style: TextStyle( fontFamily: "Lato", fontWeight: FontWeight.bold, fontSize: 12), textAlign: TextAlign.left,)),
           actions: <Widget>[
             CupertinoActionSheetAction(
 

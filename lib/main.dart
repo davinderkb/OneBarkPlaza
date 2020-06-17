@@ -91,7 +91,7 @@ class MainNavigationDrawerState extends State<MainNavigationDrawer>{
     var drawerHeaderColorLightBlue = Color(0xff3db6c6);
     var drawerAvatarBackgroundColor = Color(0xffFEF8F5);
     var drawerBackground = Color(0xff3db6c6);
-    TextStyle listTileTextStyle = TextStyle(color:drawerContentColor,fontSize: 14, fontWeight:FontWeight.bold,fontFamily: 'NunitoSans');
+    TextStyle listTileTextStyle = TextStyle(color:drawerContentColor,fontSize: 14, fontWeight:FontWeight.bold,fontFamily: 'Lato');
 
 
     return Theme(
@@ -153,10 +153,10 @@ class MainNavigationDrawerState extends State<MainNavigationDrawer>{
                                       Row(
                                         mainAxisAlignment: MainAxisAlignment.center,
                                         children: <Widget>[
-                                          Text(data["name"],style: TextStyle(color:Color(0xff464646),fontSize: 15, fontWeight:FontWeight.bold, fontFamily: 'NunitoSans')),
+                                          Text(data["name"],style: TextStyle(color:Color(0xff464646),fontSize: 15, fontWeight:FontWeight.bold, fontFamily: 'Lato')),
                                         ],
                                       ),
-                                      Text(data["email"],style: TextStyle(color:Color(0xff464646),fontSize: 12, fontFamily: 'NunitoSans')),
+                                      Text(data["email"],style: TextStyle(color:Color(0xff464646),fontSize: 12, fontFamily: 'Lato')),
                                     ],
                                   ),
 
@@ -278,7 +278,7 @@ class MainNavigationDrawerState extends State<MainNavigationDrawer>{
                   title: Text("Payment Options",style: listTileTextStyle,),
                   leading: Image.asset("assets/images/ic_billing.png",  width: iconSize, color: Colors.white,),
                   onTap: () {
-                    Toast.show("Payment Options, to-do", context);
+                    Toast.show("Payment Options, to-do", context,backgroundColor: Colors.black87, textColor: Color(0xffFFFd19));
                     ;
                   },
                 ),SizedBox(height: 4,),
@@ -288,7 +288,7 @@ class MainNavigationDrawerState extends State<MainNavigationDrawer>{
                   title: Text("Payment History",style: listTileTextStyle,),
                   leading:Image.asset("assets/images/ic_payment_history.png",  width: iconSize, color: Colors.white,),
                   onTap: () async {
-                    Toast.show("Paymnet History, to-do", context);
+                    Toast.show("Paymnet History, to-do", context,backgroundColor: Colors.black87, textColor: Color(0xffFFFd19));
 
                   },
                 ),
@@ -338,11 +338,9 @@ class MainNavigationDrawerState extends State<MainNavigationDrawer>{
       return user;
     }catch(e) {
       Toast.show("Error while loading navigation header, Try again", context,
-          textColor: Colors.white,
           duration: Toast.LENGTH_LONG,
           gravity: Toast.BOTTOM,
-          backgroundColor: Color(0xffEB5050),
-          backgroundRadius: 16);
+          backgroundRadius: 16,backgroundColor: Colors.black87, textColor: Color(0xffFFFd19));
     }
   }
 

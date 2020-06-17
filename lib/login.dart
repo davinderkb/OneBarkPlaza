@@ -20,7 +20,7 @@ class LoginPage extends StatefulWidget {
 }
 
 class LoginPageState extends State<LoginPage>{
-  TextStyle style = TextStyle(fontFamily: 'NunitoSans', fontSize: 14.0,color: Colors.white, fontWeight: FontWeight.bold);
+  TextStyle style = TextStyle(fontFamily: 'Lato', fontSize: 14.0,color: Colors.white, fontWeight: FontWeight.bold);
   TextEditingController passwordController = new TextEditingController();
   TextEditingController userNameController = new TextEditingController();
 
@@ -219,19 +219,15 @@ class LoginPageState extends State<LoginPage>{
         initiateLoginRequest(context);
       } else {
         Toast.show("Enter Password", context,
-            textColor: Color(0xffFFFd19),
             duration: Toast.LENGTH_LONG,
             gravity: Toast.BOTTOM,
-            backgroundColor: Color(0xffeb5050),
-            backgroundRadius: 16);
+            backgroundRadius: 16,backgroundColor: Colors.black87, textColor: Color(0xffFFFd19));
       }
     } else {
       Toast.show("Enter valid email", context,
-          textColor: Color(0xffFFFd19),
           duration: Toast.LENGTH_LONG,
           gravity: Toast.BOTTOM,
-          backgroundColor: Color(0xffeb5050),
-          backgroundRadius: 16);
+          backgroundRadius: 16,backgroundColor: Colors.black87, textColor: Color(0xffFFFd19));
     }
 
   }
@@ -257,29 +253,23 @@ class LoginPageState extends State<LoginPage>{
           Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (BuildContext context) => HomePage()));
         } else {
           Toast.show("Authentication Failed. " +response.toString(), context,
-              textColor: Color(0xffFFFd19),
               duration: Toast.LENGTH_LONG,
               gravity: Toast.BOTTOM,
-              backgroundColor: Color(0xffEB5050),
-              backgroundRadius: 16);
+              backgroundRadius: 16,backgroundColor: Colors.black87, textColor: Color(0xffFFFd19));
         }
       } else {
         Toast.show("Authentication Failed "+response.toString(), context,
-            textColor: Color(0xffFFFd19),
             duration: Toast.LENGTH_LONG,
             gravity: Toast.BOTTOM,
-            backgroundColor: Color(0xffEB5050),
-            backgroundRadius: 16);
+            backgroundRadius: 16,backgroundColor: Colors.black87, textColor: Color(0xffFFFd19));
       }
       setState(() {
         _isLoading = false;
       });
     }catch(exception){
       Toast.show("Request Failed. "+exception.toString(), context,
-          textColor: Color(0xffFFFd19),
           duration: Toast.LENGTH_LONG,
-          gravity: Toast.BOTTOM,
-          backgroundColor: Color(0xffEB5050),
+          gravity: Toast.BOTTOM,backgroundColor: Colors.black87, textColor: Color(0xffFFFd19),
           backgroundRadius: 16);
       setState(() {
         _isLoading = false;

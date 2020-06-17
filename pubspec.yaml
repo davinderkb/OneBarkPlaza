@@ -52,8 +52,8 @@ flutter:
   assets:
     - assets/images/
   fonts:
-    - family: NunitoSans
+    - family: Lato
       fonts:
-        - asset: assets/fonts/NunitoSans-Regular.ttf
+        - asset: assets/fonts/Lato-Regular.ttf
 
   uses-material-design: true

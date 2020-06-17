@@ -82,8 +82,8 @@ class ViewPuppyState extends State<ViewPuppy> {
     final _width = MediaQuery.of(context).size.width;
     final _height = MediaQuery.of(context).size.height;
     List<String> images = getPuppyImages();
-    var tableHeaderTextStyle = TextStyle(color: Colors.grey, fontFamily: "NunitoSans", fontSize: 13);
-    var tableContentTextStyle = TextStyle(color: Colors.grey, fontFamily: "NunitoSans", fontSize: 13, fontWeight: FontWeight.bold);
+    var tableHeaderTextStyle = TextStyle(color: Colors.grey, fontFamily: "Lato", fontSize: 13);
+    var tableContentTextStyle = TextStyle(color: Colors.grey, fontFamily: "Lato", fontSize: 13, fontWeight: FontWeight.bold);
     return Scaffold(
         backgroundColor: lightPinkBackground,
         appBar: new AppBar(
@@ -109,11 +109,12 @@ class ViewPuppyState extends State<ViewPuppy> {
                 SizedBox(
                   height: 42,
                   width: _width / 2.5,
-                  child: FlatButton.icon(
+                  child: !widget.puppyDetails.isSold || widget.puppyDetails.isSoldByObp?
+                  FlatButton.icon(
                     label: Text(
                       'Edit',
                       textAlign: TextAlign.start,
-                      style: TextStyle(fontFamily:"NunitoSans",fontSize: 14, color: Colors.white),
+                      style: TextStyle(fontFamily:"Lato",fontSize: 14, color: Colors.white),
                     ),
                     onPressed: () {
                       Navigator.push(context, MaterialPageRoute(builder: (context) => EditPuppy(widget.puppyDetails)));
@@ -131,7 +132,7 @@ class ViewPuppyState extends State<ViewPuppy> {
                         side: BorderSide(
                           color: Colors.white,
                         )),
-                  ),
+                  ):Container(),
                 )
               ]),
           centerTitle: false,
@@ -193,7 +194,7 @@ class ViewPuppyState extends State<ViewPuppy> {
 
                                   style: TextStyle(
                                       fontFamily:
-                                      'NunitoSans',
+                                      'Lato',
                                       fontSize:
                                       18,
                                       color:
@@ -206,7 +207,7 @@ class ViewPuppyState extends State<ViewPuppy> {
                                 "\$ "+getStringSafely(widget.puppyDetails.puppyPrice).toString(),
                                 style: TextStyle(
                                     fontFamily:
-                                    'NunitoSans',
+                                    'Lato',
                                     fontSize:
                                     18,
                                     color:
@@ -220,7 +221,7 @@ class ViewPuppyState extends State<ViewPuppy> {
                             Utility.capitalize(widget.puppyDetails.gender)+"  |  "+widget.puppyDetails.ageInWeeks + " weeks Old",
                             style: TextStyle(
                                 fontFamily:
-                                'NunitoSans',
+                                'Lato',
                                 fontSize:
                                 14,
                                 color:
@@ -345,12 +346,12 @@ class ViewPuppyState extends State<ViewPuppy> {
                                     Container(
                                         width: _width/2 -32,
                                         alignment: Alignment.topLeft,
-                                        child: Text("Last Checkup Date", style: tableHeaderTextStyle,)
+                                        child: Text("Current Status", style: tableHeaderTextStyle,)
                                     ),
                                     Container(
                                         width: _width/2 -32,
                                         alignment: Alignment.topLeft,
-                                        child: Text(widget.puppyDetails.checkUpDateString == null ?"Not Available" :widget.puppyDetails.checkUpDateString, style: tableContentTextStyle,)
+                                        child: Text(widget.puppyDetails.statusString , style: tableContentTextStyle,)
                                     ),
                                   ],
                                 ),
@@ -395,7 +396,7 @@ class ViewPuppyState extends State<ViewPuppy> {
                               ),
                               new Divider(height: 1.0, color: Colors.grey),
                               SizedBox(height: 12),
-                              Padding(
+                              widget.puppyDetails.isSold && widget.puppyDetails.isSoldByObp?Padding(
                                 padding: const EdgeInsets.all(20.0),
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -403,7 +404,8 @@ class ViewPuppyState extends State<ViewPuppy> {
                                     InkWell(
                                       onTap: () async {
                                         if(widget.puppyDetails.vetReport==null || widget.puppyDetails.vetReport.toString().trim() ==""){
-                                            Toast.show("File is not available", context,duration:Toast.LENGTH_LONG);
+                                            Toast.show("Vet report not available.. Please add", context,duration:Toast.LENGTH_LONG, backgroundColor: Colors.black87, textColor: Color(0xffFFFd19));
+                                            Navigator.push(context, MaterialPageRoute(builder: (context) => EditPuppy(widget.puppyDetails)));
                                         }else {
                                           setState(() {
                                             _isLoadingVet = true;
@@ -447,14 +449,15 @@ class ViewPuppyState extends State<ViewPuppy> {
                                           lineWidth: 3,
                                           color: Colors.white,
                                           size: 40,
-                                        ):Text("Vet Check Report", textAlign: TextAlign.center, style: TextStyle(fontFamily: "NunitoSans", fontSize: 18, color:Colors.white),),
+                                        ):Text("Vet Check Report", textAlign: TextAlign.center, style: TextStyle(fontFamily: "Lato", fontSize: 18, color:Colors.white),),
                                       ),
                                     ),
 
                                     InkWell(
                                       onTap: () async {
                                         if(widget.puppyDetails.flightTicket==null || widget.puppyDetails.flightTicket.toString().trim() ==""){
-                                          Toast.show("Flight information not available", context,duration:Toast.LENGTH_LONG);
+                                          Toast.show("Flight information not available.. Please Add", context,duration:Toast.LENGTH_LONG, backgroundColor: Colors.black87, textColor: Color(0xffFFFd19));
+                                          Navigator.push(context, MaterialPageRoute(builder: (context) => EditPuppy(widget.puppyDetails)));
                                         }else {
                                           setState(() {
                                             _isLoadingFlight = true;
@@ -501,12 +504,12 @@ class ViewPuppyState extends State<ViewPuppy> {
                                           lineWidth: 3,
                                           color: Colors.white,
                                           size: 40,
-                                        ):Text("Flight Information", textAlign: TextAlign.center, style: TextStyle(fontFamily: "NunitoSans", fontSize: 18, color:Colors.white),),
+                                        ):Text("Flight Information", textAlign: TextAlign.center, style: TextStyle(fontFamily: "Lato", fontSize: 18, color:Colors.white),),
                                       ),
                                     ),
                                   ],
                                 ),
-                              ),
+                              ):Container(),
                             ],
                           ),
                       ],
@@ -523,11 +526,9 @@ class ViewPuppyState extends State<ViewPuppy> {
 
   void onFinishClick(BuildContext context) {
     Toast.show("Finish clicked. To-Do", context,
-        textColor: Colors.white,
         duration: Toast.LENGTH_LONG,
         gravity: Toast.BOTTOM,
-        backgroundColor: Color(0xffeb5050),
-        backgroundRadius: 16);
+        backgroundRadius: 16,backgroundColor: Colors.black87, textColor: Color(0xffFFFd19));
   }
 
 
@@ -571,7 +572,7 @@ class ViewPuppyState extends State<ViewPuppy> {
               children: <Widget>[
                 Image.asset("assets/images/ic_badge.png", height: 20,width: 20,),
                 SizedBox(width: 5,),
-                Text(badge, style: TextStyle(fontFamily: "NunitoSans", color: obpBlueColor, fontSize: 13),),
+                Text(badge, style: TextStyle(fontFamily: "Lato", color: obpBlueColor, fontSize: 13),),
               ],
             ),
           ),

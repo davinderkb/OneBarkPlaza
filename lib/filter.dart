@@ -11,36 +11,44 @@ import 'package:one_bark_plaza/puppy_details.dart';
 import 'package:one_bark_plaza/vertical_tabs.dart';
 
 final obpBlueColor = Color(0XFF3DB6C6);
-final blueColor = Color(0xff4C8BF5);
 class Filter extends StatefulWidget {
   FilterState filterState;
+  bool isFilterApplied = false;
   RangeSliderItem priceRangeFilter;
   List<BreedFilter> setOfBreedFilter = new List<BreedFilter>();
+  List<StatusFilter> setOfStatusFilter = new List<StatusFilter>();
   Set<String> _selectedSetOfBreeds = new Set<String>();
+  Set<String> _selectedSetOfStatus = new Set<String>();
 
   double minPrice;
   double maxPrice;
   int _chosenMinPrice;
 
   Set<String> receivedSetOfBreeds;
+  Set<String> receivedSetOfStatus;
 
   int get chosenMinPrice => _chosenMinPrice;
   int _chosenMaxPrice;
   Set<String> get selectedSetOfBreeds => _selectedSetOfBreeds;
+  Set<String> get selectedSetOfStatus=> _selectedSetOfStatus;
   List<GenderFilter> genderFilter = new List<GenderFilter>();
   Set<String> _selectedGender = new Set<String>();
   Set<String> get selectedGender => _selectedGender;
 
   HomePageState homePageState;
-  Filter(Set<String> receivedSetOfBreeds, HomePageState homePageState, double minPrice, double maxPrice){
+  Filter(Set<String> receivedSetOfBreeds, HomePageState homePageState, double minPrice, double maxPrice,Set<String> receivedSetOfStatus){
     this.minPrice = minPrice;
     this.maxPrice = maxPrice;
     _chosenMinPrice = this.minPrice.round();
     _chosenMaxPrice = this.maxPrice.round();
     this.homePageState = homePageState;
     this.receivedSetOfBreeds = receivedSetOfBreeds;
+    this.receivedSetOfStatus = receivedSetOfStatus;
     for(String item in receivedSetOfBreeds){
       this.setOfBreedFilter.add(new BreedFilter(item, false));
+    }
+    for(String item in receivedSetOfStatus){
+      this.setOfStatusFilter.add(new StatusFilter(item, false));
     }
     genderFilter.add(new GenderFilter("Male", false));
     genderFilter.add(new GenderFilter("Female", false));
@@ -58,11 +66,7 @@ class Filter extends StatefulWidget {
 class FilterState extends State<Filter> {
 
   BuildContext context;
-
-
-
-
-  @override
+    @override
   void initState() {
     super.initState();
   }
@@ -101,7 +105,7 @@ class FilterState extends State<Filter> {
                 new Text(
                 "",
                 style: new TextStyle(
-                    fontFamily: 'NunitoSans',
+                    fontFamily: 'Lato',
                     fontSize: 14,
                     fontWeight: FontWeight.bold,
                     color: Colors.grey),
@@ -128,7 +132,7 @@ class FilterState extends State<Filter> {
                                   child: Text('Proceed'),
                                   onPressed: () {
                                     Navigator.of(context).pop();
-                                    Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (BuildContext context) =>widget.homePageState.filter = Filter(widget.receivedSetOfBreeds, widget.homePageState, widget.minPrice, widget.maxPrice)));;
+                                    Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (BuildContext context) =>widget.homePageState.filter = Filter(widget.receivedSetOfBreeds, widget.homePageState, widget.minPrice, widget.maxPrice, widget.receivedSetOfStatus)));;
                                   },
                                 ),
                               ],
@@ -174,6 +178,7 @@ class FilterState extends State<Filter> {
                       Tab(text: "Breed"),
                       Tab(text: "Gender"),
                       Tab(text: "Price"),
+                      Tab(text: "Status"),
 
                     ],
                     contents: <Widget>[
@@ -270,10 +275,55 @@ class FilterState extends State<Filter> {
                       Container(child: widget.priceRangeFilter==null
                           ? widget.priceRangeFilter = RangeSliderItem('Selected Price Range', widget.minPrice.round(), widget.maxPrice.round())
                           : widget.priceRangeFilter) ,
+                      Container(
+                          color:Colors.white,
+                          child: ListView.builder(
+
+                            scrollDirection: Axis.vertical,
+                            itemCount: widget.setOfStatusFilter.length,
+                            itemBuilder:
+                                (BuildContext context, int index) => Card(
+                              elevation: 0,
+                              shape: RoundedRectangleBorder(
+                                borderRadius:
+                                new BorderRadius.circular(8.0),
+                              ),
+                              child: InkWell(
+                                onTap: (){
+                                  widget.setOfStatusFilter[index].toggleSelection();
+                                  setState(() {
+
+                                  });
+                                },
+                                child: Padding(
+                                  padding: const EdgeInsets.fromLTRB(8.0,0,0,0),
+                                  child: Column(
+                                    children: <Widget>[
+                                      Container(
+                                        width:  MediaQuery.of(context).size.width -  (MediaQuery.of(context).size.width/3  + 20),
+                                        alignment: Alignment.centerLeft,
+                                        height: 48,
+                                        child: Row(
+                                          children: <Widget>[
+                                            Icon(Icons.check, size: 18, color: widget.setOfStatusFilter[index].isSelected? Color(0xff3db6c6): Colors.grey),
+                                            SizedBox(width: 12),
+                                            Flexible(child: Container(child: Text(widget.setOfStatusFilter[index].status, style: TextStyle(fontSize: 13, color: Colors.black54),)))
+                                          ],
+                                        ),
+                                      ),
+                                      new Divider(height: 1.0, color: Colors.grey),
+                                    ],
+                                  ),
+
+                                ),
+                              ),
+                            ),
+                          )
+                      ),
                     ],
                   ),
 
-                  /*Text('FILTER BY BREED', style: TextStyle( fontFamily: "NunitoSans", fontWeight: FontWeight.bold, fontSize: 12), textAlign: TextAlign.left,)*/
+                  /*Text('FILTER BY BREED', style: TextStyle( fontFamily: "Lato", fontWeight: FontWeight.bold, fontSize: 12), textAlign: TextAlign.left,)*/
 
                 ),
               ),
@@ -295,6 +345,12 @@ class FilterState extends State<Filter> {
                         for(GenderFilter filter in widget.genderFilter){
                           if((filter.isSelected && !widget._selectedGender.contains(filter.genderType))
                               ||(!filter.isSelected && widget._selectedGender.contains(filter.genderType))){
+                            filter.toggleSelection();
+                          }
+                        }
+                        for(StatusFilter filter in widget.setOfStatusFilter){
+                          if((filter.isSelected && !widget._selectedSetOfStatus.contains(filter.status))
+                              ||(!filter.isSelected && widget._selectedSetOfStatus.contains(filter.status))){
                             filter.toggleSelection();
                           }
                         }
@@ -333,6 +389,7 @@ class FilterState extends State<Filter> {
                     ),
                     InkWell(
                       onTap:(){
+
                         for(BreedFilter filter in widget.setOfBreedFilter){
                           if(filter.isSelected){
                             widget._selectedSetOfBreeds.add(filter.breedName);
@@ -349,9 +406,22 @@ class FilterState extends State<Filter> {
                             widget._selectedGender.remove(filter.genderType);
                           }
                         }
+                        for(StatusFilter filter in widget.setOfStatusFilter){
+                          if(filter.isSelected){
+                            widget._selectedSetOfStatus.add(filter.status);
+                          }
+                          else if(widget._selectedSetOfStatus.contains(filter.status)){
+                            widget._selectedSetOfStatus.remove(filter.status);
+                          }
+                        }
                         if(widget.priceRangeFilter!=null) {
                           widget._chosenMinPrice = widget.priceRangeFilter.changedMinValue;
                           widget._chosenMaxPrice = widget.priceRangeFilter.changedMaxValue;
+                        }
+                        if( widget._selectedSetOfStatus.length>0 || widget._selectedSetOfBreeds.length>0 || widget._selectedGender.length>0 || (widget.priceRangeFilter!=null && ( widget.priceRangeFilter.changedMinValue != widget.priceRangeFilter.initialMinValue ||widget.priceRangeFilter.changedMaxValue != widget.priceRangeFilter.initialMaxValue))){
+                          widget.isFilterApplied = true;
+                        } else{
+                          widget.isFilterApplied = false;
                         }
                         widget.homePageState.setState(() { });
                         Navigator.of(context).maybePop();
@@ -395,16 +465,32 @@ class FilterState extends State<Filter> {
   } */
 
 }
-
 class BreedFilter {
   String _breedName = "";
   bool _isSelected = false;
   BreedFilter(breedName, isSelected){
-     this._breedName = breedName;
-     this._isSelected = isSelected;
+    this._breedName = breedName;
+    this._isSelected = isSelected;
   }
 
   String get breedName => _breedName;
+
+  bool get isSelected => _isSelected;
+
+  toggleSelection(){
+    this._isSelected = !this._isSelected;
+  }
+
+}
+class StatusFilter {
+  String _status = "";
+  bool _isSelected = false;
+  StatusFilter(status, isSelected){
+     this._status = status;
+     this._isSelected = isSelected;
+  }
+
+  String get status => _status;
 
   bool get isSelected => _isSelected;
 
@@ -546,5 +632,5 @@ class FilterItemHolder extends StatelessWidget {
     );
   }
 
-  final titleTextStyle = TextStyle(fontSize: 13, fontWeight:FontWeight.normal, color:Color(0XFF414A4C));
+  final titleTextStyle = TextStyle(fontSize: 13, fontWeight:FontWeight.normal, color:Color(0xFF414A4C));
 }

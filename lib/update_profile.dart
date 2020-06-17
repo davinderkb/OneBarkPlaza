@@ -73,8 +73,8 @@ class UpdateProfileState extends State<UpdateProfile> with TickerProviderStateMi
     final hintColor = Color(0xffA9A9A9);
 
 
-    TextStyle style = TextStyle(fontFamily: 'NunitoSans', fontSize: 14.0, color: Color(0xff707070));
-    TextStyle labelStyle = TextStyle(fontFamily: 'NunitoSans',  fontSize: 12, color: Color(0xff707070));
+    TextStyle style = TextStyle(fontFamily: 'Lato', fontSize: 14.0, color: Color(0xff707070));
+    TextStyle labelStyle = TextStyle(fontFamily: 'Lato',  fontSize: 12, color: Color(0xff707070));
 
     return WillPopScope(
       onWillPop: _onBackPressed,
@@ -123,7 +123,7 @@ class UpdateProfileState extends State<UpdateProfile> with TickerProviderStateMi
                   new Text(
                     "Edit Profile",
                     style: new TextStyle(
-                        fontFamily: 'NunitoSans',
+                        fontFamily: 'Lato',
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
                         color: customColor),
@@ -368,16 +368,16 @@ class UpdateProfileState extends State<UpdateProfile> with TickerProviderStateMi
       if (response.statusCode == 200) {
         dynamic responseList = jsonDecode(response.toString());
         prefs.setString(Constants.SHARED_PREF_PROFILE_IMAGE, responseList["success"]["profile_image"]);
-        Toast.show("Profile Updated Successfully" , context,duration: Toast.LENGTH_LONG);
+        Toast.show("Profile Updated Successfully" , context,duration: Toast.LENGTH_LONG,backgroundColor: Colors.black87, textColor: Color(0xffFFFd19));
           Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (BuildContext context) => HomePage()));
       } else {
-        Toast.show("Profile Updation Failed "+response.toString(), context,duration: Toast.LENGTH_LONG);
+        Toast.show("Profile Updation Failed "+response.toString(), context,duration: Toast.LENGTH_LONG,backgroundColor: Colors.black87, textColor: Color(0xffFFFd19));
       }
       setState(() {
         _isLoading = false;
       });
     }catch(exception){
-      Toast.show("Request Failed. "+exception.toString(), context,
+      Toast.show("Request Failed. "+exception.toString(), context,backgroundColor: Colors.black87, textColor: Color(0xffFFFd19)
       );
       setState(() {
         _isLoading = false;

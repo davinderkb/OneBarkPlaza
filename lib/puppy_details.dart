@@ -230,13 +230,56 @@ class PuppyDetails {
 
   get categoryName => _categoryName;
 
-  get status => _status;
 
   get registry => _registry;
 
   get puppyMomWeight => _puppyMomWeight;
 
   get puppyDadWeight => _puppyDadWeight;
+
+  get status => _status;
+  get statusString {
+    String statusString = status;
+    switch (statusString) {
+      case "pending":
+        statusString= "Pending for Approval";
+        break;
+      case "draft":
+        statusString=  "Draft";
+        break;
+      case "pricechange":
+        statusString=  "Price Change, Pending for Approval";
+        break;
+      case "sold":
+        if (!isSoldByObp)
+          statusString=  "Sold By Breeder";
+        else
+          statusString=  "Sold By OBP";
+        break;
+      case "healthissue":
+        statusString=  "Health Issue, Pending for Approval";
+        break;
+      case "datacorrection":
+        statusString=  "Data Correction, Pending for Approval";
+        break;
+      case "photochange":
+        statusString=  "Pic changed, Pending for Approval";
+        break;
+      case "duplicatepuppy":
+        statusString=  "Duplicate";
+        break;
+      case "reviewpuppy":
+        statusString=  "Pending for review with Breeder";
+        break;
+      case "upcoming_litters":
+        statusString=  "Upcoming Litters";
+        break;
+      case "soldobp":
+        statusString=  "Sold By OBP";
+        break;
+    }
+    return statusString;
+  }
 
   get puppyWeight => _puppyWeight;
 

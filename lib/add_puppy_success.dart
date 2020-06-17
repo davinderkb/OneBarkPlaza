@@ -78,9 +78,9 @@ class AddPuppySuccessfulState extends State<AddPuppySuccessful> {
               children: <Widget>[
                 Image.asset("assets/images/ic_success.png", height: 60, color: obpBlueColor,),
                 SizedBox(height: 12),
-                Text("Congratulations", style: TextStyle(fontFamily: 'NunitoSans', fontWeight: FontWeight.bold, fontSize: 16.0, color:  obpBlueColor)),
+                Text("Congratulations", style: TextStyle(fontFamily: 'Lato', fontWeight: FontWeight.bold, fontSize: 16.0, color:  obpBlueColor)),
                 SizedBox(height: 12),
-                Text("Your puppy has been added Successfully", style: TextStyle(fontFamily: 'NunitoSans', fontSize: 14.0, color: Color(0xff6C6D6A))),
+                Text("Your puppy has been added Successfully", style: TextStyle(fontFamily: 'Lato', fontSize: 14.0, color: Color(0xff6C6D6A))),
                 SizedBox(height: 48,),
                 ButtonTheme(
                   minWidth: 200.0,
@@ -96,7 +96,7 @@ class AddPuppySuccessfulState extends State<AddPuppySuccessful> {
                       disabledColor: Colors.white,
                       child: Padding(
                         padding: const EdgeInsets.fromLTRB(32.0,12,32,12),
-                        child: new Text("Preview Ad", style: TextStyle(color:obpBlueColor,fontFamily:"NunitoSans", fontWeight: FontWeight.bold, fontSize: 13),),
+                        child: new Text("Preview Ad", style: TextStyle(color:obpBlueColor,fontFamily:"Lato", fontWeight: FontWeight.bold, fontSize: 13),),
                       )),
                 ),
                 SizedBox(height:16),
@@ -114,7 +114,7 @@ class AddPuppySuccessfulState extends State<AddPuppySuccessful> {
                       disabledColor: Colors.white,
                       child: Padding(
                         padding: const EdgeInsets.fromLTRB(20.0,12,20,12),
-                        child: new Text("Add New Puppy", style: TextStyle(color:obpBlueColor,fontFamily:"NunitoSans", fontWeight: FontWeight.bold, fontSize: 13),),
+                        child: new Text("Add New Puppy", style: TextStyle(color:obpBlueColor,fontFamily:"Lato", fontWeight: FontWeight.bold, fontSize: 13),),
                       )),
                 ),
                 SizedBox(height:16),
@@ -132,7 +132,7 @@ class AddPuppySuccessfulState extends State<AddPuppySuccessful> {
                       disabledColor: Colors.white,
                       child: Padding(
                         padding: const EdgeInsets.fromLTRB(20.0,12,20,12),
-                        child: new Text("Home Page", style: TextStyle(color:obpBlueColor,fontFamily:"NunitoSans", fontWeight: FontWeight.bold, fontSize: 13),),
+                        child: new Text("Home Page", style: TextStyle(color:obpBlueColor,fontFamily:"Lato", fontWeight: FontWeight.bold, fontSize: 13),),
                       )),
                 ),
 
@@ -158,7 +158,7 @@ class AddPuppySuccessfulState extends State<AddPuppySuccessful> {
         _isLoading = false;
       });
     }catch(exception){
-      Toast.show("Request Failed. "+exception.toString(), context,);
+      Toast.show("Request Failed. "+exception.toString(), context,backgroundColor: Colors.black87, textColor: Color(0xffFFFd19));
       setState(() {
         _isLoading = false;
       });

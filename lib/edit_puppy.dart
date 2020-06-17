@@ -245,11 +245,11 @@ class EditPuppyState extends State<EditPuppy> {
     final hintColor = Color(0xffA9A9A9);
 
     TextStyle style = TextStyle(
-        fontFamily: 'NunitoSans', fontSize: 14.0, color: Color(0xff707070));
+        fontFamily: 'Lato', fontSize: 14.0, color: Color(0xff707070));
     TextStyle hintStyle =
-        TextStyle(fontFamily: 'NunitoSans', fontSize: 14.0, color: hintColor);
+        TextStyle(fontFamily: 'Lato', fontSize: 14.0, color: hintColor);
     TextStyle labelStyle = TextStyle(
-      fontFamily: 'NunitoSans',
+      fontFamily: 'Lato',
       color: obpBlueColor,
       fontSize: 12,
     );
@@ -280,7 +280,7 @@ class EditPuppyState extends State<EditPuppy> {
                 new Text(
                   "Edit Puppy",
                   style: new TextStyle(
-                      fontFamily: 'NunitoSans',
+                      fontFamily: 'Lato',
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
                       color: obpBlueColor),
@@ -476,10 +476,10 @@ class EditPuppyState extends State<EditPuppy> {
                                           ),
                                           SizedBox(height:12),
                                           new Text('You can add upto 6 photos',
-                                            style: TextStyle(fontFamily:"NunitoSans",color: Color(0xff707070), fontSize: 12,fontWeight: FontWeight.bold),
+                                            style: TextStyle(fontFamily:"Lato",color: Color(0xff707070), fontSize: 12,fontWeight: FontWeight.bold),
                                           ),
                                           new Text('First photo of your selection will be cover photo',
-                                            style: TextStyle(fontFamily:"NunitoSans",color: Color(0xff707070), fontSize: 12,fontWeight: FontWeight.normal),
+                                            style: TextStyle(fontFamily:"Lato",color: Color(0xff707070), fontSize: 12,fontWeight: FontWeight.normal),
                                           ),SizedBox(height:12),
                                         ],
 
@@ -503,7 +503,7 @@ class EditPuppyState extends State<EditPuppy> {
                               onPressed: loadAssets,
                               color: Color(0xffffffff),
                               icon: new Icon(Icons.image, color:obpBlueColor, size:16),
-                              label: new Text("Add Images", style: TextStyle(color:obpBlueColor,fontFamily:"NunitoSans", fontWeight: FontWeight.bold, fontSize: 13),)),
+                              label: new Text("Add Images", style: TextStyle(color:obpBlueColor,fontFamily:"Lato", fontWeight: FontWeight.bold, fontSize: 13),)),
                         ):SizedBox(height: 0,),
                         SizedBox(height: 24),
                         Center(
@@ -605,7 +605,7 @@ class EditPuppyState extends State<EditPuppy> {
                                       "${_chooseBreed}",
                                       textAlign: TextAlign.start,
                                       style: TextStyle(
-                                          fontFamily: "NunitoSans",
+                                          fontFamily: "Lato",
                                           fontSize: 14,
                                           color: obpBlueColor),
                                     ),
@@ -668,7 +668,7 @@ class EditPuppyState extends State<EditPuppy> {
                                       "${dateOfBirthString}",
                                       textAlign: TextAlign.start,
                                       style: TextStyle(
-                                          fontFamily: "NunitoSans",
+                                          fontFamily: "Lato",
                                           fontSize: 14,
                                           color: obpBlueColor),
                                     ),
@@ -717,7 +717,7 @@ class EditPuppyState extends State<EditPuppy> {
                                       disabledElevation: 3.0,
                                       elevation: 0,
                                       icon: !isFemale? Icon(Icons.check_box, color: Colors.white, size:14): Icon(null, size:0),
-                                      label: new Text("Male", style: TextStyle(color:Colors.white,fontFamily:"NunitoSans", fontWeight: FontWeight.bold, fontSize: 13),)),
+                                      label: new Text("Male", style: TextStyle(color:Colors.white,fontFamily:"Lato", fontWeight: FontWeight.bold, fontSize: 13),)),
                                 ),
                                 Container(
                                   width: (_width - 44)/ 2,
@@ -740,7 +740,7 @@ class EditPuppyState extends State<EditPuppy> {
                                       disabledElevation: 3.0,
                                       elevation: 0,
                                       icon: isFemale? Icon(Icons.check_box, color: Colors.white, size:14): Icon(null, size:0),
-                                      label: new Text("Female", style: TextStyle(color:Colors.white,fontFamily:"NunitoSans", fontWeight: FontWeight.bold, fontSize: 13),)),
+                                      label: new Text("Female", style: TextStyle(color:Colors.white,fontFamily:"Lato", fontWeight: FontWeight.bold, fontSize: 13),)),
                                 ),
                               ],
                             ),
@@ -1065,548 +1065,558 @@ class EditPuppyState extends State<EditPuppy> {
                             ),
                           ),
                         ),
-                        SizedBox(height: 24,),
-                        Center(
-                          child: Container(
-                            width: _width,
-                            height: 60,
-                            decoration: BoxDecoration(
-                                color: Color(0xffffffff),
-                                borderRadius:  new BorderRadius.circular(borderRadius)
-                            ),
-
-                            child: TextFormField(
-                              initialValue: widget.puppyDetails.vetName,
-                              textAlign: TextAlign.start,
-                              onChanged: (String value) {
-                                widget.puppyDetails.vetName = value;
-                              },
-                              style: style,
-                              decoration: InputDecoration(
-                                  contentPadding: EdgeInsets.all(20),
-                                  labelText: 'Vet Name',
-                                  labelStyle: labelStyle,
-                                  focusedBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(color: obpBlueColor, width: 3.0),
-                                    borderRadius: BorderRadius.circular(borderRadius),
-                                  ),
-                                  enabledBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(color: obpBlueColor, width: 2.0),
-                                    borderRadius: BorderRadius.circular(borderRadius),
-                                  ),
-                                  border: OutlineInputBorder(
-                                    borderSide: BorderSide(color: obpBlueColor, width: 2.0),
-                                    borderRadius: BorderRadius.circular(borderRadius),
-                                  )
-                              ),
-                            ),
-                          ),
-                        ),
-                        SizedBox(height: 24,),
-                        Center(
-                          child: Container(
-                            width: _width,
-                            height: 60,
-                            decoration: BoxDecoration(
-                                color: Color(0xffffffff),
-                                borderRadius:  new BorderRadius.circular(borderRadius)
-                            ),
-
-                            child: TextFormField(
-                              initialValue: widget.puppyDetails.vetAddress,
-                              textAlign: TextAlign.start,
-                              onChanged: (String value) {
-                                widget.puppyDetails.vetAddress = value;
-                              },
-                              style: style,
-                              decoration: InputDecoration(
-                                  contentPadding: EdgeInsets.all(20),
-                                  labelText: 'Vet Address',
-                                  labelStyle: labelStyle,
-                                  focusedBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(color: obpBlueColor, width: 3.0),
-                                    borderRadius: BorderRadius.circular(borderRadius),
-                                  ),
-                                  enabledBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(color: obpBlueColor, width: 2.0),
-                                    borderRadius: BorderRadius.circular(borderRadius),
-                                  ),
-                                  border: OutlineInputBorder(
-                                    borderSide: BorderSide(color: obpBlueColor, width: 2.0),
-                                    borderRadius: BorderRadius.circular(borderRadius),
-                                  )
-                              ),
-                            ),
-                          ),
-                        ),
-                        SizedBox(height: 24,),
-
-                        Center(
-                          child: InkWell(
-                            onTap: () {
-                              FocusScope.of(context).unfocus();
-                              _selectDateOfCheckup(context);
-                            },
-                            child: Container(
-                              width: _width,
-                              height: 64,
-                              decoration: BoxDecoration(
-                                color: Color(0xffffffff),
-                                borderRadius:  new BorderRadius.circular(30),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Colors.grey,
-                                    blurRadius: 1.0, // soften the shadow
-                                    offset: Offset(
-                                      1.0, // Move to right 10  horizontally
-                                      1.0, // Move to bottom 10 Vertically
-                                    ),
-                                  )
-                                ],
-                              ),
 
 
-                              child: InputDecorator(
-
-                                decoration: new InputDecoration(
-                                  contentPadding: EdgeInsets.all(20),
-                                  labelText: 'Check-up Date',
-                                  labelStyle: labelStyle,
-                                  border: OutlineInputBorder(),
-                                  enabledBorder: OutlineInputBorder(borderRadius:  new BorderRadius.circular(30), borderSide: BorderSide(width: 2.0, color: obpBlueColor)),
-                                ),
-                                child: Row(
-                                  mainAxisAlignment:
-                                  MainAxisAlignment.spaceBetween,
-                                  children: <Widget>[
-
-                                    Text(
-                                      "${dateOfCheckupString}",
-                                      textAlign: TextAlign.start,
-                                      style: TextStyle(
-                                          fontFamily: "NunitoSans",
-                                          fontSize: 14,
-                                          color: obpBlueColor),
-                                    ),
-                                    Padding(
-                                        padding:
-                                        const EdgeInsets.fromLTRB(
-                                            00, 0, 0, 0),
-                                        child: Container(
-                                          height: 40,
-                                          width: 40,
-                                          child: Icon(Icons.calendar_today, color: obpBlueColor),
-                                        )),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                        SizedBox(height: 24,),
-
+                        widget.puppyDetails.isSold && widget.puppyDetails.isSoldByObp?
                         Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
                           children: <Widget>[
-                            Container(
-                              width: _width,
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius:  new BorderRadius.circular(30),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Colors.grey,
-                                    blurRadius: 1, // soften the shadow
-                                    offset: Offset(
-                                      1, // Move to right 10  horizontally
-                                      1.0, // Move to bottom 10 Vertically
-                                    ),
-                                  )
-                                ],
-                              ),
-                              child: InputDecorator(
-                                decoration: new InputDecoration(
-
-                                  labelText: 'Vet Check Report',
-                                  labelStyle: labelStyle,
-                                  border: OutlineInputBorder(),
-                                  enabledBorder: OutlineInputBorder(borderRadius:  new BorderRadius.circular(30), borderSide: BorderSide(width:2.0, color: obpBlueColor)),
+                            SizedBox(height: 24,),
+                            Center(
+                              child: Container(
+                                width: _width,
+                                height: 60,
+                                decoration: BoxDecoration(
+                                    color: Color(0xffffffff),
+                                    borderRadius:  new BorderRadius.circular(borderRadius)
                                 ),
+
+                                child: TextFormField(
+                                  initialValue: widget.puppyDetails.vetName,
+                                  textAlign: TextAlign.start,
+                                  onChanged: (String value) {
+                                    widget.puppyDetails.vetName = value;
+                                  },
+                                  style: style,
+                                  decoration: InputDecoration(
+                                      contentPadding: EdgeInsets.all(20),
+                                      labelText: 'Vet Name',
+                                      labelStyle: labelStyle,
+                                      focusedBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(color: obpBlueColor, width: 3.0),
+                                        borderRadius: BorderRadius.circular(borderRadius),
+                                      ),
+                                      enabledBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(color: obpBlueColor, width: 2.0),
+                                        borderRadius: BorderRadius.circular(borderRadius),
+                                      ),
+                                      border: OutlineInputBorder(
+                                        borderSide: BorderSide(color: obpBlueColor, width: 2.0),
+                                        borderRadius: BorderRadius.circular(borderRadius),
+                                      )
+                                  ),
+                                ),
+                              ),
+                            ),
+                            SizedBox(height: 24,),
+                            Center(
+                              child: Container(
+                                width: _width,
+                                height: 60,
+                                decoration: BoxDecoration(
+                                    color: Color(0xffffffff),
+                                    borderRadius:  new BorderRadius.circular(borderRadius)
+                                ),
+
+                                child: TextFormField(
+                                  initialValue: widget.puppyDetails.vetAddress,
+                                  textAlign: TextAlign.start,
+                                  onChanged: (String value) {
+                                    widget.puppyDetails.vetAddress = value;
+                                  },
+                                  style: style,
+                                  decoration: InputDecoration(
+                                      contentPadding: EdgeInsets.all(20),
+                                      labelText: 'Vet Address',
+                                      labelStyle: labelStyle,
+                                      focusedBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(color: obpBlueColor, width: 3.0),
+                                        borderRadius: BorderRadius.circular(borderRadius),
+                                      ),
+                                      enabledBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(color: obpBlueColor, width: 2.0),
+                                        borderRadius: BorderRadius.circular(borderRadius),
+                                      ),
+                                      border: OutlineInputBorder(
+                                        borderSide: BorderSide(color: obpBlueColor, width: 2.0),
+                                        borderRadius: BorderRadius.circular(borderRadius),
+                                      )
+                                  ),
+                                ),
+                              ),
+                            ),
+                            SizedBox(height: 24,),
+
+                            Center(
+                              child: InkWell(
+                                onTap: () {
+                                  FocusScope.of(context).unfocus();
+                                  _selectDateOfCheckup(context);
+                                },
                                 child: Container(
-
-                                  child: _vetReportPath!=null && _vetReportPath.trim()!=""
-                                      ? Column(
-                                    children: <Widget>[
-                                      Container(
-                                        decoration: BoxDecoration(
-                                          color: Colors.white,
-                                          borderRadius:  new BorderRadius.circular(12),
-                                          boxShadow: [
-                                            BoxShadow(
-                                              color: Colors.transparent,
-                                              blurRadius: 0, // soften the shadow
-                                              offset: Offset(
-                                                0, // Move to right 10  horizontally
-                                                0.0, // Move to bottom 10 Vertically
-                                              ),
-                                            )
-                                          ],
+                                  width: _width,
+                                  height: 64,
+                                  decoration: BoxDecoration(
+                                    color: Color(0xffffffff),
+                                    borderRadius:  new BorderRadius.circular(30),
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Colors.grey,
+                                        blurRadius: 1.0, // soften the shadow
+                                        offset: Offset(
+                                          1.0, // Move to right 10  horizontally
+                                          1.0, // Move to bottom 10 Vertically
                                         ),
-
-                                        child: Padding(
-                                          padding: const EdgeInsets.all(8.0),
-                                          child: Row(
-                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                            children: <Widget>[
-                                              Row(
-                                                mainAxisAlignment: MainAxisAlignment.start,
-                                                children: <Widget>[
-                                                  Icon(Icons.attachment, color: Colors.black38, ),
-                                                  SizedBox(width: 8,),
-                                                  Container(
-                                                    width: _width/1.75,
-                                                    child: Text(_vetReportPath.substring(_vetReportPath.lastIndexOf("/")+1),textAlign: TextAlign.start,
-                                                      maxLines: 2,
-                                                      style: TextStyle(fontSize: 14,color: Colors.grey),
-                                                    ),
-                                                  ),
-
-                                                ],
-                                              ),
-                                              InkWell(
-                                                splashColor: Colors.red,
-                                                onTap: (){
-                                                  Toast.show("Vet report removed", context);
-                                                  setState(() {
-                                                    _vetReportPath = null;
-                                                  });
-                                                },
-                                                child: Container(
-                                                  height: 40,
-                                                  width: 40,
-                                                  child: Icon(Icons.cancel, color: Colors.redAccent,),
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-
-                                        ),
-                                      ),
-                                      SizedBox(height: 16,),
-                                      Container(
-                                        alignment: Alignment.bottomRight,
-                                        child: Container(
-                                          width: _width,
-                                          child: Row(
-                                            mainAxisAlignment: MainAxisAlignment.end,
-                                            children: <Widget>[
-                                              InkWell(
-                                                  onTap:() async {
-                                                    try{
-                                                    showDialog(context: context,child:  BackdropFilter(
-                                                      filter: ImageFilter.blur(sigmaX:2.0,sigmaY:2.0),
-                                                      child: SpinKitRing(
-                                                        lineWidth: 2,
-                                                        color: obpBlueColor,
-                                                        size: 50,
-                                                      ),
-                                                    ),
-                                                    );
-
-                                                    if(_vetReportPath == widget.puppyDetails.vetReport){
-                                                      var data = await http.get(_vetReportPath);
-                                                      var bytes = data.bodyBytes;
-                                                      var dir = await getApplicationDocumentsDirectory();
-                                                      var ext = _vetReportPath.substring(_vetReportPath.lastIndexOf(".")+1);
-                                                      if(ext!=null && ext != "")
-                                                        ext = "."+ext;
-                                                      else
-                                                        ext="";
-                                                      File file  = File("${dir.path}/vetReport"+ext);
-                                                      File assetFile = await file.writeAsBytes(bytes);
-                                                      Navigator.of(context).pop();
-                                                      await OpenFile.open("${dir.path}/vetReport"+ext);
-                                                    } else{
-                                                      Navigator.of(context).pop();
-                                                      await OpenFile.open(_vetReportPath);
-                                                    }
-
-                                                  }catch(exception){
-                                                    Navigator.of(context).pop();
-                                                    Toast.show("Error while fetching vet report", context,duration:Toast.LENGTH_LONG);
-                                                  }
-                                                  },
-                                                  child: Container(
-                                                      padding: EdgeInsets.only(
-                                                        bottom: 0.0, // space between underline and text
-                                                      ),
-                                                      decoration: BoxDecoration(
-                                                          border: Border(bottom: BorderSide(
-                                                            color: Colors.blue,  // Text colour here
-                                                            width: 1.5, // Underline width
-                                                          ))
-                                                      ),
-
-                                                      child:new Text("VIEW", style: TextStyle(color:Colors.blue, fontWeight: FontWeight.bold, fontSize: 12))
-                                                  )
-                                              ),
-                                              SizedBox(width: 20,),
-                                              InkWell(
-                                                  onTap:(){
-                                                    loadVetReport();
-                                                  },
-                                                  child: Container(
-                                                      padding: EdgeInsets.only(
-                                                        bottom: 0.0, // space between underline and text
-                                                      ),
-                                                      decoration: BoxDecoration(
-                                                          border: Border(bottom: BorderSide(
-                                                            color: Colors.blue,  // Text colour here
-                                                            width: 1.5, // Underline width
-                                                          ))
-                                                      ),
-
-                                                      child:new Text("CHANGE", style: TextStyle(color:Colors.blue, fontWeight: FontWeight.bold, fontSize: 12))
-                                                  )
-                                              ),
-                                              SizedBox(width: 8,),
-                                            ],
-                                          ),
-                                        ),
-                                      ),
+                                      )
                                     ],
-                                  )
-                                      : InkWell(
-                                    onTap:loadVetReport,
+                                  ),
+
+
+                                  child: InputDecorator(
+
+                                    decoration: new InputDecoration(
+                                      contentPadding: EdgeInsets.all(20),
+                                      labelText: 'Check-up Date',
+                                      labelStyle: labelStyle,
+                                      border: OutlineInputBorder(),
+                                      enabledBorder: OutlineInputBorder(borderRadius:  new BorderRadius.circular(30), borderSide: BorderSide(width: 2.0, color: obpBlueColor)),
+                                    ),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                      children: <Widget>[
+
+                                        Text(
+                                          "${dateOfCheckupString}",
+                                          textAlign: TextAlign.start,
+                                          style: TextStyle(
+                                              fontFamily: "Lato",
+                                              fontSize: 14,
+                                              color: obpBlueColor),
+                                        ),
+                                        Padding(
+                                            padding:
+                                            const EdgeInsets.fromLTRB(
+                                                00, 0, 0, 0),
+                                            child: Container(
+                                              height: 40,
+                                              width: 40,
+                                              child: Icon(Icons.calendar_today, color: obpBlueColor),
+                                            )),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            SizedBox(height: 24,),
+
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: <Widget>[
+                                Container(
+                                  width: _width,
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius:  new BorderRadius.circular(30),
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Colors.grey,
+                                        blurRadius: 1, // soften the shadow
+                                        offset: Offset(
+                                          1, // Move to right 10  horizontally
+                                          1.0, // Move to bottom 10 Vertically
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                  child: InputDecorator(
+                                    decoration: new InputDecoration(
+
+                                      labelText: 'Vet Check Report',
+                                      labelStyle: labelStyle,
+                                      border: OutlineInputBorder(),
+                                      enabledBorder: OutlineInputBorder(borderRadius:  new BorderRadius.circular(30), borderSide: BorderSide(width:2.0, color: obpBlueColor)),
+                                    ),
                                     child: Container(
 
-                                      child: Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      child: _vetReportPath!=null && _vetReportPath.trim()!=""
+                                          ? Column(
                                         children: <Widget>[
-                                          Padding(
-                                            padding: const EdgeInsets.fromLTRB(16,0,0,0),
-                                            child: Text("Upload", style:labelStyle),
-                                          ),
-                                          ClipRRect(
-                                            borderRadius:
-                                            BorderRadius.circular(24.0),
-                                            child:Padding(
-                                              padding: const EdgeInsets.fromLTRB(0,0,12 ,0),
-                                              child: Icon(Icons.file_upload, color: obpBlueColor,),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-
-                                ),
-                              ),
-                            ),
-
-                          ],
-                        ),
-                        SizedBox(height: 24,),
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: <Widget>[
-                            Container(
-                              width: _width,
-                              decoration: BoxDecoration(
-                                color: Color(0xffffffff),
-                                borderRadius:  new BorderRadius.circular(30),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Colors.grey,
-                                    blurRadius: 1, // soften the shadow
-                                    offset: Offset(
-                                      1, // Move to right 10  horizontally
-                                      1.0, // Move to bottom 10 Vertically
-                                    ),
-                                  )
-                                ],
-                              ),
-                              child: InputDecorator(
-                                decoration: new InputDecoration(
-
-                                  labelText: 'Flight Ticket',
-                                  labelStyle: labelStyle,
-                                  border: OutlineInputBorder(),
-                                  enabledBorder: OutlineInputBorder(borderRadius:  new BorderRadius.circular(30), borderSide: BorderSide(width:2.0, color: obpBlueColor)),
-                                ),
-                                child: Container(
-
-                                  child: _flightTicketPath!=null && _flightTicketPath.trim()!=""
-                                      ? Column(
-                                    children: <Widget>[
-                                      Container(
-                                        decoration: BoxDecoration(
-                                          borderRadius:  new BorderRadius.circular(12),
-                                          boxShadow: [
-                                            BoxShadow(
-                                              color: Colors.transparent,
-                                              blurRadius: 0, // soften the shadow
-                                              offset: Offset(
-                                                0, // Move to right 10  horizontally
-                                                0.0, // Move to bottom 10 Vertically
-                                              ),
-                                            )
-                                          ],
-                                        ),
-
-                                        child: Padding(
-                                          padding: const EdgeInsets.all(8.0),
-                                          child: Row(
-                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                            children: <Widget>[
-                                              Row(
-                                                mainAxisAlignment: MainAxisAlignment.start,
-                                                children: <Widget>[
-                                                  Icon(Icons.attachment, color: Colors.black38, ),
-                                                  SizedBox(width: 8,),
-                                                  Container(
-                                                    width: _width/1.75,
-                                                    child: Text(_flightTicketPath.substring(_flightTicketPath.lastIndexOf("/")+1),textAlign: TextAlign.start,
-                                                      maxLines: 2,
-                                                      style: TextStyle(fontSize: 14,color: Colors.grey),
-                                                    ),
+                                          Container(
+                                            decoration: BoxDecoration(
+                                              color: Colors.white,
+                                              borderRadius:  new BorderRadius.circular(12),
+                                              boxShadow: [
+                                                BoxShadow(
+                                                  color: Colors.transparent,
+                                                  blurRadius: 0, // soften the shadow
+                                                  offset: Offset(
+                                                    0, // Move to right 10  horizontally
+                                                    0.0, // Move to bottom 10 Vertically
                                                   ),
+                                                )
+                                              ],
+                                            ),
 
-                                                ],
-                                              ),
-                                              InkWell(
-                                                splashColor: Colors.red,
-                                                onTap: (){
-                                                  Toast.show("Flight Ticket selection cancelled", context);
-                                                  setState(() {
-                                                    _flightTicketPath = null;
-                                                  });
-                                                },
-                                                child: Container(
-                                                  height: 40,
-                                                  width: 40,
-                                                  child: Icon(Icons.cancel, color: Colors.redAccent,),
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-
-                                        ),
-                                      ),
-                                      SizedBox(height: 16,),
-                                      Container(
-                                        alignment: Alignment.bottomRight,
-                                        child: Container(
-                                          width: _width,
-                                          child: Row(
-                                            mainAxisAlignment: MainAxisAlignment.end,
-                                            children: <Widget>[
-                                              InkWell(
-                                                  onTap:() async {
-                                                    try{
-                                                      showDialog(context: context,child:  BackdropFilter(
-                                                        filter: ImageFilter.blur(sigmaX:2.0,sigmaY:2.0),
-                                                        child: SpinKitRing(
-                                                          lineWidth: 2,
-                                                          color: obpBlueColor,
-                                                          size: 50,
+                                            child: Padding(
+                                              padding: const EdgeInsets.all(8.0),
+                                              child: Row(
+                                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                children: <Widget>[
+                                                  Row(
+                                                    mainAxisAlignment: MainAxisAlignment.start,
+                                                    children: <Widget>[
+                                                      Icon(Icons.attachment, color: Colors.black38, ),
+                                                      SizedBox(width: 8,),
+                                                      Container(
+                                                        width: _width/1.75,
+                                                        child: Text(_vetReportPath.substring(_vetReportPath.lastIndexOf("/")+1),textAlign: TextAlign.start,
+                                                          maxLines: 2,
+                                                          style: TextStyle(fontSize: 14,color: Colors.grey),
                                                         ),
                                                       ),
-                                                      );
 
-                                                      if(_flightTicketPath == widget.puppyDetails.flightTicket){
-                                                        var data = await http.get(_flightTicketPath);
-                                                        var bytes = data.bodyBytes;
-                                                        var dir = await getApplicationDocumentsDirectory();
-                                                        var ext = _flightTicketPath.substring(_flightTicketPath.lastIndexOf(".")+1);
-                                                        if(ext!=null && ext != "")
-                                                          ext = "."+ext;
-                                                        else
-                                                          ext="";
-                                                        File file  = File("${dir.path}/flight"+ext);
-                                                        File assetFile = await file.writeAsBytes(bytes);
+                                                    ],
+                                                  ),
+                                                  InkWell(
+                                                    splashColor: Colors.red,
+                                                    onTap: (){
+                                                      Toast.show("Vet report removed", context,backgroundColor: Colors.black87, textColor: Color(0xffFFFd19));
+                                                      setState(() {
+                                                        _vetReportPath = null;
+                                                      });
+                                                    },
+                                                    child: Container(
+                                                      height: 40,
+                                                      width: 40,
+                                                      child: Icon(Icons.cancel, color: Colors.redAccent,),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+
+                                            ),
+                                          ),
+                                          SizedBox(height: 16,),
+                                          Container(
+                                            alignment: Alignment.bottomRight,
+                                            child: Container(
+                                              width: _width,
+                                              child: Row(
+                                                mainAxisAlignment: MainAxisAlignment.end,
+                                                children: <Widget>[
+                                                  InkWell(
+                                                      onTap:() async {
+                                                        try{
+                                                        showDialog(context: context,child:  BackdropFilter(
+                                                          filter: ImageFilter.blur(sigmaX:2.0,sigmaY:2.0),
+                                                          child: SpinKitRing(
+                                                            lineWidth: 2,
+                                                            color: obpBlueColor,
+                                                            size: 50,
+                                                          ),
+                                                        ),
+                                                        );
+
+                                                        if(_vetReportPath == widget.puppyDetails.vetReport){
+                                                          var data = await http.get(_vetReportPath);
+                                                          var bytes = data.bodyBytes;
+                                                          var dir = await getApplicationDocumentsDirectory();
+                                                          var ext = _vetReportPath.substring(_vetReportPath.lastIndexOf(".")+1);
+                                                          if(ext!=null && ext != "")
+                                                            ext = "."+ext;
+                                                          else
+                                                            ext="";
+                                                          File file  = File("${dir.path}/vetReport"+ext);
+                                                          File assetFile = await file.writeAsBytes(bytes);
+                                                          Navigator.of(context).pop();
+                                                          await OpenFile.open("${dir.path}/vetReport"+ext);
+                                                        } else{
+                                                          Navigator.of(context).pop();
+                                                          await OpenFile.open(_vetReportPath);
+                                                        }
+
+                                                      }catch(exception){
                                                         Navigator.of(context).pop();
-                                                        await OpenFile.open("${dir.path}/flight"+ext);
-                                                      } else{
-                                                        Navigator.of(context).pop();
-                                                        await OpenFile.open(_flightTicketPath);
+                                                        Toast.show("Error while fetching vet report", context,duration:Toast.LENGTH_LONG,backgroundColor: Colors.black87, textColor: Color(0xffFFFd19));
                                                       }
-                                                    }catch(exception){
-                                                      Navigator.of(context).pop();
-                                                      Toast.show("Error while fetching flight ticket", context,duration:Toast.LENGTH_LONG);
-                                                    }
+                                                      },
+                                                      child: Container(
+                                                          padding: EdgeInsets.only(
+                                                            bottom: 0.0, // space between underline and text
+                                                          ),
+                                                          decoration: BoxDecoration(
+                                                              border: Border(bottom: BorderSide(
+                                                                color: Colors.blue,  // Text colour here
+                                                                width: 1.5, // Underline width
+                                                              ))
+                                                          ),
 
+                                                          child:new Text("VIEW", style: TextStyle(color:Colors.blue, fontWeight: FontWeight.bold, fontSize: 12))
+                                                      )
+                                                  ),
+                                                  SizedBox(width: 20,),
+                                                  InkWell(
+                                                      onTap:(){
+                                                        loadVetReport();
+                                                      },
+                                                      child: Container(
+                                                          padding: EdgeInsets.only(
+                                                            bottom: 0.0, // space between underline and text
+                                                          ),
+                                                          decoration: BoxDecoration(
+                                                              border: Border(bottom: BorderSide(
+                                                                color: Colors.blue,  // Text colour here
+                                                                width: 1.5, // Underline width
+                                                              ))
+                                                          ),
 
-                                                  },
-                                                  child: Container(
-                                                      padding: EdgeInsets.only(
-                                                        bottom: 0.0, // space between underline and text
-                                                      ),
-                                                      decoration: BoxDecoration(
-                                                          border: Border(bottom: BorderSide(
-                                                            color: Colors.blue,  // Text colour here
-                                                            width: 1.5, // Underline width
-                                                          ))
-                                                      ),
-
-                                                      child:new Text("VIEW", style: TextStyle(color:Colors.blue, fontWeight: FontWeight.bold, fontSize: 12))
-                                                  )
+                                                          child:new Text("CHANGE", style: TextStyle(color:Colors.blue, fontWeight: FontWeight.bold, fontSize: 12))
+                                                      )
+                                                  ),
+                                                  SizedBox(width: 8,),
+                                                ],
                                               ),
-                                              SizedBox(width: 20,),
-                                              InkWell(
-                                                  onTap:(){
-                                                    loadFlightTicket();
-                                                  },
-                                                  child: Container(
-                                                      padding: EdgeInsets.only(
-                                                        bottom: 0.0, // space between underline and text
-                                                      ),
-                                                      decoration: BoxDecoration(
-                                                          border: Border(bottom: BorderSide(
-                                                            color: Colors.blue,  // Text colour here
-                                                            width: 1.5, // Underline width
-                                                          ))
-                                                      ),
+                                            ),
+                                          ),
+                                        ],
+                                      )
+                                          : InkWell(
+                                        onTap:loadVetReport,
+                                        child: Container(
 
-                                                      child:new Text("CHANGE", style: TextStyle(color:Colors.blue, fontWeight: FontWeight.bold, fontSize: 12))
-                                                  )
+                                          child: Row(
+                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                            children: <Widget>[
+                                              Padding(
+                                                padding: const EdgeInsets.fromLTRB(16,0,0,0),
+                                                child: Text("Upload", style:labelStyle),
                                               ),
-                                              SizedBox(width: 8,),
+                                              ClipRRect(
+                                                borderRadius:
+                                                BorderRadius.circular(24.0),
+                                                child:Padding(
+                                                  padding: const EdgeInsets.fromLTRB(0,0,12 ,0),
+                                                  child: Icon(Icons.file_upload, color: obpBlueColor,),
+                                                ),
+                                              ),
                                             ],
                                           ),
                                         ),
                                       ),
+
+                                    ),
+                                  ),
+                                ),
+
+                              ],
+                            ),
+                            SizedBox(height: 24,),
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: <Widget>[
+                                Container(
+                                  width: _width,
+                                  decoration: BoxDecoration(
+                                    color: Color(0xffffffff),
+                                    borderRadius:  new BorderRadius.circular(30),
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Colors.grey,
+                                        blurRadius: 1, // soften the shadow
+                                        offset: Offset(
+                                          1, // Move to right 10  horizontally
+                                          1.0, // Move to bottom 10 Vertically
+                                        ),
+                                      )
                                     ],
-                                  )
-                                      : InkWell(
-                                    onTap:loadFlightTicket,
+                                  ),
+                                  child: InputDecorator(
+                                    decoration: new InputDecoration(
+
+                                      labelText: 'Flight Ticket',
+                                      labelStyle: labelStyle,
+                                      border: OutlineInputBorder(),
+                                      enabledBorder: OutlineInputBorder(borderRadius:  new BorderRadius.circular(30), borderSide: BorderSide(width:2.0, color: obpBlueColor)),
+                                    ),
                                     child: Container(
-                                      child: Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+
+                                      child: _flightTicketPath!=null && _flightTicketPath.trim()!=""
+                                          ? Column(
                                         children: <Widget>[
-                                          Padding(
-                                            padding: const EdgeInsets.fromLTRB(16,0,0,0),
-                                            child: Text("Upload ..", style:labelStyle),
+                                          Container(
+                                            decoration: BoxDecoration(
+                                              borderRadius:  new BorderRadius.circular(12),
+                                              boxShadow: [
+                                                BoxShadow(
+                                                  color: Colors.transparent,
+                                                  blurRadius: 0, // soften the shadow
+                                                  offset: Offset(
+                                                    0, // Move to right 10  horizontally
+                                                    0.0, // Move to bottom 10 Vertically
+                                                  ),
+                                                )
+                                              ],
+                                            ),
+
+                                            child: Padding(
+                                              padding: const EdgeInsets.all(8.0),
+                                              child: Row(
+                                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                children: <Widget>[
+                                                  Row(
+                                                    mainAxisAlignment: MainAxisAlignment.start,
+                                                    children: <Widget>[
+                                                      Icon(Icons.attachment, color: Colors.black38, ),
+                                                      SizedBox(width: 8,),
+                                                      Container(
+                                                        width: _width/1.75,
+                                                        child: Text(_flightTicketPath.substring(_flightTicketPath.lastIndexOf("/")+1),textAlign: TextAlign.start,
+                                                          maxLines: 2,
+                                                          style: TextStyle(fontSize: 14,color: Colors.grey),
+                                                        ),
+                                                      ),
+
+                                                    ],
+                                                  ),
+                                                  InkWell(
+                                                    splashColor: Colors.red,
+                                                    onTap: (){
+                                                      Toast.show("Flight Ticket selection cancelled", context,backgroundColor: Colors.black87, textColor: Color(0xffFFFd19));
+                                                      setState(() {
+                                                        _flightTicketPath = null;
+                                                      });
+                                                    },
+                                                    child: Container(
+                                                      height: 40,
+                                                      width: 40,
+                                                      child: Icon(Icons.cancel, color: Colors.redAccent,),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+
+                                            ),
                                           ),
-                                          ClipRRect(
-                                            borderRadius:
-                                            BorderRadius.circular(24.0),
-                                            child:Padding(
-                                              padding: const EdgeInsets.fromLTRB(0,0,12 ,0),
-                                              child: Icon(Icons.file_upload, color: obpBlueColor,),
+                                          SizedBox(height: 16,),
+                                          Container(
+                                            alignment: Alignment.bottomRight,
+                                            child: Container(
+                                              width: _width,
+                                              child: Row(
+                                                mainAxisAlignment: MainAxisAlignment.end,
+                                                children: <Widget>[
+                                                  InkWell(
+                                                      onTap:() async {
+                                                        try{
+                                                          showDialog(context: context,child:  BackdropFilter(
+                                                            filter: ImageFilter.blur(sigmaX:2.0,sigmaY:2.0),
+                                                            child: SpinKitRing(
+                                                              lineWidth: 2,
+                                                              color: obpBlueColor,
+                                                              size: 50,
+                                                            ),
+                                                          ),
+                                                          );
+
+                                                          if(_flightTicketPath == widget.puppyDetails.flightTicket){
+                                                            var data = await http.get(_flightTicketPath);
+                                                            var bytes = data.bodyBytes;
+                                                            var dir = await getApplicationDocumentsDirectory();
+                                                            var ext = _flightTicketPath.substring(_flightTicketPath.lastIndexOf(".")+1);
+                                                            if(ext!=null && ext != "")
+                                                              ext = "."+ext;
+                                                            else
+                                                              ext="";
+                                                            File file  = File("${dir.path}/flight"+ext);
+                                                            File assetFile = await file.writeAsBytes(bytes);
+                                                            Navigator.of(context).pop();
+                                                            await OpenFile.open("${dir.path}/flight"+ext);
+                                                          } else{
+                                                            Navigator.of(context).pop();
+                                                            await OpenFile.open(_flightTicketPath);
+                                                          }
+                                                        }catch(exception){
+                                                          Navigator.of(context).pop();
+                                                          Toast.show("Error while fetching flight ticket", context,backgroundColor: Colors.black87, textColor: Color(0xffFFFd19),duration:Toast.LENGTH_LONG);
+                                                        }
+
+
+                                                      },
+                                                      child: Container(
+                                                          padding: EdgeInsets.only(
+                                                            bottom: 0.0, // space between underline and text
+                                                          ),
+                                                          decoration: BoxDecoration(
+                                                              border: Border(bottom: BorderSide(
+                                                                color: Colors.blue,  // Text colour here
+                                                                width: 1.5, // Underline width
+                                                              ))
+                                                          ),
+
+                                                          child:new Text("VIEW", style: TextStyle(color:Colors.blue, fontWeight: FontWeight.bold, fontSize: 12))
+                                                      )
+                                                  ),
+                                                  SizedBox(width: 20,),
+                                                  InkWell(
+                                                      onTap:(){
+                                                        loadFlightTicket();
+                                                      },
+                                                      child: Container(
+                                                          padding: EdgeInsets.only(
+                                                            bottom: 0.0, // space between underline and text
+                                                          ),
+                                                          decoration: BoxDecoration(
+                                                              border: Border(bottom: BorderSide(
+                                                                color: Colors.blue,  // Text colour here
+                                                                width: 1.5, // Underline width
+                                                              ))
+                                                          ),
+
+                                                          child:new Text("CHANGE", style: TextStyle(color:Colors.blue, fontWeight: FontWeight.bold, fontSize: 12))
+                                                      )
+                                                  ),
+                                                  SizedBox(width: 8,),
+                                                ],
+                                              ),
                                             ),
                                           ),
                                         ],
+                                      )
+                                          : InkWell(
+                                        onTap:loadFlightTicket,
+                                        child: Container(
+                                          child: Row(
+                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                            children: <Widget>[
+                                              Padding(
+                                                padding: const EdgeInsets.fromLTRB(16,0,0,0),
+                                                child: Text("Upload ..", style:labelStyle),
+                                              ),
+                                              ClipRRect(
+                                                borderRadius:
+                                                BorderRadius.circular(24.0),
+                                                child:Padding(
+                                                  padding: const EdgeInsets.fromLTRB(0,0,12 ,0),
+                                                  child: Icon(Icons.file_upload, color: obpBlueColor,),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
                                       ),
+
                                     ),
                                   ),
-
                                 ),
-                              ),
-                            ),
 
+                              ],
+                            ),
                           ],
-                        ),
+                        ):Container(),
+
+
+
                         SizedBox(height: 24,),
                         Center(
                           child: Container(
@@ -1800,63 +1810,93 @@ class EditPuppyState extends State<EditPuppy> {
 
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String userId =  prefs.getString(Constants.SHARED_PREF_USER_ID);
-    Toast.show("New Images "+multipart.length.toString() + ", Deleted: " +deletedImagesIdList.length.toString(), context, duration: Toast.LENGTH_LONG);
+    Toast.show("New Images "+multipart.length.toString() + ", Deleted: " +deletedImagesIdList.length.toString(), context,backgroundColor: Colors.black87, textColor: Color(0xffFFFd19), duration: Toast.LENGTH_LONG);
 
     var dio = Dio();
-    FormData formData = new FormData.fromMap({
-      "puppy-name": Utility.capitalize(widget.puppyDetails.puppyName.trim()),
-      "puppy_id": widget.puppyDetails.puppyId,
-      "description": Utility.capitalize(widget.puppyDetails.description.trim()),
-      "categories": _selectedBreedId,
-      "user_id": userId,
-      "selling-price": widget.puppyDetails.puppyPrice.trim(),
-      "shipping-cost": widget.puppyDetails.shippingCost.trim(),
-      "date-of-birth": dateOfBirth.millisecondsSinceEpoch.toString(),
-      "date-available-new": dateOfBirthString,
-      "age-in-week": calculateAgeInWeeks(),
-      "color": Utility.capitalize(widget.puppyDetails.color.trim()),
-      "puppy-weight": widget.puppyDetails.puppyWeight.trim(),
-      "dad-weight": widget.puppyDetails.puppyDadWeight.trim(),
-      "mom-weight": widget.puppyDetails.puppyMomWeight.trim(),
-      "registry": widget.puppyDetails.registry.trim(),
-      "vet-name": widget.puppyDetails.vetName.trim(),
-      "vet-address": widget.puppyDetails.vetAddress.trim(),
-      "checkup-date": dateOfCheckup.millisecondsSinceEpoch.toString(),
-      "kid-friendly": isKidFriendly?"1":"0",
-      "socialized": isSocialized?"1":"0",
-      "family-raised":isFamilyRaised?"1":"0",
-      "champion-bloodlines": isChampionBloodline?"1":"0",
-      "microchipped": isMicrochipped?"1":"0",
-      "gender": isFemale?"Female":"Male",
-      "gallery_images": [multipart],
-      "deleted_imgs_ids": deletedImagesIdList,
-      "report-copy" :_vetReportPath!=null && _vetReportPath.trim()!=""
-          ? _vetReportPath == widget.puppyDetails.vetReport
-          ? widget.puppyDetails.vetReport
-          : vetReport
-          : "",
-      "flight-doc" : _flightTicketPath!=null && _flightTicketPath.trim()!=""
-          ? _flightTicketPath == widget.puppyDetails.flightTicket
-          ? widget.puppyDetails.flightTicket
-          : flightTicketFile
-          : "",
-    });
+    FormData formData;
+    if(widget.puppyDetails.isSold && widget.puppyDetails.isSoldByObp){
+      formData = new FormData.fromMap({
+        "puppy-name": Utility.capitalize(widget.puppyDetails.puppyName.trim()),
+        "puppy_id": widget.puppyDetails.puppyId,
+        "description": Utility.capitalize(widget.puppyDetails.description.trim()),
+        "categories": _selectedBreedId,
+        "user_id": userId,
+        "selling-price": widget.puppyDetails.puppyPrice.trim(),
+        "shipping-cost": widget.puppyDetails.shippingCost.trim(),
+        "date-of-birth": dateOfBirth.millisecondsSinceEpoch.toString(),
+        "date-available-new": dateOfBirthString,
+        "age-in-week": calculateAgeInWeeks(),
+        "color": Utility.capitalize(widget.puppyDetails.color.trim()),
+        "puppy-weight": widget.puppyDetails.puppyWeight.trim(),
+        "dad-weight": widget.puppyDetails.puppyDadWeight.trim(),
+        "mom-weight": widget.puppyDetails.puppyMomWeight.trim(),
+        "registry": widget.puppyDetails.registry.trim(),
+        "vet-name": widget.puppyDetails.vetName.trim(),
+        "vet-address": widget.puppyDetails.vetAddress.trim(),
+        "checkup-date": dateOfCheckup.millisecondsSinceEpoch.toString(),
+        "kid-friendly": isKidFriendly?"1":"0",
+        "socialized": isSocialized?"1":"0",
+        "family-raised":isFamilyRaised?"1":"0",
+        "champion-bloodlines": isChampionBloodline?"1":"0",
+        "microchipped": isMicrochipped?"1":"0",
+        "gender": isFemale?"Female":"Male",
+        "gallery_images": [multipart],
+        "deleted_imgs_ids": deletedImagesIdList,
+        "report-copy" :_vetReportPath!=null && _vetReportPath.trim()!=""
+            ? _vetReportPath == widget.puppyDetails.vetReport
+            ? widget.puppyDetails.vetReport
+            : vetReport
+            : "",
+        "flight-doc" : _flightTicketPath!=null && _flightTicketPath.trim()!=""
+            ? _flightTicketPath == widget.puppyDetails.flightTicket
+            ? widget.puppyDetails.flightTicket
+            : flightTicketFile
+            : "",
+      });
+    } else{
+      formData = new FormData.fromMap({
+        "puppy-name": Utility.capitalize(widget.puppyDetails.puppyName.trim()),
+        "puppy_id": widget.puppyDetails.puppyId,
+        "description": Utility.capitalize(widget.puppyDetails.description.trim()),
+        "categories": _selectedBreedId,
+        "user_id": userId,
+        "selling-price": widget.puppyDetails.puppyPrice.trim(),
+        "shipping-cost": widget.puppyDetails.shippingCost.trim(),
+        "date-of-birth": dateOfBirth.millisecondsSinceEpoch.toString(),
+        "date-available-new": dateOfBirthString,
+        "age-in-week": calculateAgeInWeeks(),
+        "color": Utility.capitalize(widget.puppyDetails.color.trim()),
+        "puppy-weight": widget.puppyDetails.puppyWeight.trim(),
+        "dad-weight": widget.puppyDetails.puppyDadWeight.trim(),
+        "mom-weight": widget.puppyDetails.puppyMomWeight.trim(),
+        "registry": widget.puppyDetails.registry.trim(),
+        "kid-friendly": isKidFriendly?"1":"0",
+        "socialized": isSocialized?"1":"0",
+        "family-raised":isFamilyRaised?"1":"0",
+        "champion-bloodlines": isChampionBloodline?"1":"0",
+        "microchipped": isMicrochipped?"1":"0",
+        "gender": isFemale?"Female":"Male",
+        "gallery_images": [multipart],
+        "deleted_imgs_ids": deletedImagesIdList,
+      });
+    }
+
     try{
       dynamic response = await dio.post("https://onebarkplaza.com/wp-json/obp/v1/update_puppy",data:formData);
       if (response.statusCode == 200) {
         dynamic responseList = jsonDecode(response.toString());
         if (responseList["success"] == "Puppy successfully Edit!") {
         }
-        Toast.show("Edit request successful" , context,duration: Toast.LENGTH_LONG);
+        Toast.show("Edit request successful" , context,duration: Toast.LENGTH_LONG,backgroundColor: Colors.black87, textColor: Color(0xffFFFd19));
         Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (BuildContext context) => HomePage()));
       } else {
-        Toast.show("Edit Puppy Failed "+response.toString(), context,duration: Toast.LENGTH_LONG);
+        Toast.show("Edit Puppy Failed "+response.toString(), context,duration: Toast.LENGTH_LONG,backgroundColor: Colors.black87, textColor: Color(0xffFFFd19));
       }
       setState(() {
         _isLoading = false;
       });
     }catch(exception){
-      Toast.show("Request Failed. "+exception.toString(), context,
+      Toast.show("Request Failed. "+exception.toString(), context,backgroundColor: Colors.black87, textColor: Color(0xffFFFd19)
       );
       setState(() {
         _isLoading = false;

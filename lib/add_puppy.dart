@@ -310,11 +310,11 @@ class AddPuppyState extends State<AddPuppy> {
     final hintColor = Color(0xffA9A9A9);
 
 
-    TextStyle style = TextStyle(fontFamily: 'NunitoSans', fontSize: 14.0, color: Color(0xff707070));
+    TextStyle style = TextStyle(fontFamily: 'Lato', fontSize: 14.0, color: Color(0xff707070));
     TextStyle hintStyle = TextStyle(
-        fontFamily: 'NunitoSans', fontSize: 14.0, color: hintColor);
+        fontFamily: 'Lato', fontSize: 14.0, color: hintColor);
     TextStyle labelStyle = TextStyle(
-      fontFamily: 'NunitoSans', color: dividerColor, fontSize: 12,);
+      fontFamily: 'Lato', color: dividerColor, fontSize: 12,);
     var maleColor = Color(0xff5cbaed);
     var femaleColor = Color(0xfff25fa3);
     return WillPopScope(
@@ -362,7 +362,7 @@ class AddPuppyState extends State<AddPuppy> {
                   new Text(
                     "Add Puppy",
                     style: new TextStyle(
-                        fontFamily: 'NunitoSans',
+                        fontFamily: 'Lato',
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
                         color: dividerColor),
@@ -448,10 +448,10 @@ class AddPuppyState extends State<AddPuppy> {
                                           ),
                                           SizedBox(height:12),
                                           new Text('You can add upto 6 photos',
-                                            style: TextStyle(fontFamily:"NunitoSans",color: Color(0xff707070), fontSize: 12,fontWeight: FontWeight.bold),
+                                            style: TextStyle(fontFamily:"Lato",color: Color(0xff707070), fontSize: 12,fontWeight: FontWeight.bold),
                                           ),
                                           new Text('First photo of your selection will be cover photo',
-                                            style: TextStyle(fontFamily:"NunitoSans",color: Color(0xff707070), fontSize: 12,fontWeight: FontWeight.normal),
+                                            style: TextStyle(fontFamily:"Lato",color: Color(0xff707070), fontSize: 12,fontWeight: FontWeight.normal),
                                           ),SizedBox(height:12),
                                         ],
 
@@ -475,7 +475,7 @@ class AddPuppyState extends State<AddPuppy> {
                                               onPressed: loadAssets,
                                               color: Color(0xffffffff),
                                               icon: new Icon(Icons.image, color:dividerColor, size:16),
-                                              label: new Text("Add / View", style: TextStyle(color:dividerColor,fontFamily:"NunitoSans", fontWeight: FontWeight.bold, fontSize: 13),)),
+                                              label: new Text("Add / View", style: TextStyle(color:dividerColor,fontFamily:"Lato", fontWeight: FontWeight.bold, fontSize: 13),)),
                                         ),
                                       ],
                                     ),
@@ -543,7 +543,7 @@ class AddPuppyState extends State<AddPuppy> {
                                             "${_chooseBreed}",
                                             textAlign: TextAlign.start,
                                             style: TextStyle(
-                                                fontFamily: "NunitoSans",
+                                                fontFamily: "Lato",
                                                 fontSize: 14,
                                                 color: dividerColor),
                                           ),
@@ -651,7 +651,7 @@ class AddPuppyState extends State<AddPuppy> {
                                             "${dateOfBirthString}",
                                             textAlign: TextAlign.start,
                                             style: TextStyle(
-                                                fontFamily: "NunitoSans",
+                                                fontFamily: "Lato",
                                                 fontSize: 14,
                                                 color: dividerColor),
                                           ),
@@ -700,7 +700,7 @@ class AddPuppyState extends State<AddPuppy> {
                                             disabledElevation: 3.0,
                                             elevation: 0,
                                             icon: !isFemale? Icon(Icons.check_box, color: Colors.white, size:14): Icon(null, size:0),
-                                            label: new Text("Male", style: TextStyle(color:Colors.white,fontFamily:"NunitoSans", fontWeight: FontWeight.bold, fontSize: 13),)),
+                                            label: new Text("Male", style: TextStyle(color:Colors.white,fontFamily:"Lato", fontWeight: FontWeight.bold, fontSize: 13),)),
                                       ),
                                       Container(
                                         width: (_width - 44)/ 2,
@@ -723,7 +723,7 @@ class AddPuppyState extends State<AddPuppy> {
                                             disabledElevation: 3.0,
                                             elevation: 0,
                                             icon: isFemale? Icon(Icons.check_box, color: Colors.white, size:14): Icon(null, size:0),
-                                            label: new Text("Female", style: TextStyle(color:Colors.white,fontFamily:"NunitoSans", fontWeight: FontWeight.bold, fontSize: 13),)),
+                                            label: new Text("Female", style: TextStyle(color:Colors.white,fontFamily:"Lato", fontWeight: FontWeight.bold, fontSize: 13),)),
                                       ),
                                     ],
                                   ),
@@ -1319,19 +1319,19 @@ class AddPuppyState extends State<AddPuppy> {
       if (response.toString() != '[]') {
         dynamic responseList = jsonDecode(response.toString());
         if (responseList["success"] == "Puppy successfully created!") {
-          Toast.show("Add Puppy Successful " +response.toString(), context,duration: Toast.LENGTH_LONG);
+          Toast.show("Add Puppy Successful " +response.toString(), context,duration: Toast.LENGTH_LONG,backgroundColor: Colors.black87, textColor: Color(0xffFFFd19));
           Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (BuildContext context) => AddPuppySuccessful(responseList["puppy_id"])));
         } else {
-          Toast.show("Add Puppy Failed " +response.toString(), context, duration: Toast.LENGTH_LONG);
+          Toast.show("Add Puppy Failed " +response.toString(), context, duration: Toast.LENGTH_LONG,backgroundColor: Colors.black87, textColor: Color(0xffFFFd19));
         }
       } else {
-        Toast.show("Add Puppy Failed "+response.toString(), context,duration: Toast.LENGTH_LONG);
+        Toast.show("Add Puppy Failed "+response.toString(), context,duration: Toast.LENGTH_LONG,backgroundColor: Colors.black87, textColor: Color(0xffFFFd19));
       }
       setState(() {
         _isLoading = false;
       });
     }catch(exception){
-      Toast.show("Request Failed. "+exception.toString(), context,
+      Toast.show("Request Failed. "+exception.toString(), context,backgroundColor: Colors.black87, textColor: Color(0xffFFFd19)
       );
       setState(() {
         _isLoading = false;
