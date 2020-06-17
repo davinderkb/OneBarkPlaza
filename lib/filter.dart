@@ -336,28 +336,7 @@ class FilterState extends State<Filter> {
                   children: <Widget>[
                     InkWell(
                       onTap: (){
-                        for(BreedFilter filter in widget.setOfBreedFilter){
-                          if((filter.isSelected && !widget._selectedSetOfBreeds.contains(filter.breedName))
-                          ||(!filter.isSelected && widget._selectedSetOfBreeds.contains(filter.breedName))){
-                            filter.toggleSelection();
-                          }
-                        }
-                        for(GenderFilter filter in widget.genderFilter){
-                          if((filter.isSelected && !widget._selectedGender.contains(filter.genderType))
-                              ||(!filter.isSelected && widget._selectedGender.contains(filter.genderType))){
-                            filter.toggleSelection();
-                          }
-                        }
-                        for(StatusFilter filter in widget.setOfStatusFilter){
-                          if((filter.isSelected && !widget._selectedSetOfStatus.contains(filter.status))
-                              ||(!filter.isSelected && widget._selectedSetOfStatus.contains(filter.status))){
-                            filter.toggleSelection();
-                          }
-                        }
-                        if(widget.priceRangeFilter!=null) {
-                          widget.priceRangeFilter.changedMinValue = widget._chosenMinPrice;
-                          widget.priceRangeFilter.changedMaxValue = widget._chosenMaxPrice;
-                        }
+                        revertToLastSavedFiltersState();
                         widget.homePageState.setState(() { });
                         Navigator.of(context).maybePop();
                       },
@@ -390,39 +369,8 @@ class FilterState extends State<Filter> {
                     InkWell(
                       onTap:(){
 
-                        for(BreedFilter filter in widget.setOfBreedFilter){
-                          if(filter.isSelected){
-                            widget._selectedSetOfBreeds.add(filter.breedName);
-                          }
-                          else if(widget._selectedSetOfBreeds.contains(filter.breedName)){
-                            widget._selectedSetOfBreeds.remove(filter.breedName);
-                          }
-                        }
-                        for(GenderFilter filter in widget.genderFilter){
-                          if(filter.isSelected){
-                            widget._selectedGender.add(filter.genderType);
-                          }
-                          else if(widget._selectedGender.contains(filter.genderType)){
-                            widget._selectedGender.remove(filter.genderType);
-                          }
-                        }
-                        for(StatusFilter filter in widget.setOfStatusFilter){
-                          if(filter.isSelected){
-                            widget._selectedSetOfStatus.add(filter.status);
-                          }
-                          else if(widget._selectedSetOfStatus.contains(filter.status)){
-                            widget._selectedSetOfStatus.remove(filter.status);
-                          }
-                        }
-                        if(widget.priceRangeFilter!=null) {
-                          widget._chosenMinPrice = widget.priceRangeFilter.changedMinValue;
-                          widget._chosenMaxPrice = widget.priceRangeFilter.changedMaxValue;
-                        }
-                        if( widget._selectedSetOfStatus.length>0 || widget._selectedSetOfBreeds.length>0 || widget._selectedGender.length>0 || (widget.priceRangeFilter!=null && ( widget.priceRangeFilter.changedMinValue != widget.priceRangeFilter.initialMinValue ||widget.priceRangeFilter.changedMaxValue != widget.priceRangeFilter.initialMaxValue))){
-                          widget.isFilterApplied = true;
-                        } else{
-                          widget.isFilterApplied = false;
-                        }
+                        saveFilters();
+                        setIsFilterApplied();
                         widget.homePageState.setState(() { });
                         Navigator.of(context).maybePop();
 
@@ -453,6 +401,70 @@ class FilterState extends State<Filter> {
             ],
           ),
         ));
+  }
+
+  void revertToLastSavedFiltersState() {
+     for(BreedFilter filter in widget.setOfBreedFilter){
+      if((filter.isSelected && !widget._selectedSetOfBreeds.contains(filter.breedName))
+      ||(!filter.isSelected && widget._selectedSetOfBreeds.contains(filter.breedName))){
+        filter.toggleSelection();
+      }
+    }
+    for(GenderFilter filter in widget.genderFilter){
+      if((filter.isSelected && !widget._selectedGender.contains(filter.genderType))
+          ||(!filter.isSelected && widget._selectedGender.contains(filter.genderType))){
+        filter.toggleSelection();
+      }
+    }
+    for(StatusFilter filter in widget.setOfStatusFilter){
+      if((filter.isSelected && !widget._selectedSetOfStatus.contains(filter.status))
+          ||(!filter.isSelected && widget._selectedSetOfStatus.contains(filter.status))){
+        filter.toggleSelection();
+      }
+    }
+    if(widget.priceRangeFilter!=null) {
+      widget.priceRangeFilter.changedMinValue = widget._chosenMinPrice;
+      widget.priceRangeFilter.changedMaxValue = widget._chosenMaxPrice;
+    }
+  }
+
+  void saveFilters() {
+    for(BreedFilter filter in widget.setOfBreedFilter){
+      if(filter.isSelected){
+        widget._selectedSetOfBreeds.add(filter.breedName);
+      }
+      else if(widget._selectedSetOfBreeds.contains(filter.breedName)){
+        widget._selectedSetOfBreeds.remove(filter.breedName);
+      }
+    }
+    for(GenderFilter filter in widget.genderFilter){
+      if(filter.isSelected){
+        widget._selectedGender.add(filter.genderType);
+      }
+      else if(widget._selectedGender.contains(filter.genderType)){
+        widget._selectedGender.remove(filter.genderType);
+      }
+    }
+    for(StatusFilter filter in widget.setOfStatusFilter){
+      if(filter.isSelected){
+        widget._selectedSetOfStatus.add(filter.status);
+      }
+      else if(widget._selectedSetOfStatus.contains(filter.status)){
+        widget._selectedSetOfStatus.remove(filter.status);
+      }
+    }
+    if(widget.priceRangeFilter!=null) {
+      widget._chosenMinPrice = widget.priceRangeFilter.changedMinValue;
+      widget._chosenMaxPrice = widget.priceRangeFilter.changedMaxValue;
+    }
+  }
+
+  void setIsFilterApplied() {
+    if( widget._selectedSetOfStatus.length>0 || widget._selectedSetOfBreeds.length>0 || widget._selectedGender.length>0 || (widget.priceRangeFilter!=null && ( widget.priceRangeFilter.changedMinValue != widget.priceRangeFilter.initialMinValue ||widget.priceRangeFilter.changedMaxValue != widget.priceRangeFilter.initialMaxValue))){
+      widget.isFilterApplied = true;
+    } else{
+      widget.isFilterApplied = false;
+    }
   }
 
 
