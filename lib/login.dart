@@ -47,7 +47,6 @@ class LoginPageState extends State<LoginPage>{
       controller: userNameController,
       style: style,
       decoration: InputDecoration(
-
           contentPadding: EdgeInsets.fromLTRB(18.0, 20.0, 18.0, 20.0),
           labelText: "Username",
           labelStyle: TextStyle(color: Color(0xffFFFd19)),

@@ -1882,13 +1882,16 @@ class EditPuppyState extends State<EditPuppy> {
     }
 
     try{
-      dynamic response = await dio.post("https://onebarkplaza.com/wp-json/obp/v1/update_puppy",data:formData);
+      dynamic response = await dio.post("https://obpdevstage.wpengine.com/wp-json/obp/v1/update_puppy",data:formData);
       if (response.statusCode == 200) {
         dynamic responseList = jsonDecode(response.toString());
-        if (responseList["success"] == "Puppy successfully Edit!") {
+        if (responseList["success"] == "Puppy successfully updated!") {
+          Toast.show("Edit request successful" , context,duration: Toast.LENGTH_LONG,backgroundColor: Colors.black87, textColor: Color(0xffFFFd19));
+          Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (BuildContext context) => HomePage()));
+        }else{
+          Toast.show("Edit Puppy Failed "+response.toString(), context,duration: Toast.LENGTH_LONG,backgroundColor: Colors.black87, textColor: Color(0xffFFFd19));
         }
-        Toast.show("Edit request successful" , context,duration: Toast.LENGTH_LONG,backgroundColor: Colors.black87, textColor: Color(0xffFFFd19));
-        Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (BuildContext context) => HomePage()));
+
       } else {
         Toast.show("Edit Puppy Failed "+response.toString(), context,duration: Toast.LENGTH_LONG,backgroundColor: Colors.black87, textColor: Color(0xffFFFd19));
       }

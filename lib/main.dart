@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:one_bark_plaza/add_puppy.dart';
 import 'package:one_bark_plaza/orders_page.dart';
+import 'package:one_bark_plaza/payment_options_page.dart';
 import 'package:one_bark_plaza/update_profile.dart';
 import 'package:one_bark_plaza/util/constants.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -278,8 +279,7 @@ class MainNavigationDrawerState extends State<MainNavigationDrawer>{
                   title: Text("Payment Options",style: listTileTextStyle,),
                   leading: Image.asset("assets/images/ic_billing.png",  width: iconSize, color: Colors.white,),
                   onTap: () {
-                    Toast.show("Payment Options, to-do", context,backgroundColor: Colors.black87, textColor: Color(0xffFFFd19));
-                    ;
+                    Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext context) =>PaymentOptionsPage()));
                   },
                 ),SizedBox(height: 4,),
                 new Divider(height: 1.0, color: dividerColor),

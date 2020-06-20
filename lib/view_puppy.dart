@@ -432,7 +432,9 @@ class ViewPuppyState extends State<ViewPuppy> {
                                         height: 120,
                                         width: 120,
                                         decoration: BoxDecoration(
-                                          color: Color(0xffF69601),
+                                          color:  widget.puppyDetails.vetReport==null || widget.puppyDetails.vetReport.toString().trim() ==""
+                                              ? Colors.redAccent
+                                              :  Colors.lightGreen,
                                           borderRadius: BorderRadius.circular(200),
                                           boxShadow: [
                                             BoxShadow(
@@ -487,7 +489,9 @@ class ViewPuppyState extends State<ViewPuppy> {
                                         height: 120,
                                         width: 120,
                                         decoration: BoxDecoration(
-                                          color: Color(0xffF69601),
+                                          color: widget.puppyDetails.flightTicket==null || widget.puppyDetails.flightTicket.toString().trim() ==""
+                                              ? Colors.redAccent
+                                              :  Colors.lightGreen,
                                           borderRadius: BorderRadius.circular(200),
                                           boxShadow: [
                                             BoxShadow(
