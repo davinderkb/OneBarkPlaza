@@ -8,34 +8,80 @@ import 'package:one_bark_plaza/util/utility.dart';
  * 3. class schema
  */
 class PaymentMode {
-  bool _isPayPal, _isZelle, _isDirectBank, _isInitialPayPal, _isInitialZelle, _isInitialDirectBank;
+  bool _isPayPal, _isZelle, _isDirectBank;
   Paypal _paypal;
   Zelle _zelle;
   BankAccount _bankAccount;
 
   PaymentMode(this._isPayPal, this._isZelle, this._isDirectBank, this._paypal,
       this._zelle, this._bankAccount){
-    _isInitialDirectBank = _isDirectBank;
-    _isInitialZelle = _isZelle;
-    _isInitialPayPal = _isPayPal;
+
 
   }
 
-  // ignore: missing_return
+  PaymentMode deepCopy(){
+      Paypal paypal = new Paypal("");
+      Zelle zelle = new Zelle("");
+      BankAccount account = new BankAccount("", "", "","","","","","");
+      if(isPayPal){
+        paypal.paypalEmail = this.paypal.paypalEmail;
+      }
+      if(isZelle){
+        zelle.zelleEmail = this.zelle.zelleEmail;
+      }
+      if(isDirectBank){
+        account.accountType = this.bankAccount.accountType;
+        account.bankAccountNum = this.bankAccount.bankAccountNum;
+        account.bankName = this.bankAccount.bankName;
+        account.abaRoutingNum = this.bankAccount.abaRoutingNum;
+        account.bankAddress = this.bankAccount.bankAddress;
+        account.destinationCurrency = this.bankAccount.destinationCurrency;
+        account.ibanNum = this.bankAccount.ibanNum;
+        account.accountHolderName = this.bankAccount.accountHolderName;
+      }
+      return new PaymentMode(this.isPayPal, this.isZelle, this.isDirectBank, paypal, zelle, account)  ;
+  }
+
+  bool equals(PaymentMode toBeCompared){
+    if(!(toBeCompared.isPayPal==isPayPal && toBeCompared.isZelle==isZelle && toBeCompared.isDirectBank==isDirectBank))
+      return false;
+    if(isPayPal){
+      if(paypal.paypalEmail==toBeCompared.paypal.paypalEmail)
+       return true;
+    }
+    if(isZelle){
+      if(zelle.zelleEmail==toBeCompared.zelle.zelleEmail)
+        return true;
+    }
+    if(isDirectBank){
+     if(bankAccount.accountType == toBeCompared.bankAccount.accountType &&
+         bankAccount.bankAccountNum == toBeCompared.bankAccount.bankAccountNum &&
+         bankAccount.bankName == toBeCompared.bankAccount.bankName &&
+         bankAccount.abaRoutingNum == toBeCompared.bankAccount.abaRoutingNum &&
+         bankAccount.bankAddress == toBeCompared.bankAccount.bankAddress &&
+         bankAccount.destinationCurrency == toBeCompared.bankAccount.destinationCurrency &&
+         bankAccount.ibanNum == toBeCompared.bankAccount.ibanNum &&
+         bankAccount.accountHolderName == toBeCompared.bankAccount.accountHolderName){
+       return true;
+     }
+    }
+    return false;
+  }
+
   factory PaymentMode.fromJson(dynamic json) {
     if (json["payment_mode"] == "paypal_payout") {
      return PaymentMode(true,
           false,
           false,
           new Paypal(json["paypal_email"] as String),
-          null,
-          null);
+          new Zelle(""),
+          new BankAccount("","","","","","","",""));
     } else if (json["payment_mode"] == "direct_bank") {
       return PaymentMode(false,
           false,
           true,
-          null,
-          null,
+          new Paypal(""),
+          new Zelle(""),
           new BankAccount(
               json["account_type"],
               json["bank_account_number"],
@@ -51,9 +97,9 @@ class PaymentMode {
       return PaymentMode(false,
           true,
           false,
-          null,
+          new Paypal(""),
           new Zelle(json["zelle_email"] as String),
-          null);
+          new BankAccount("","","","","","","",""));
     }
   }
 
@@ -87,10 +133,8 @@ class PaymentMode {
     }
   }
 
-  bool isSelectionChanged(){
-    return _isPayPal==_isInitialPayPal && _isZelle==_isInitialZelle && _isDirectBank == isInitialDirectBank;
-  }
-  get isInitialPayPal => _isInitialPayPal;
+
+
 
   BankAccount get bankAccount => _bankAccount;
 
@@ -98,9 +142,7 @@ class PaymentMode {
 
   Paypal get paypal => _paypal;
 
-  get isInitialDirectBank => _isInitialDirectBank;
 
-  get isInitialZelle => _isInitialZelle;
 }
 
 class Paypal {
@@ -108,11 +150,19 @@ class Paypal {
 
   String get paypalEmail => _paypalEmail;
 
+  set paypalEmail(String value) {
+    _paypalEmail = value;
+  }
+
   Paypal(this._paypalEmail);
 }
 
 class Zelle {
   String _zelleEmail;
+
+  set zelleEmail(String value) {
+    _zelleEmail = value;
+  }
 
   String get zelleEmail => _zelleEmail;
 
@@ -128,6 +178,10 @@ class BankAccount {
       _destinationCurrency,
       _ibanNum,
       _accountHolderName;
+
+  set accountType(String value) {
+    _accountType = value;
+  }
 
   BankAccount(
       this._accountType,
@@ -154,4 +208,32 @@ class BankAccount {
   get bankAccountNum => _bankAccountNum;
 
   String get accountType => _accountType;
+
+  set bankAccountNum(value) {
+    _bankAccountNum = value;
+  }
+
+  set bankName(value) {
+    _bankName = value;
+  }
+
+  set abaRoutingNum(value) {
+    _abaRoutingNum = value;
+  }
+
+  set bankAddress(value) {
+    _bankAddress = value;
+  }
+
+  set destinationCurrency(value) {
+    _destinationCurrency = value;
+  }
+
+  set ibanNum(value) {
+    _ibanNum = value;
+  }
+
+  set accountHolderName(value) {
+    _accountHolderName = value;
+  }
 }

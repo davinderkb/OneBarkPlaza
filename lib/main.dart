@@ -183,9 +183,9 @@ class MainNavigationDrawerState extends State<MainNavigationDrawer>{
                                             child: ClipRRect(
                                               borderRadius:BorderRadius.circular(300.0),
                                               child: FadeInImage.assetNetwork(
-                                                    placeholder: data["gender"]=="Male"
-                                                      ? "assets/images/ic_profile_male.png"
-                                                      : "assets/images/ic_profile_female.png",
+                                                    placeholder: data["gender"]=="Female"
+                                                      ? "assets/images/ic_profile_female.png"
+                                                      : "assets/images/ic_profile_male.png",
                                                   image: data["profilePic"],
                                                   fit: BoxFit.cover),
                                             ),
