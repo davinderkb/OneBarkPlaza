@@ -745,16 +745,62 @@ class PaymentOptionsPageState extends State<PaymentOptionsPage> {
                                                 textAlign: TextAlign.start,
                                                 style: TextStyle(fontFamily:"Lato",fontSize: 14, color: Colors.white, fontWeight:FontWeight.bold),
                                               ),
-                                              onPressed:  updatedPaymentMode!=null && !updatedPaymentMode.equals(originalData )?() {
+                                              onPressed:  updatedPaymentMode!=null && !updatedPaymentMode.equals(originalData )
+                                                  ? () async {
+                                                SharedPreferences prefs = await SharedPreferences.getInstance();
+                                                String userId =  prefs.getString(Constants.SHARED_PREF_USER_ID);
+
+                                                var dio = Dio();
+                                                FormData formData;
                                                 if (updatedPaymentMode.isPayPal && _paypalFormKey.currentState.validate()) {
-                                                      Toast.show("Yes, Paypal", context);
+                                                  formData = new FormData.fromMap({
+                                                    "user_id": userId,
+                                                    "payment_mode": "paypal_payout",
+                                                    "paypal_email":updatedPaymentMode.paypal.paypalEmail
+                                                  });
                                                 }
                                                 if (updatedPaymentMode.isZelle && _zelleFormKey.currentState.validate()) {
-                                                  Toast.show("Yes, Zelle", context);
+                                                  formData = new FormData.fromMap({
+                                                    "user_id": userId,
+                                                    "payment_mode": "zelle",
+                                                    "zelle_email":updatedPaymentMode.zelle.zelleEmail
+                                                  });
                                                 }
                                                 if (updatedPaymentMode.isDirectBank && _bankAccountFormKey.currentState.validate()) {
-                                                  Toast.show("Yes, Bank", context);
+                                                  formData = new FormData.fromMap({
+                                                    "user_id": userId,
+                                                    "payment_mode": "direct_bank",
+                                                    "account_type": updatedPaymentMode.bankAccount.accountType,
+                                                    "bank_account_number": updatedPaymentMode.bankAccount.bankAccountNum,
+                                                    "bank_name" : updatedPaymentMode.bankAccount.bankName,
+                                                    "aba_routing_number": updatedPaymentMode.bankAccount.abaRoutingNum,
+                                                    "bank_address": updatedPaymentMode.bankAccount.bankAddress,
+                                                    "destination_currency": updatedPaymentMode.bankAccount.destinationCurrency,
+                                                    "iban": updatedPaymentMode.bankAccount.ibanNum,
+                                                    "account_holder_name": updatedPaymentMode.bankAccount.accountHolderName,
+                                                  });
                                                 }
+
+                                                try{
+                                                  dynamic response = await dio.post("https://onebarkplaza.com/wp-json/obp/v1/update_payment_options", data:formData);
+                                                  if (response.statusCode == 200) {
+                                                    dynamic responseList = jsonDecode(response.toString());
+                                                    Toast.show("Payment mode set successfully" , context,duration: Toast.LENGTH_LONG,backgroundColor: Colors.black87, textColor: Color(0xffFFFd19));
+                                                    Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (BuildContext context) => PaymentOptionsPage()));
+                                                  } else {
+                                                    Toast.show("Operation Failed "+response.toString(), context,duration: Toast.LENGTH_LONG,backgroundColor: Colors.black87, textColor: Color(0xffFFFd19));
+                                                  }
+                                                  setState(() {
+                                                    _isLoading = false;
+                                                  });
+                                                }catch(exception){
+                                                  Toast.show("Request Failed. "+exception.toString(), context,backgroundColor: Colors.black87, textColor: Color(0xffFFFd19)
+                                                  );
+                                                  setState(() {
+                                                    _isLoading = false;
+                                                  });
+                                                }
+
                                               }:null,
                                               disabledColor: Color(0xFFEBEBEB),
                                               color: obpBlueColor,
