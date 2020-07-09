@@ -44,13 +44,10 @@ class AddPuppyState extends State<AddPuppy> {
   DateTime dateOfBirth = DateTime.now();
   DateTime dateOfCheckup = DateTime.now();
   String dateOfBirthString = '';
-  String dateOfCheckupString = '';
   String _chooseBreed = '';
   int _selectedBreedId = 0;
   bool _isBreedSelectedOnce = false;
   List<Asset> images = List<Asset>();
-  String _error = 'No Error Dectected';
-  String _platformMessage = 'No Error';
   List images2;
   int maxImageNo = 10;
   bool selectSingleImage = false;
@@ -61,19 +58,12 @@ class AddPuppyState extends State<AddPuppy> {
   bool isKidFriendly = false;
   bool isMicrochipped = false;
   bool isSocialized = false;
-  String _vetReportPath;
-  String _flightTicketPath;
-  int vetFileType = Constants.FILE_TYPE_OTHER;
-  int flightFileType = Constants.FILE_TYPE_OTHER;
   ChooseBreedDialog chooseBreedDialog = null;
   final _formKey = GlobalKey<FormState>();
   bool isFemale = false;
 
-  Image vetReportThumbnail;
-  PDFPageImage vetPageImage;
-  PDFPageImage flightPageImage;
-  MultipartFile vetReport;
-  MultipartFile flightTicketFile;
+  String _error = 'No Error Dectected';
+
   Widget buildGridView() {
     return GridView.count(
       crossAxisCount: imagesInGridRow,
@@ -125,8 +115,7 @@ class AddPuppyState extends State<AddPuppy> {
   TextEditingController askingPriceText = new TextEditingController();
   TextEditingController shippingCostText = new TextEditingController();
   TextEditingController registryText = new TextEditingController();
-  TextEditingController vetAddressText = new TextEditingController();
-  TextEditingController vetNameText = new TextEditingController();
+
 
   FocusNode puppyDescriptionFocus = new FocusNode();
   FocusNode puppyNameFocus = new FocusNode();
@@ -137,8 +126,7 @@ class AddPuppyState extends State<AddPuppy> {
   FocusNode askingPriceFocus = new FocusNode();
   FocusNode shippingCostFocus = new FocusNode();
   FocusNode registryFocus = new FocusNode();
-  FocusNode vetAddressFocus = new FocusNode();
-  FocusNode vetNameFocus = new FocusNode();
+
 
   @override
   void initState() {
@@ -236,68 +224,6 @@ class AddPuppyState extends State<AddPuppy> {
           duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
     }
   }*/
-  void loadVetReport() async {
-    try {
-      String filePath = await FilePicker.getFilePath(type: FileType.custom, allowedExtensions: ['jpg', 'jpeg', 'png', 'pdf', 'doc' , 'docx'],);
-      if (filePath == '') {
-        return;
-      }
-      if(filePath.substring(filePath.lastIndexOf(".") + 1) == "pdf"){
-        vetFileType = Constants.FILE_TYPE_PDF;
-      } else if (filePath.substring(filePath.lastIndexOf(".") + 1) == "jpg"
-          || filePath.substring(filePath.lastIndexOf(".") + 1) == "jpeg"
-          || filePath.substring(filePath.lastIndexOf(".") + 1) == "png" ){
-        vetFileType = Constants.FILE_TYPE_IMAGE;
-      } else{
-        vetFileType = Constants.FILE_TYPE_OTHER;
-      }
-      this._vetReportPath = filePath;
-      if(_vetReportPath!=null){
-        List<int> vetFile = await File(_vetReportPath).readAsBytes();
-        vetReport= MultipartFile.fromBytes(
-            vetFile,
-            filename: 'vet_report.'+_vetReportPath.substring(_vetReportPath.lastIndexOf(".")+1),
-            contentType: MediaType("vet_report", _vetReportPath.substring(_vetReportPath.lastIndexOf(".")+1))
-        );
-      }
-      setState((){
-
-      });
-    } on Exception catch (e) {
-      print("Error while picking the file: " + e.toString());
-    }
-  }
-
-  void loadFlightTicket() async {
-    try {
-      String filePath = await FilePicker.getFilePath(type: FileType.custom, allowedExtensions: ['jpg', 'jpeg', 'png', 'pdf', 'doc' , 'docx'],);
-      if (filePath == '') {
-        return;
-      }
-      if(filePath.substring(filePath.lastIndexOf(".") + 1) == "pdf"){
-        flightFileType = Constants.FILE_TYPE_PDF;
-      } else if (filePath.substring(filePath.lastIndexOf(".") + 1) == "jpg"
-          || filePath.substring(filePath.lastIndexOf(".") + 1) == "jpeg"
-          || filePath.substring(filePath.lastIndexOf(".") + 1) == "png" ){
-        vetFileType = Constants.FILE_TYPE_IMAGE;
-      } else{
-        vetFileType = Constants.FILE_TYPE_OTHER;
-      }
-      this._flightTicketPath = filePath;
-      if(_flightTicketPath!=null){
-        List<int> flightTicket = await File(_flightTicketPath).readAsBytes();
-        flightTicketFile= MultipartFile.fromBytes(
-            flightTicket,
-            filename: 'flight_ticket.'+_flightTicketPath.substring(_flightTicketPath.lastIndexOf(".")+1),
-            contentType: MediaType("flight_ticket", _flightTicketPath.substring(_flightTicketPath.lastIndexOf(".")+1))
-        );
-      }
-      setState((){
-      });
-    } on Exception catch (e) {
-      print("Error while picking the file: " + e.toString());
-    }
-  }
 
 
 
@@ -1301,9 +1227,6 @@ class AddPuppyState extends State<AddPuppy> {
       "dad-weight": puppyDadWeightText.text.trim(),
       "mom-weight": puppyMomWeightText.text.trim(),
       "registry": registryText.text.trim(),
-      "vet-name": vetNameText.text.trim(),
-      "vet-address": vetAddressText.text.trim(),
-      "checkup-date": dateOfCheckup.millisecondsSinceEpoch.toString(),
       "kid-friendly": isKidFriendly?"1":"0",
       "socialized": isSocialized?"1":"0",
       "family-raised":isFamilyRaised?"1":"0",
@@ -1311,8 +1234,6 @@ class AddPuppyState extends State<AddPuppy> {
       "microchipped": isMicrochipped?"1":"0",
       "gender": isFemale?"Female":"Male",
       "gallery_images": [multipart],
-      "report-copy" : _vetReportPath!=null?vetReport:"",
-      "flight-doc" : _flightTicketPath!=null?flightTicketFile:""
     });
     try{
       dynamic response = await dio.post("https://onebarkplaza.com/wp-json/obp/v1/create_puppy",data:formData);
@@ -1371,30 +1292,6 @@ class AddPuppyState extends State<AddPuppy> {
       });
   }
 
-  Future<Null> _selectDateOfCheckup(BuildContext context) async {
-    final DateTime picked = await showDatePicker(
-        context: context,
-        initialDate: dateOfCheckup,
-        firstDate: DateTime(dateOfBirth.year),
-        lastDate: new DateTime.now(),
-        builder: (BuildContext context, Widget child) {
-          return Theme(
-            data: ThemeData.light().copyWith(
-              primaryColor: Color(0xff3db6c6),//Head background
-              accentColor: Color(0xff3db6c6),
-              buttonTheme: ButtonTheme.of(context).copyWith(
-                colorScheme: ColorScheme.fromSwatch(accentColor:Color(0xff3db6c6), primarySwatch: Colors.lightBlue),
-              ),
-            ),
-            child: child,
-          );
-        });
-    if (picked != null)
-      setState(() {
-        dateOfCheckup = picked;
-        dateOfCheckupString = new DateFormat("MMM dd, yyyy").format(picked);
-      });
-  }
 
   chooseBreed(String value) {
     setState(() {
