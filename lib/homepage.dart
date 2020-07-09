@@ -458,17 +458,18 @@ class HomePageState extends State<HomePage> {
 
                                                         //color: Color(0xfffffd19),
                                                         child:Container(
-                                                          padding: const EdgeInsets.all(8),
+                                                          padding: const EdgeInsets.all(6),
                                                           decoration: BoxDecoration(
-                                                            color: Color(0xffFFFd19),
+                                                            color:  Color(0xff3db6c6),
                                                             //color: Color(0xffFFFFFF),
-                                                            shape: BoxShape.circle,
-                                                              border: Border.all(),
+                                                            shape: BoxShape.rectangle,
+                                                            borderRadius: new BorderRadius.all(Radius.circular(2.0)),
+                                                            //border: Border.all(color: Color(0xff3db6c6)),
                                                           ),
 
                                                           child: Padding(
                                                             padding: const EdgeInsets.all(10.0),
-                                                            child: Text("Sold\nOut", style: TextStyle(fontWeight:FontWeight.bold,fontSize:14, fontFamily: "Lato", color: Color(0xff464646)),),
+                                                            child: Text("Sold", style: TextStyle(fontWeight:FontWeight.bold,fontSize:14, fontFamily: "Lato", color:Colors.white),),
                                                           )
                                                         )
                                                     ) : Container(
