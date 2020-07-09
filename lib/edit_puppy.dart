@@ -1926,10 +1926,10 @@ class EditPuppyState extends State<EditPuppy> {
         builder: (BuildContext context, Widget child) {
           return Theme(
             data: ThemeData.light().copyWith(
-              primaryColor: Colors.green,//Head background
-              accentColor: Colors.green,
+              primaryColor: Color(0xff3db6c6),//Head background
+              accentColor: Color(0xff3db6c6),
               buttonTheme: ButtonTheme.of(context).copyWith(
-                colorScheme: ColorScheme.fromSwatch(accentColor: Colors.green, primarySwatch: Colors.green),
+                colorScheme: ColorScheme.fromSwatch(accentColor:Color(0xff3db6c6), primarySwatch: Colors.lightBlue),
               ),
             ),
             child: child,
@@ -1952,10 +1952,10 @@ class EditPuppyState extends State<EditPuppy> {
         builder: (BuildContext context, Widget child) {
           return Theme(
             data: ThemeData.light().copyWith(
-              primaryColor: Colors.green,//Head background
-              accentColor: Colors.green,
+              primaryColor: Color(0xff3db6c6),//Head background
+              accentColor: Color(0xff3db6c6),
               buttonTheme: ButtonTheme.of(context).copyWith(
-                colorScheme: ColorScheme.fromSwatch(accentColor: Colors.green, primarySwatch:Colors.green),
+                colorScheme: ColorScheme.fromSwatch(accentColor:Color(0xff3db6c6), primarySwatch: Colors.lightBlue),
               ),
             ),
             child: child,
