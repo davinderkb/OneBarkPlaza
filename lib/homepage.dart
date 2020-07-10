@@ -24,6 +24,7 @@ import 'package:one_bark_plaza/main.dart';
 import 'package:one_bark_plaza/util/utility.dart';
 
 import 'edit_puppy.dart';
+import 'edit_puppy_reason.dart';
 import 'filter.dart';
 final customColor = Color(0xff3db6c6); //(0XFF3DB6C6);//Color(0xff4C8BF5);
 TextStyle style = TextStyle(
@@ -458,18 +459,18 @@ class HomePageState extends State<HomePage> {
 
                                                         //color: Color(0xfffffd19),
                                                         child:Container(
-                                                          padding: const EdgeInsets.all(6),
+                                                          padding: const EdgeInsets.fromLTRB(6,0,6,0),
                                                           decoration: BoxDecoration(
-                                                            color:  Color(0xff3db6c6),
+                                                            color:  Colors.white,
                                                             //color: Color(0xffFFFFFF),
                                                             shape: BoxShape.rectangle,
-                                                            borderRadius: new BorderRadius.all(Radius.circular(2.0)),
-                                                            //border: Border.all(color: Color(0xff3db6c6)),
+                                                            borderRadius: new BorderRadius.all(Radius.circular(4.0)),
+                                                            border: Border.all(color: Colors.redAccent, width: 2.0),
                                                           ),
 
                                                           child: Padding(
                                                             padding: const EdgeInsets.all(10.0),
-                                                            child: Text("Sold", style: TextStyle(fontWeight:FontWeight.bold,fontSize:14, fontFamily: "Lato", color:Colors.white),),
+                                                            child: Text("Sold", style: TextStyle(fontWeight:FontWeight.bold,fontSize:14, fontFamily: "Lato", color:Colors.redAccent),),
                                                           )
                                                         )
                                                     ) : Container(
@@ -549,7 +550,13 @@ class HomePageState extends State<HomePage> {
                                                               },
                                                             );
                                                           } else {
-                                                            Navigator.push(context, MaterialPageRoute(builder: (context) => EditPuppy(data[index])));
+                                                            showDialog(
+                                                              context: context,
+                                                              child:  BackdropFilter(
+                                                                filter: ImageFilter.blur(sigmaX:2.0,sigmaY:2.0),
+                                                                child: EditPuppyReason(data[index]),
+                                                              ),
+                                                            );
                                                           }
                                                           setState(() {
                                                             //_selection = value;

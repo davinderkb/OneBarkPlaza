@@ -21,6 +21,7 @@ import 'package:http/http.dart' as http;
 import 'package:path_provider/path_provider.dart';
 
 
+import 'edit_puppy_reason.dart';
 import 'homepage.dart';
 final obpBlueColor = Color(0XFF3DB6C6);
 final blueColor = Color(0xff4C8BF5);
@@ -117,7 +118,14 @@ class ViewPuppyState extends State<ViewPuppy> {
                       style: TextStyle(fontFamily:"Lato",fontSize: 14, color: Colors.white),
                     ),
                     onPressed: () {
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => EditPuppy(widget.puppyDetails)));
+                      //Navigator.push(context, MaterialPageRoute(builder: (context) => EditPuppy(widget.puppyDetails)));
+                      showDialog(
+                        context: context,
+                        child:  BackdropFilter(
+                          filter: ImageFilter.blur(sigmaX:2.0,sigmaY:2.0),
+                          child: EditPuppyReason(widget.puppyDetails),
+                        ),
+                      );
                     },
                     icon: Icon(Icons.edit, color: Colors.white, size: 14,),
                     disabledColor: obpBlueColor,

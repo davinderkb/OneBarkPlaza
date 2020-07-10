@@ -51,7 +51,7 @@ class ChoosBreedDailogState extends State<ChooseBreedDialog>{
     return
       Dialog(
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(Consts.padding),
+        borderRadius: BorderRadius.circular(2.0),
       ),
       elevation: 0.0,
       backgroundColor: Colors.transparent,
