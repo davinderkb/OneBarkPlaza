@@ -33,9 +33,10 @@ final blueColor = Color(0xff4C8BF5);
 
 class EditPuppy extends StatefulWidget {
   EditPuppyState editPuppyState;
-
+  String reason;
   PuppyDetails puppyDetails;
-  EditPuppy(PuppyDetails puppyDetails) {
+  EditPuppy(PuppyDetails puppyDetails, String reason) {
+    this.reason = reason;
     this.puppyDetails = new PuppyDetails.deepCopy(
         puppyDetails.puppyId,
         puppyDetails.puppyName,
@@ -116,6 +117,19 @@ class EditPuppyState extends State<EditPuppy> {
   List<ImageWithId> newImages;
 
   List<String> deletedImagesIdList = new List<String>() ;
+
+  bool isBreedEditAllowed = false;
+  bool isGenderEditAllowed = false;
+  bool isBadgeEditAllowed = false;
+
+  TextStyle labelStyle(bool isEnableColor){
+     return TextStyle(
+      fontFamily: 'Lato',
+      color: isEnableColor? obpBlueColor : Colors.grey,
+      fontSize: 12,
+    );
+  }
+
   Future<Widget> buildGridView() async {
 
     return GridView.count(
@@ -248,11 +262,7 @@ class EditPuppyState extends State<EditPuppy> {
         fontFamily: 'Lato', fontSize: 14.0, color: Color(0xff707070));
     TextStyle hintStyle =
         TextStyle(fontFamily: 'Lato', fontSize: 14.0, color: hintColor);
-    TextStyle labelStyle = TextStyle(
-      fontFamily: 'Lato',
-      color: obpBlueColor,
-      fontSize: 12,
-    );
+
     var maleColor = Color(0xff5cbaed);
     var femaleColor = Color(0xfff25fa3);
     return _isLoading? Container(
@@ -377,7 +387,7 @@ class EditPuppyState extends State<EditPuppy> {
                                                           ),
                                                         ),
                                                       )),
-                                                  Positioned(
+                                                  widget.reason==Constants.PHOTO_CHANGE?Positioned(
                                                     top:12.0,
                                                     right: 14.0,
                                                     child: Container(
@@ -435,12 +445,13 @@ class EditPuppyState extends State<EditPuppy> {
                                                           child: Icon(Icons.cancel, size:32)
                                                       ),
                                                     ),
-                                                  )
+                                                  ):SizedBox()
                                                 ],
                                               ),
                                             ),
                                       ),
-                                    ) : Container(
+                                    ) :
+                                    widget.reason==Constants.PHOTO_CHANGE?Container(
                                       width: _width,
                                       child: Column(
                                         children: <Widget>[
@@ -485,7 +496,7 @@ class EditPuppyState extends State<EditPuppy> {
 
                                       ),
 
-                                    );
+                                    ):SizedBox();
                                     break;
                                 }
                               },
@@ -493,7 +504,7 @@ class EditPuppyState extends State<EditPuppy> {
                           ),
                         ),
                         SizedBox(height: 24),
-                        maxImageNo - oldImages.length  > 0 ?
+                        widget.reason==Constants.PHOTO_CHANGE && maxImageNo - oldImages.length  > 0 ?
                         Center(
                           child: new RaisedButton.icon(
                               shape: RoundedRectangleBorder(
@@ -515,6 +526,7 @@ class EditPuppyState extends State<EditPuppy> {
                                 borderRadius:
                                     new BorderRadius.circular(borderRadius)),
                             child: TextFormField(
+                              enabled: false,
                               initialValue: widget.puppyDetails.puppyName,
                               textAlign: TextAlign.start,
                               style: style,
@@ -524,7 +536,7 @@ class EditPuppyState extends State<EditPuppy> {
                               decoration: InputDecoration(
                                   contentPadding: EdgeInsets.all(20),
                                   labelText: 'Puppy Name',
-                                  labelStyle: labelStyle,
+                                  labelStyle: labelStyle(false),
                                   focusedBorder: OutlineInputBorder(
                                     borderSide: BorderSide(
                                         color: obpBlueColor, width: 3.0),
@@ -549,7 +561,8 @@ class EditPuppyState extends State<EditPuppy> {
                         SizedBox(height: 24,),
                         Center(
                           child: InkWell(
-                            onTap: () {
+                          //No removing this unreachable code, Just in case if we enable editing in breed selection in future
+                            onTap: isBreedEditAllowed ? () {
 
                               chooseBreedDialog != null && chooseBreedDialog.allDuplicateItems.length!=0?
                               showDialog(
@@ -568,11 +581,11 @@ class EditPuppyState extends State<EditPuppy> {
                                 ),
                               )
                               ;
-                            },
+                            }: null,
                             child: Container(
                               width: _width,
                               height: 60,
-                              decoration: BoxDecoration(
+                              decoration: isBreedEditAllowed?BoxDecoration(
                                 color: Color(0xffffffff),
                                 borderRadius:  new BorderRadius.circular(30),
                                 boxShadow: [
@@ -585,16 +598,16 @@ class EditPuppyState extends State<EditPuppy> {
                                     ),
                                   )
                                 ],
-                              ),
+                              ):BoxDecoration(),
 
 
                               child: InputDecorator(
                                 decoration: new InputDecoration(
                                   contentPadding: EdgeInsets.all(20),
                                   labelText: 'Breed',
-                                  labelStyle: labelStyle,
+                                  labelStyle: labelStyle(isBreedEditAllowed),
                                   border: OutlineInputBorder(),
-                                  enabledBorder: OutlineInputBorder(borderRadius:  new BorderRadius.circular(30), borderSide: BorderSide(width: 2.0, color: obpBlueColor) ),
+                                  enabledBorder: OutlineInputBorder(borderRadius:  new BorderRadius.circular(30), borderSide: BorderSide(width: 2.0, color: isBreedEditAllowed?obpBlueColor:Color(0xffE3E3E3))),
                                 ),
                                 child: Row(
                                   mainAxisAlignment:
@@ -607,17 +620,18 @@ class EditPuppyState extends State<EditPuppy> {
                                       style: TextStyle(
                                           fontFamily: "Lato",
                                           fontSize: 14,
-                                          color: obpBlueColor),
+                                          color: isBreedEditAllowed?obpBlueColor:Colors.grey),
                                     ),
                                     Padding(
                                         padding:
                                         const EdgeInsets.fromLTRB(
                                             00, 0, 00, 0),
-                                        child: Container(
+                                        child: isBreedEditAllowed?Container(
                                           height: 40,
                                           width: 40,
                                           child: _isBreedSelectedOnce?Icon(Icons.check, color: Colors.green):Icon(Icons.format_list_bulleted, color: obpBlueColor),
-                                        )),
+                                        ):SizedBox(),
+                                    ),
                                   ],
                                 ),
                               ),
@@ -627,14 +641,14 @@ class EditPuppyState extends State<EditPuppy> {
                         SizedBox(height: 24,),
                         Center(
                           child: InkWell(
-                            onTap: () {
+                            onTap: widget.reason==Constants.DATE_CORRECTION ? () {
                               FocusScope.of(context).unfocus();
                               _selectDateOfBirth(context);
-                            },
+                            } : null,
                             child: Container(
                               width: _width,
                               height: 64,
-                              decoration: BoxDecoration(
+                              decoration: widget.reason==Constants.DATE_CORRECTION ?BoxDecoration(
                                 color: Color(0xffffffff),
                                 borderRadius:  new BorderRadius.circular(30),
                                 boxShadow: [
@@ -647,17 +661,14 @@ class EditPuppyState extends State<EditPuppy> {
                                     ),
                                   )
                                 ],
-                              ),
-
-
+                              ):BoxDecoration(),
                               child: InputDecorator(
-
                                 decoration: new InputDecoration(
                                   contentPadding: EdgeInsets.all(20),
                                   labelText: 'Date of Birth',
-                                  labelStyle: labelStyle,
+                                  labelStyle: labelStyle(widget.reason==Constants.DATE_CORRECTION),
                                   border: OutlineInputBorder(),
-                                  enabledBorder: OutlineInputBorder(borderRadius:  new BorderRadius.circular(30), borderSide: BorderSide(width: 2.0, color: obpBlueColor)),
+                                  enabledBorder: OutlineInputBorder(borderRadius:  new BorderRadius.circular(30), borderSide: BorderSide(width: 2.0, color: widget.reason==Constants.DATE_CORRECTION ?obpBlueColor:Color(0xffE3E3E3))),
                                 ),
                                 child: Row(
                                   mainAxisAlignment:
@@ -670,17 +681,17 @@ class EditPuppyState extends State<EditPuppy> {
                                       style: TextStyle(
                                           fontFamily: "Lato",
                                           fontSize: 14,
-                                          color: obpBlueColor),
+                                          color:  widget.reason==Constants.DATE_CORRECTION ?obpBlueColor:Colors.grey),
                                     ),
                                     Padding(
                                         padding:
                                         const EdgeInsets.fromLTRB(
                                             00, 0, 0, 0),
-                                        child: Container(
+                                        child:  widget.reason==Constants.DATE_CORRECTION?Container(
                                           height: 40,
                                           width: 40,
                                           child: Icon(Icons.calendar_today, color: obpBlueColor),
-                                        )),
+                                        ):SizedBox()),
                                   ],
                                 ),
                               ),
@@ -691,7 +702,8 @@ class EditPuppyState extends State<EditPuppy> {
                         Center(
                           child: Padding(
                             padding: const EdgeInsets.fromLTRB(0.0, 0 ,0,0),
-                            child: Row(
+                            child: isGenderEditAllowed
+                                ? Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: <Widget>[
                                 Container(
@@ -743,6 +755,59 @@ class EditPuppyState extends State<EditPuppy> {
                                       label: new Text("Female", style: TextStyle(color:Colors.white,fontFamily:"Lato", fontWeight: FontWeight.bold, fontSize: 13),)),
                                 ),
                               ],
+                            )
+                                :Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: <Widget>[
+                                Container(
+                                  width: (_width - 44)/ 2,
+                                  height: 60,
+                                  decoration: BoxDecoration(
+                                      color: Color(0xffffffff),
+                                      borderRadius:  new BorderRadius.circular(30.0)
+                                  ),
+
+
+                                  child: RaisedButton.icon(
+
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: new BorderRadius.circular(30.0),
+
+
+                                      ),
+
+                                      onPressed: null,
+                                      color:Color(0xffEBEBE4),
+                                      disabledColor: !isFemale?maleColor:Color(0xffEBEBE4),
+                                      disabledElevation: 3.0,
+                                      elevation: 0,
+                                      icon: !isFemale? Icon(Icons.lock, color: Colors.white, size:14): Icon(null, size:0),
+                                      label: new Text("Male", style: TextStyle(color:Colors.white,fontFamily:"Lato", fontWeight: FontWeight.bold, fontSize: 13),)),
+                                ),
+                                Container(
+                                  width: (_width - 44)/ 2,
+                                  height: 60,
+                                  decoration: BoxDecoration(
+                                      color: Color(0xffffffff),
+                                      borderRadius:  new BorderRadius.circular(30.0)
+
+                                  ),
+
+
+                                  child: RaisedButton.icon(
+
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: new BorderRadius.circular(30.0),
+                                      ),
+                                      onPressed:null,
+                                      color:Color(0xffEBEBE4),
+                                      disabledColor: isFemale?femaleColor:Color(0xffEBEBE4),
+                                      disabledElevation: 3.0,
+                                      elevation: 0,
+                                      icon: isFemale? Icon(Icons.lock, color: Colors.white, size:14): Icon(null, size:0),
+                                      label: new Text("Female", style: TextStyle(color:Colors.white,fontFamily:"Lato", fontWeight: FontWeight.bold, fontSize: 13),)),
+                                ),
+                              ],
                             ),
                           ),
                         ),
@@ -760,6 +825,7 @@ class EditPuppyState extends State<EditPuppy> {
                             child: TextFormField(
                               initialValue: widget.puppyDetails.description,
                               textAlign: TextAlign.start,
+                              enabled: false,
                               style: style,
                               onChanged: (String value) {
                                 widget.puppyDetails.description = value;
@@ -768,7 +834,7 @@ class EditPuppyState extends State<EditPuppy> {
                               decoration: InputDecoration(
                                   contentPadding: EdgeInsets.all(20),
                                   labelText: 'Description',
-                                  labelStyle: labelStyle,
+                                  labelStyle: labelStyle(false),
                                   focusedBorder: OutlineInputBorder(
                                     borderSide: BorderSide(color: obpBlueColor, width: 3.0),
                                     borderRadius: BorderRadius.circular(borderRadius),
@@ -802,6 +868,7 @@ class EditPuppyState extends State<EditPuppy> {
 
 
                                   child: TextFormField(
+                                    enabled: false,
                                     initialValue: widget.puppyDetails.color,
                                     textAlign: TextAlign.start,
                                     style: style,
@@ -811,7 +878,7 @@ class EditPuppyState extends State<EditPuppy> {
                                     decoration: InputDecoration(
                                         contentPadding: EdgeInsets.all(20),
                                         labelText: 'Color',
-                                        labelStyle: labelStyle,
+                                        labelStyle: labelStyle(false),
                                         focusedBorder: OutlineInputBorder(
                                           borderSide: BorderSide(color: obpBlueColor, width: 3.0),
                                           borderRadius: BorderRadius.circular(borderRadius),
@@ -837,6 +904,7 @@ class EditPuppyState extends State<EditPuppy> {
 
                                   child: TextFormField(
                                     initialValue: widget.puppyDetails.puppyWeight,
+                                    enabled: false,
                                     textAlign: TextAlign.start,
                                     keyboardType: TextInputType.number,
                                     onChanged: (String value) {
@@ -846,7 +914,7 @@ class EditPuppyState extends State<EditPuppy> {
                                     decoration: InputDecoration(
                                         contentPadding: EdgeInsets.all(20),
                                         labelText: 'Weight',
-                                        labelStyle: labelStyle,
+                                        labelStyle: labelStyle(false),
                                         focusedBorder: OutlineInputBorder(
                                           borderSide: BorderSide(color: obpBlueColor, width: 3.0),
                                           borderRadius: BorderRadius.circular(borderRadius),
@@ -885,6 +953,7 @@ class EditPuppyState extends State<EditPuppy> {
 
                                   child: TextFormField(
                                     initialValue: widget.puppyDetails.puppyDadWeight,
+                                    enabled: false,
                                     textAlign: TextAlign.start,
                                     keyboardType: TextInputType.number,
                                     onChanged: (String value) {
@@ -894,7 +963,7 @@ class EditPuppyState extends State<EditPuppy> {
                                     decoration: InputDecoration(
                                         contentPadding: EdgeInsets.all(20),
                                         labelText: "Dad's Weight",
-                                        labelStyle: labelStyle,
+                                        labelStyle: labelStyle(false),
                                         focusedBorder: OutlineInputBorder(
                                           borderSide: BorderSide(color: obpBlueColor, width: 3.0),
                                           borderRadius: BorderRadius.circular(borderRadius),
@@ -921,6 +990,7 @@ class EditPuppyState extends State<EditPuppy> {
 
                                   child: TextFormField(
                                     initialValue: widget.puppyDetails.puppyMomWeight,
+                                    enabled: false,
                                     textAlign: TextAlign.start,
                                     keyboardType: TextInputType.number,
                                     onChanged: (String value) {
@@ -930,7 +1000,7 @@ class EditPuppyState extends State<EditPuppy> {
                                     decoration: InputDecoration(
                                         contentPadding: EdgeInsets.all(20),
                                         labelText: "Mom's Weight",
-                                        labelStyle: labelStyle,
+                                        labelStyle: labelStyle(false),
                                         focusedBorder: OutlineInputBorder(
                                           borderSide: BorderSide(color: obpBlueColor, width: 3.0),
                                           borderRadius: BorderRadius.circular(borderRadius),
@@ -963,6 +1033,7 @@ class EditPuppyState extends State<EditPuppy> {
 
                             child: TextFormField(
                               textAlign: TextAlign.start,
+                              enabled: widget.reason==Constants.PRICE_CHANGE,
                               keyboardType: TextInputType.number,
                               initialValue: widget.puppyDetails.puppyPrice,
                               onChanged: (String value) {
@@ -972,7 +1043,7 @@ class EditPuppyState extends State<EditPuppy> {
                               decoration: InputDecoration(
                                   contentPadding: EdgeInsets.all(20),
                                   labelText: 'Asking Price',
-                                  labelStyle: labelStyle,
+                                  labelStyle: labelStyle(widget.reason==Constants.PRICE_CHANGE),
                                   focusedBorder: OutlineInputBorder(
                                     borderSide: BorderSide(color: obpBlueColor, width: 3.0),
                                     borderRadius: BorderRadius.circular(borderRadius),
@@ -1002,6 +1073,7 @@ class EditPuppyState extends State<EditPuppy> {
 
                             child: TextFormField(
                               textAlign: TextAlign.start,
+                              enabled: widget.reason==Constants.PRICE_CHANGE,
                               keyboardType: TextInputType.number,
                               initialValue: widget.puppyDetails.shippingCost,
                               onChanged: (String value) {
@@ -1011,7 +1083,7 @@ class EditPuppyState extends State<EditPuppy> {
                               decoration: InputDecoration(
                                   contentPadding: EdgeInsets.all(20),
                                   labelText: 'Shipping Cost',
-                                  labelStyle: labelStyle,
+                                  labelStyle: labelStyle(widget.reason==Constants.PRICE_CHANGE),
                                   focusedBorder: OutlineInputBorder(
                                     borderSide: BorderSide(color: obpBlueColor, width: 3.0),
                                     borderRadius: BorderRadius.circular(borderRadius),
@@ -1040,6 +1112,7 @@ class EditPuppyState extends State<EditPuppy> {
 
                             child: TextFormField(
                               textAlign: TextAlign.start,
+                              enabled: false,
                               initialValue: widget.puppyDetails.registry,
                               onChanged: (String value) {
                                 widget.puppyDetails.registry = value;
@@ -1048,7 +1121,7 @@ class EditPuppyState extends State<EditPuppy> {
                               decoration: InputDecoration(
                                   contentPadding: EdgeInsets.all(20),
                                   labelText: 'Registry',
-                                  labelStyle: labelStyle,
+                                  labelStyle: labelStyle(false),
                                   focusedBorder: OutlineInputBorder(
                                     borderSide: BorderSide(color: obpBlueColor, width: 3.0),
                                     borderRadius: BorderRadius.circular(borderRadius),
@@ -1067,7 +1140,7 @@ class EditPuppyState extends State<EditPuppy> {
                         ),
 
 
-                        widget.puppyDetails.isSold && widget.puppyDetails.isSoldByObp?
+                        widget.puppyDetails.isSoldByObp && widget.reason==Constants.PREFLIGHT_HELTH_CERT?
                         Column(
                           children: <Widget>[
                             SizedBox(height: 24,),
@@ -1090,7 +1163,7 @@ class EditPuppyState extends State<EditPuppy> {
                                   decoration: InputDecoration(
                                       contentPadding: EdgeInsets.all(20),
                                       labelText: 'Vet Name',
-                                      labelStyle: labelStyle,
+                                      labelStyle: labelStyle(true),
                                       focusedBorder: OutlineInputBorder(
                                         borderSide: BorderSide(color: obpBlueColor, width: 3.0),
                                         borderRadius: BorderRadius.circular(borderRadius),
@@ -1118,6 +1191,7 @@ class EditPuppyState extends State<EditPuppy> {
                                 ),
 
                                 child: TextFormField(
+                                  enabled: true,
                                   initialValue: widget.puppyDetails.vetAddress,
                                   textAlign: TextAlign.start,
                                   onChanged: (String value) {
@@ -1127,7 +1201,7 @@ class EditPuppyState extends State<EditPuppy> {
                                   decoration: InputDecoration(
                                       contentPadding: EdgeInsets.all(20),
                                       labelText: 'Vet Address',
-                                      labelStyle: labelStyle,
+                                      labelStyle: labelStyle(true),
                                       focusedBorder: OutlineInputBorder(
                                         borderSide: BorderSide(color: obpBlueColor, width: 3.0),
                                         borderRadius: BorderRadius.circular(borderRadius),
@@ -1151,7 +1225,8 @@ class EditPuppyState extends State<EditPuppy> {
                                 onTap: () {
                                   FocusScope.of(context).unfocus();
                                   _selectDateOfCheckup(context);
-                                },
+                                }
+                               ,
                                 child: Container(
                                   width: _width,
                                   height: 64,
@@ -1176,7 +1251,7 @@ class EditPuppyState extends State<EditPuppy> {
                                     decoration: new InputDecoration(
                                       contentPadding: EdgeInsets.all(20),
                                       labelText: 'Check-up Date',
-                                      labelStyle: labelStyle,
+                                      labelStyle: labelStyle(true),
                                       border: OutlineInputBorder(),
                                       enabledBorder: OutlineInputBorder(borderRadius:  new BorderRadius.circular(30), borderSide: BorderSide(width: 2.0, color: obpBlueColor)),
                                     ),
@@ -1231,11 +1306,10 @@ class EditPuppyState extends State<EditPuppy> {
                                   ),
                                   child: InputDecorator(
                                     decoration: new InputDecoration(
-
                                       labelText: 'Vet Check Report',
-                                      labelStyle: labelStyle,
+                                      labelStyle: labelStyle(true),
                                       border: OutlineInputBorder(),
-                                      enabledBorder: OutlineInputBorder(borderRadius:  new BorderRadius.circular(30), borderSide: BorderSide(width:2.0, color: obpBlueColor)),
+                                      enabledBorder: OutlineInputBorder(borderRadius:  new BorderRadius.circular(30), borderSide: BorderSide(width:2.0, color:  obpBlueColor)),
                                     ),
                                     child: Container(
 
@@ -1278,7 +1352,7 @@ class EditPuppyState extends State<EditPuppy> {
 
                                                     ],
                                                   ),
-                                                  InkWell(
+                                                 InkWell(
                                                     splashColor: Colors.red,
                                                     onTap: (){
                                                       Toast.show("Vet report removed", context,backgroundColor: Colors.black87, textColor: Color(0xffFFFd19));
@@ -1356,7 +1430,7 @@ class EditPuppyState extends State<EditPuppy> {
                                                       )
                                                   ),
                                                   SizedBox(width: 20,),
-                                                  InkWell(
+                                                 InkWell(
                                                       onTap:(){
                                                         loadVetReport();
                                                       },
@@ -1390,7 +1464,7 @@ class EditPuppyState extends State<EditPuppy> {
                                             children: <Widget>[
                                               Padding(
                                                 padding: const EdgeInsets.fromLTRB(16,0,0,0),
-                                                child: Text("Upload", style:labelStyle),
+                                                child: Text("Upload", style:labelStyle(true)),
                                               ),
                                               ClipRRect(
                                                 borderRadius:
@@ -1435,7 +1509,7 @@ class EditPuppyState extends State<EditPuppy> {
                                     decoration: new InputDecoration(
 
                                       labelText: 'Flight Ticket',
-                                      labelStyle: labelStyle,
+                                      labelStyle: labelStyle(true),
                                       border: OutlineInputBorder(),
                                       enabledBorder: OutlineInputBorder(borderRadius:  new BorderRadius.circular(30), borderSide: BorderSide(width:2.0, color: obpBlueColor)),
                                     ),
@@ -1586,12 +1660,12 @@ class EditPuppyState extends State<EditPuppy> {
                                           : InkWell(
                                         onTap:loadFlightTicket,
                                         child: Container(
-                                          child: Row(
+                                          child:  Row(
                                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                             children: <Widget>[
                                               Padding(
                                                 padding: const EdgeInsets.fromLTRB(16,0,0,0),
-                                                child: Text("Upload ..", style:labelStyle),
+                                                child: Text("Upload ..", style:labelStyle(true)),
                                               ),
                                               ClipRRect(
                                                 borderRadius:
@@ -1638,19 +1712,19 @@ class EditPuppyState extends State<EditPuppy> {
                                       scale: 0.75,
                                       child: CupertinoSwitch(
                                         value: isChampionBloodline,
-                                        onChanged: (bool value) {
+                                        onChanged:isBadgeEditAllowed ?(bool value) {
                                           setState(() {
                                             isChampionBloodline = value;
                                           }
                                           );
-                                        },
+                                        }:null,
                                       ),
                                     ),
-                                    onTap: () {
+                                    onTap: isBadgeEditAllowed ? () {
                                       setState(() {
                                         isChampionBloodline = !isChampionBloodline;
                                       });
-                                    },
+                                    }: null,
                                   ),
                                 ),
                                 MergeSemantics(
@@ -1661,19 +1735,19 @@ class EditPuppyState extends State<EditPuppy> {
                                       scale: 0.75,
                                       child: CupertinoSwitch(
                                         value: isFamilyRaised,
-                                        onChanged: (bool value) {
+                                        onChanged:isBadgeEditAllowed ? (bool value) {
                                           setState(() {
                                             isFamilyRaised = value;
                                           }
                                           );
-                                        },
+                                        }: null,
                                       ),
                                     ),
-                                    onTap: () {
+                                    onTap: isBadgeEditAllowed? () {
                                       setState(() {
                                         isFamilyRaised = !isFamilyRaised;
                                       });
-                                    },
+                                    }:null,
                                   ),
                                 ),
                                 MergeSemantics(
@@ -1684,19 +1758,19 @@ class EditPuppyState extends State<EditPuppy> {
                                       scale: 0.75,
                                       child: CupertinoSwitch(
                                         value: isKidFriendly,
-                                        onChanged: (bool value) {
+                                        onChanged:isBadgeEditAllowed ? (bool value) {
                                           setState(() {
                                             isKidFriendly = value;
                                           }
                                           );
-                                        },
+                                        }: null,
                                       ),
                                     ),
-                                    onTap: () {
+                                    onTap: isBadgeEditAllowed?() {
                                       setState(() {
                                         isKidFriendly = !isKidFriendly;
                                       });
-                                    },
+                                    }:null,
                                   ),
                                 ),
                                 MergeSemantics(
@@ -1707,19 +1781,19 @@ class EditPuppyState extends State<EditPuppy> {
                                       scale: 0.75,
                                       child: CupertinoSwitch(
                                         value: isMicrochipped,
-                                        onChanged: (bool value) {
+                                        onChanged: isBadgeEditAllowed ? (bool value) {
                                           setState(() {
                                             isMicrochipped = value;
                                           }
                                           );
-                                        },
+                                        }: null,
                                       ),
                                     ),
-                                    onTap: () {
+                                    onTap: isBadgeEditAllowed? () {
                                       setState(() {
                                         isMicrochipped = !isMicrochipped;
                                       });
-                                    },
+                                    }:null,
                                   ),
                                 ),
                                 MergeSemantics(
@@ -1730,19 +1804,19 @@ class EditPuppyState extends State<EditPuppy> {
                                       scale: 0.75,
                                       child: CupertinoSwitch(
                                         value: isSocialized,
-                                        onChanged: (bool value) {
+                                        onChanged: isBadgeEditAllowed ? (bool value) {
                                           setState(() {
                                             isSocialized = value;
                                           }
                                           );
-                                        },
+                                        }: null,
                                       ),
                                     ),
-                                    onTap: () {
+                                    onTap:isBadgeEditAllowed? () {
                                       setState(() {
                                         isSocialized = !isSocialized;
                                       });
-                                    },
+                                    }:null,
                                   ),
                                 ),
                               ],
@@ -1814,7 +1888,7 @@ class EditPuppyState extends State<EditPuppy> {
 
     var dio = Dio();
     FormData formData;
-    if(widget.puppyDetails.isSold && widget.puppyDetails.isSoldByObp){
+    if(widget.puppyDetails.isSoldByObp){
       formData = new FormData.fromMap({
         "puppy-name": Utility.capitalize(widget.puppyDetails.puppyName.trim()),
         "puppy_id": widget.puppyDetails.puppyId,
@@ -1882,7 +1956,7 @@ class EditPuppyState extends State<EditPuppy> {
     }
 
     try{
-      dynamic response = await dio.post("https://obpdevstage.wpengine.com/wp-json/obp/v1/update_puppy",data:formData);
+      dynamic response = await dio.post("https://onebarkplaza.com/wp-json/obp/v1/update_puppy",data:formData);
       if (response.statusCode == 200) {
         dynamic responseList = jsonDecode(response.toString());
         if (responseList["success"] == "Puppy successfully updated!") {

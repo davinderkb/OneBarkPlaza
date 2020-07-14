@@ -283,7 +283,7 @@ class MainNavigationDrawerState extends State<MainNavigationDrawer>{
                   },
                 ),SizedBox(height: 4,),
                 new Divider(height: 1.0, color: dividerColor),
-                SizedBox(height: 4,),
+               /* SizedBox(height: 4,),
                 ListTile(
                   title: Text("Payment History",style: listTileTextStyle,),
                   leading:Image.asset("assets/images/ic_payment_history.png",  width: iconSize, color: Colors.white,),
@@ -293,7 +293,7 @@ class MainNavigationDrawerState extends State<MainNavigationDrawer>{
                   },
                 ),
                 SizedBox(height: 4,),
-                new Divider(height: 1.0, color: dividerColor),
+                new Divider(height: 1.0, color: dividerColor),*/
                 SizedBox(height: 4,),
                 ListTile(
                   title: Text(Constants.LOGOUT,style: listTileTextStyle,),

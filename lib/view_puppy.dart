@@ -13,6 +13,7 @@ import 'package:flutter/widgets.dart';
 import 'package:one_bark_plaza/edit_puppy.dart';
 import 'package:one_bark_plaza/img.dart';
 import 'package:one_bark_plaza/puppy_details.dart';
+import 'package:one_bark_plaza/util/constants.dart';
 import 'package:open_file/open_file.dart';
 import 'package:toast/toast.dart';
 import 'package:one_bark_plaza/util/utility.dart';
@@ -118,7 +119,6 @@ class ViewPuppyState extends State<ViewPuppy> {
                       style: TextStyle(fontFamily:"Lato",fontSize: 14, color: Colors.white),
                     ),
                     onPressed: () {
-                      //Navigator.push(context, MaterialPageRoute(builder: (context) => EditPuppy(widget.puppyDetails)));
                       showDialog(
                         context: context,
                         child:  BackdropFilter(
@@ -404,7 +404,7 @@ class ViewPuppyState extends State<ViewPuppy> {
                               ),
                               new Divider(height: 1.0, color: Colors.grey),
                               SizedBox(height: 12),
-                              widget.puppyDetails.isSold && widget.puppyDetails.isSoldByObp?Padding(
+                              widget.puppyDetails.isSoldByObp?Padding(
                                 padding: const EdgeInsets.all(20.0),
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -413,7 +413,7 @@ class ViewPuppyState extends State<ViewPuppy> {
                                       onTap: () async {
                                         if(widget.puppyDetails.vetReport==null || widget.puppyDetails.vetReport.toString().trim() ==""){
                                             Toast.show("Vet report not available.. Please add", context,duration:Toast.LENGTH_LONG, backgroundColor: Colors.black87, textColor: Color(0xffFFFd19));
-                                            Navigator.push(context, MaterialPageRoute(builder: (context) => EditPuppy(widget.puppyDetails)));
+                                            Navigator.push(context, MaterialPageRoute(builder: (context) => EditPuppy(widget.puppyDetails,Constants.PREFLIGHT_HELTH_CERT)));
                                         }else {
                                           setState(() {
                                             _isLoadingVet = true;
@@ -467,7 +467,7 @@ class ViewPuppyState extends State<ViewPuppy> {
                                       onTap: () async {
                                         if(widget.puppyDetails.flightTicket==null || widget.puppyDetails.flightTicket.toString().trim() ==""){
                                           Toast.show("Flight information not available.. Please Add", context,duration:Toast.LENGTH_LONG, backgroundColor: Colors.black87, textColor: Color(0xffFFFd19));
-                                          Navigator.push(context, MaterialPageRoute(builder: (context) => EditPuppy(widget.puppyDetails)));
+                                          Navigator.push(context, MaterialPageRoute(builder: (context) => EditPuppy(widget.puppyDetails,Constants.PREFLIGHT_HELTH_CERT)));
                                         }else {
                                           setState(() {
                                             _isLoadingFlight = true;

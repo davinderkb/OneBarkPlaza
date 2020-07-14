@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:ui';
 
 import 'package:intl/intl.dart';
+import 'package:one_bark_plaza/util/constants.dart';
 
 import 'img.dart';
 
@@ -32,7 +33,7 @@ class PuppyDetails {
       _flightTicket
       ;
 
-  bool get isSoldByObp => _isSoldByObp;
+  bool get isSoldByObp => statusString==Constants.SOLD_BY_OBP;
   bool get isSold{
     if (_status=="sold" || _status == "soldobp"){
       return true;
@@ -254,7 +255,7 @@ class PuppyDetails {
         if (!isSoldByObp)
           statusString=  "Sold By Breeder";
         else
-          statusString=  "Sold By OBP";
+          statusString= Constants.SOLD_BY_OBP;
         break;
       case "healthissue":
         statusString=  "Health Issue, Pending for Approval";
@@ -275,7 +276,7 @@ class PuppyDetails {
         statusString=  "Upcoming Litters";
         break;
       case "soldobp":
-        statusString=  "Sold By OBP";
+        statusString= Constants.SOLD_BY_OBP;
         break;
     }
     return statusString;
