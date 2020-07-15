@@ -181,9 +181,9 @@ class UpdateProfileState extends State<UpdateProfile> with TickerProviderStateMi
                                           child: _image != null?
                                           Image.file(_image):
                                           FadeInImage.assetNetwork(
-                                              placeholder:widget.gender=="Male"
-                                                  ? "assets/images/ic_profile_male.png"
-                                                  : "assets/images/ic_profile_female.png",
+                                              placeholder:widget.gender=="Female"
+                                                  ? "assets/images/ic_profile_female.png"
+                                                  : "assets/images/ic_profile_male.png",
                                               image:widget.profilePic,
                                               fit: BoxFit.cover),
                                         ),

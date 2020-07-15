@@ -1185,6 +1185,11 @@ class AddPuppyState extends State<AddPuppy> {
             duration: Toast.LENGTH_LONG, backgroundColor: Colors.black87, textColor: Color(0xffFFFd19));
         return;
       }
+      if(images.length==0){
+        Toast.show("Please upload Pic(s) before proceeding further", context,
+            duration: Toast.LENGTH_LONG, backgroundColor: Colors.black87, textColor: Color(0xffFFFd19));
+        return;
+      }
       initiateAddPuppy(context);
     }
 
@@ -1240,7 +1245,7 @@ class AddPuppyState extends State<AddPuppy> {
       if (response.toString() != '[]') {
         dynamic responseList = jsonDecode(response.toString());
         if (responseList["success"] == "Puppy successfully created!") {
-          Toast.show("Add Puppy Successful " +response.toString(), context,duration: Toast.LENGTH_LONG,backgroundColor: Colors.black87, textColor: Color(0xffFFFd19));
+          Toast.show("Puppy has been added Successfully", context,duration: Toast.LENGTH_LONG,backgroundColor: Colors.black87, textColor: Color(0xffFFFd19));
           Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (BuildContext context) => AddPuppySuccessful(responseList["puppy_id"])));
         } else {
           Toast.show("Add Puppy Failed " +response.toString(), context, duration: Toast.LENGTH_LONG,backgroundColor: Colors.black87, textColor: Color(0xffFFFd19));

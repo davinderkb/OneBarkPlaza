@@ -12,12 +12,14 @@ import 'package:one_bark_plaza/puppy_details.dart';
 import 'package:one_bark_plaza/util/constants.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:toast/toast.dart';
+import 'package:one_bark_plaza/homepage.dart';
+
 class EditPuppyReason extends StatefulWidget{
   PuppyDetails data;
   List<String> reasonsList;
   EditPuppyReason(PuppyDetails data){
     this.data = data;
-    reasonsList = data.isSoldByObp ?[
+    reasonsList = data.isSoldByObp() ?[
       Constants.NO_SELECT,
       Constants.PRICE_CHANGE,
       Constants.HEALTH_ISSUE,
@@ -246,10 +248,7 @@ class EditPuppyReasonState extends State<EditPuppyReason> {
                             dynamic responseList = jsonDecode(response.toString());
                             if (response.statusCode == 200) {
                               Toast.show("Status update request sucessful", context, duration: Toast.LENGTH_LONG,backgroundColor: Colors.black87, textColor: Color(0xffFFFd19));
-                              setState(() {
-                                _isLoading = false;
-                              });
-                              Navigator.of(context).pop();
+                              Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (BuildContext context) =>HomePage()));
                             } else {
                               setState(() {
                                 _isLoading = false;
@@ -274,7 +273,7 @@ class EditPuppyReasonState extends State<EditPuppyReason> {
                                   body: 'Puppy Id: '+widget.data.puppyId.toString()
                                       + '\nReason: ' + otherReasonText.text,
                                   subject: 'Edit Puppy request' ,
-                                  recipients: ['davinder.bansal@bonafidetech.com'],
+                                  recipients: ['naresh@bonafidetech.com'],
                                   isHTML: false,
                                 );
 

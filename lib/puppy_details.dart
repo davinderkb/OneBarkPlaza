@@ -33,7 +33,7 @@ class PuppyDetails {
       _flightTicket
       ;
 
-  bool get isSoldByObp => statusString==Constants.SOLD_BY_OBP;
+  bool get isSoldByObpPrivate => _isSoldByObp;
   bool get isSold{
     if (_status=="sold" || _status == "soldobp"){
       return true;
@@ -41,7 +41,16 @@ class PuppyDetails {
     return false;
   }
 
-  set isSoldByObp(bool value) {
+  /**
+   * This method need occured to support old entries when soldobp status was not introduced
+   * and we used to rely on status="sold" and "sold-by-obp" bool to findout if it Sold By OBP. statusString message takes care of this backward compatibility
+   * So here we customized getter based on statuString result
+   */
+  bool isSoldByObp(){
+    return statusString==Constants.SOLD_BY_OBP;
+  }
+
+  set isSoldByObpPrivate(bool value) {
     _isSoldByObp = value;
   }
 
@@ -251,8 +260,12 @@ class PuppyDetails {
       case "pricechange":
         statusString=  "Price Change, Pending for Approval";
         break;
+      case "soldobp":
+        statusString= Constants.SOLD_BY_OBP;
+        break;
+        //In Old entries we may not get soldbyobp, So we'll rely on status="sold" & sold-by-opb value together from API response
       case "sold":
-        if (!isSoldByObp)
+        if (!isSoldByObpPrivate)
           statusString=  "Sold By Breeder";
         else
           statusString= Constants.SOLD_BY_OBP;
@@ -274,9 +287,6 @@ class PuppyDetails {
         break;
       case "upcoming_litters":
         statusString=  "Upcoming Litters";
-        break;
-      case "soldobp":
-        statusString= Constants.SOLD_BY_OBP;
         break;
     }
     return statusString;

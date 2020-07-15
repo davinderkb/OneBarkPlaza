@@ -35,7 +35,7 @@ class HomePage extends StatefulWidget {
   HomePage() {
     this.isRedirectedFromSoldByBreeder= false;
   }
-  HomePage.redirectedFromDelete(){
+  HomePage.redirectedFromSoldByBreeder(){
     this.isRedirectedFromSoldByBreeder= true;
   }
   @override
@@ -104,7 +104,7 @@ class HomePageState extends State<HomePage> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if(widget.isRedirectedFromSoldByBreeder){
         widget.isRedirectedFromSoldByBreeder= false;
-        Toast.show("Puppy Deleted Successfully", context,backgroundColor: Colors.black87, textColor: Color(0xffFFFd19));
+        Toast.show("Request Successful", context,backgroundColor: Colors.black87, textColor: Color(0xffFFFd19));
       }
     } );
 
@@ -130,7 +130,7 @@ class HomePageState extends State<HomePage> {
           size: 120,
         ))
         : isSoldByBreederSuccess
-        ? Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (BuildContext context) => HomePage.redirectedFromDelete()))
+        ? Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (BuildContext context) => HomePage.redirectedFromSoldByBreeder()))
         : Scaffold(
         backgroundColor: Colors.white,
         appBar: new AppBar(
@@ -515,7 +515,7 @@ class HomePageState extends State<HomePage> {
                                                                         SharedPreferences prefs = await SharedPreferences.getInstance();
                                                                         String userId =  prefs.getString(Constants.SHARED_PREF_USER_ID);
                                                                         var dio = Dio();
-                                                                        var soldByBreederUrl = 'https://onebarkplaza.com/wp-json/obp/v1/update_puppy_status';
+                                                                        var soldByBreederUrl = 'https://onebarkplaza.com/wp-json/obp/v1/update_puppy';
                                                                         FormData formData = new FormData.fromMap({
                                                                           "user_id": userId,
                                                                           "puppy_id": data[index].puppyId,
@@ -524,11 +524,12 @@ class HomePageState extends State<HomePage> {
                                                                         try{
                                                                           dynamic response = await dio.post(soldByBreederUrl, data: formData);
                                                                           dynamic responseList = jsonDecode(response.toString());
-                                                                          if (responseList.length > 0 && responseList[0] == "success"){
+                                                                          if (response.statusCode == 200) {
                                                                             setState(() {
                                                                               _isLoading = false;
                                                                               isSoldByBreederSuccess = true;
                                                                             });
+
                                                                           } else{
                                                                             setState(() {
                                                                               _isLoading = false;

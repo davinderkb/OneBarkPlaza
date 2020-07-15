@@ -111,7 +111,7 @@ class ViewPuppyState extends State<ViewPuppy> {
                 SizedBox(
                   height: 42,
                   width: _width / 2.5,
-                  child: !widget.puppyDetails.isSold || widget.puppyDetails.isSoldByObp?
+                  child: !widget.puppyDetails.isSold || widget.puppyDetails.isSoldByObp()?
                   FlatButton.icon(
                     label: Text(
                       'Edit',
@@ -404,7 +404,7 @@ class ViewPuppyState extends State<ViewPuppy> {
                               ),
                               new Divider(height: 1.0, color: Colors.grey),
                               SizedBox(height: 12),
-                              widget.puppyDetails.isSoldByObp?Padding(
+                              widget.puppyDetails.isSoldByObp()?Padding(
                                 padding: const EdgeInsets.all(20.0),
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,

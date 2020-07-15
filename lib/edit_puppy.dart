@@ -68,7 +68,7 @@ class EditPuppy extends StatefulWidget {
         puppyDetails.isKidFriendly,
         puppyDetails.isMicrochipped,
         puppyDetails.isSocialized,
-        puppyDetails.isSoldByObp,
+        puppyDetails.isSoldByObp(),
         puppyDetails.coverPic
     );
   }
@@ -1140,7 +1140,7 @@ class EditPuppyState extends State<EditPuppy> {
                         ),
 
 
-                        widget.puppyDetails.isSoldByObp && widget.reason==Constants.PREFLIGHT_HELTH_CERT?
+                        widget.puppyDetails.statusString==Constants.SOLD_BY_OBP && widget.reason==Constants.PREFLIGHT_HELTH_CERT?
                         Column(
                           children: <Widget>[
                             SizedBox(height: 24,),
@@ -1888,7 +1888,7 @@ class EditPuppyState extends State<EditPuppy> {
 
     var dio = Dio();
     FormData formData;
-    if(widget.puppyDetails.isSoldByObp){
+    if(widget.puppyDetails.isSoldByObp()){
       formData = new FormData.fromMap({
         "puppy-name": Utility.capitalize(widget.puppyDetails.puppyName.trim()),
         "puppy_id": widget.puppyDetails.puppyId,

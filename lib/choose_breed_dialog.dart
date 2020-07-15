@@ -256,6 +256,7 @@ class ChoosBreedDailogState extends State<ChooseBreedDialog>{
                             onTap: () {
                               widget.formState.isBreedSelectedOnce(true);
                               widget.formState.chooseBreed(filteredItems[index].name);
+                              widget.formState.setSelectedBreedId(filteredItems[index].categoryId);
                               Navigator.pop(context);
                             },
                           ),
