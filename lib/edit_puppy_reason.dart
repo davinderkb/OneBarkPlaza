@@ -270,11 +270,11 @@ class EditPuppyReasonState extends State<EditPuppyReason> {
                               if (_otherReasonFormKey.currentState.validate()) {
                                 Navigator.pop(context);
                                 final Email email = Email(
-                                  body: 'Puppy Id: '+widget.data.puppyId.toString()
-                                      + '\nReason: ' + otherReasonText.text,
-                                  subject: 'Edit Puppy request' ,
-                                  recipients: ['naresh@bonafidetech.com'],
-                                  isHTML: false,
+                                  body: 'Hi Team OBP, <br><br>This is an edit request for puppy #'+widget.data.puppyId.toString()
+                                      + '<br><br>Reason: ' + otherReasonText.text +'<br><br>Thanks<br><br>',
+                                  subject: '[Urgent] OBP: Puppy Edit Request #'+widget.data.puppyId.toString() ,
+                                  recipients: ['victor@onebarkplaza.com', 'admin@onebarkplaza.com'],
+                                  isHTML: true,
                                 );
 
                                 await FlutterEmailSender.send(email);
