@@ -11,7 +11,7 @@
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
-	<string>one_bark_plaza</string>
+	<string>Onebark Photobox</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
@@ -41,5 +41,9 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
+	<key>NSPhotoLibraryUsageDescription</key>
+    <string>Application needs access to Photo Library in order to upload pics</string>
+    <key>NSCameraUsageDescription</key>
+    <string>Application needs access to Camera in order to upload pic(s)</string>
 </dict>
 </plist>
