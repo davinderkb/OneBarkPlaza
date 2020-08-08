@@ -378,6 +378,7 @@ class UpdateProfileState extends State<UpdateProfile> with TickerProviderStateMi
       if (response.statusCode == 200) {
         dynamic responseList = jsonDecode(response.toString());
         prefs.setString(Constants.SHARED_PREF_PROFILE_IMAGE, responseList["success"]["profile_image"]);
+        prefs.setString(Constants.SHARED_PREF_NAME, responseList["success"]["first_name"] +" "+ responseList["success"]["last_name"]);
         Toast.show("Profile Updated Successfully" , context,duration: Toast.LENGTH_LONG,backgroundColor: Colors.black87, textColor: Color(0xffFFFd19));
           Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (BuildContext context) => HomePage()));
       } else {
