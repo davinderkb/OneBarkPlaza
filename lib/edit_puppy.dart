@@ -914,7 +914,7 @@ class EditPuppyState extends State<EditPuppy> {
                                     style: style,
                                     decoration: InputDecoration(
                                         contentPadding: EdgeInsets.all(20),
-                                        labelText: 'Weight',
+                                        labelText: 'Weight (lbs)',
                                         labelStyle: labelStyle(false),
                                         focusedBorder: OutlineInputBorder(
                                           borderSide: BorderSide(color: obpBlueColor, width: 3.0),
@@ -963,7 +963,7 @@ class EditPuppyState extends State<EditPuppy> {
                                     style: style,
                                     decoration: InputDecoration(
                                         contentPadding: EdgeInsets.all(20),
-                                        labelText: "Dad's Weight",
+                                        labelText: "Dad's Weight (lbs)",
                                         labelStyle: labelStyle(false),
                                         focusedBorder: OutlineInputBorder(
                                           borderSide: BorderSide(color: obpBlueColor, width: 3.0),
@@ -1000,7 +1000,7 @@ class EditPuppyState extends State<EditPuppy> {
                                     style: style,
                                     decoration: InputDecoration(
                                         contentPadding: EdgeInsets.all(20),
-                                        labelText: "Mom's Weight",
+                                        labelText: "Mom's Weight (lbs)",
                                         labelStyle: labelStyle(false),
                                         focusedBorder: OutlineInputBorder(
                                           borderSide: BorderSide(color: obpBlueColor, width: 3.0),
@@ -1043,7 +1043,7 @@ class EditPuppyState extends State<EditPuppy> {
                               style: style,
                               decoration: InputDecoration(
                                   contentPadding: EdgeInsets.all(20),
-                                  labelText: 'Asking Price',
+                                  labelText: 'Asking Price \$',
                                   labelStyle: labelStyle(widget.reason==Constants.PRICE_CHANGE),
                                   focusedBorder: OutlineInputBorder(
                                     borderSide: BorderSide(color: obpBlueColor, width: 3.0),
@@ -1083,7 +1083,7 @@ class EditPuppyState extends State<EditPuppy> {
                               style: style,
                               decoration: InputDecoration(
                                   contentPadding: EdgeInsets.all(20),
-                                  labelText: 'Shipping Cost',
+                                  labelText: 'Shipping Cost \$',
                                   labelStyle: labelStyle(widget.reason==Constants.PRICE_CHANGE),
                                   focusedBorder: OutlineInputBorder(
                                     borderSide: BorderSide(color: obpBlueColor, width: 3.0),

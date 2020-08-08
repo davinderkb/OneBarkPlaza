@@ -212,9 +212,9 @@ class FilterState extends State<Filter> {
                                     height: 48,
                                     child: Row(
                                       children: <Widget>[
-                                        Icon(Icons.check, size: 18, color: widget.setOfBreedFilter[index].isSelected? Color(0xff3db6c6): Colors.grey),
+                                        Icon(Icons.check, size: widget.setOfBreedFilter[index].isSelected?24:18, color: widget.setOfBreedFilter[index].isSelected? Color(0xff3db6c6): Colors.grey),
                                         SizedBox(width: 12),
-                                        Flexible(child: Container(child: Text(widget.setOfBreedFilter[index].breedName, style: TextStyle(fontSize: 13, color: Colors.black54),)))
+                                        Flexible(child: Container(child: Text(widget.setOfBreedFilter[index].breedName, style: TextStyle(fontSize: 13, color: widget.setOfBreedFilter[index].isSelected? Color(0xff3db6c6):Colors.black54),)))
                                       ],
                                     ),
                                   ),
@@ -257,9 +257,9 @@ class FilterState extends State<Filter> {
                                         height: 48,
                                         child: Row(
                                           children: <Widget>[
-                                            Icon(Icons.check, size: 18, color: widget.genderFilter[index].isSelected? Color(0xff3db6c6): Colors.grey),
+                                            Icon(Icons.check, size: widget.genderFilter[index].isSelected?24:18, color: widget.genderFilter[index].isSelected? Color(0xff3db6c6): Colors.grey),
                                             SizedBox(width: 12),
-                                            Flexible(child: Container(child: Text(widget.genderFilter[index].genderType, style: TextStyle(fontSize: 13, color: Colors.black54),)))
+                                            Flexible(child: Container(child: Text(widget.genderFilter[index].genderType, style: TextStyle(fontSize: 13, color:  widget.genderFilter[index].isSelected? Color(0xff3db6c6):Colors.black54),)))
                                           ],
                                         ),
                                       ),
@@ -305,9 +305,9 @@ class FilterState extends State<Filter> {
                                         height: 48,
                                         child: Row(
                                           children: <Widget>[
-                                            Icon(Icons.check, size: 18, color: widget.setOfStatusFilter[index].isSelected? Color(0xff3db6c6): Colors.grey),
+                                            Icon(Icons.check, size: widget.setOfStatusFilter[index].isSelected?24:18, color: widget.setOfStatusFilter[index].isSelected? Color(0xff3db6c6): Colors.grey),
                                             SizedBox(width: 12),
-                                            Flexible(child: Container(child: Text(widget.setOfStatusFilter[index].status, style: TextStyle(fontSize: 13, color: Colors.black54),)))
+                                            Flexible(child: Container(child: Text(widget.setOfStatusFilter[index].status, style: TextStyle(fontSize: 13, color: widget.setOfStatusFilter[index].isSelected? Color(0xff3db6c6):Colors.black54),)))
                                           ],
                                         ),
                                       ),

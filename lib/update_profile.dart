@@ -341,28 +341,38 @@ class UpdateProfileState extends State<UpdateProfile> with TickerProviderStateMi
     setState(() {
       _isLoading = true;
     });
-
+    MultipartFile multipartFile = null;
+    if(_image!=null){
       final mimeTypeData = lookupMimeType(_image.path, headerBytes: [0xFF, 0xD8]).split('/');
 
       List<int> imageData = await _image.readAsBytes();
-      MultipartFile multipartFile = MultipartFile.fromBytes(
+      multipartFile = MultipartFile.fromBytes(
         imageData,
         filename: 'image',
         contentType: MediaType("image", mimeTypeData[1]),
       );
+    }
+
 
 
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String userId =  prefs.getString(Constants.SHARED_PREF_USER_ID);
 
     var dio = Dio();
-    FormData formData = new FormData.fromMap({
+
+    FormData formData = _image!=null?
+      new FormData.fromMap({
       "first_name": Utility.capitalize(firstName),
       "user_id": userId,
       "last_name": Utility.capitalize(lastName),
       "profile_image": multipartFile,
-
-    });
+      }):
+    new FormData.fromMap({
+      "first_name": Utility.capitalize(firstName),
+      "user_id": userId,
+      "last_name": Utility.capitalize(lastName),
+    })
+    ;
     try{
       dynamic response = await dio.post(updateProfileUrl, data:formData);
       if (response.statusCode == 200) {

@@ -4,6 +4,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:one_bark_plaza/homepage.dart';
 
 import 'package:flutter/material.dart';
+import 'package:one_bark_plaza/reset_password.dart';
 import 'package:toast/toast.dart';
 import 'package:one_bark_plaza/userdata.dart';
 import 'package:flutter/services.dart';
@@ -180,13 +181,18 @@ class LoginPageState extends State<LoginPage>{
                   SizedBox(height: 12.0),
                   Padding(
                     padding: const EdgeInsets.all(4.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        Container(child: forgotPassword),
-                        SizedBox(width: 6.0),
-                        Container( child: forgotPasswordLink),
-                      ],
+                    child: InkWell(
+                      onTap: (){
+                        Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext context) => ResetPassword()));
+                      },
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Container(child: forgotPassword),
+                          SizedBox(width: 6.0),
+                          Container( child: forgotPasswordLink),
+                        ],
+                      ),
                     ),
                   ),
                 ],

@@ -252,33 +252,7 @@ class AddPuppyState extends State<AddPuppy> {
 
             leading: new IconButton(
               icon: new Icon(Icons.arrow_back, color: dividerColor),
-              onPressed: () {
-                showDialog<void>(
-                  context: context,
-                  barrierDismissible: false, // user must tap button!
-                  builder: (BuildContext context) {
-                    return CupertinoAlertDialog(
-                      title: Text('Are you sure?'),
-                      content: Text("\nAny entries in the form would be lost. Do you want to exit this page?"),
-                      actions: <Widget>[
-                        CupertinoDialogAction(
-                          child: Text('No',style: TextStyle(color:customColor, fontWeight:FontWeight.bold)),
-                          onPressed: () {
-                            Navigator.of(context).pop();
-                          },
-                        ),
-                        CupertinoDialogAction(
-                          child: Text('Yes',style: TextStyle(color:customColor, fontWeight:FontWeight.bold)),
-                          onPressed: (){
-                            Navigator.of(context).pop();
-                            Navigator.of(context).pop();
-                          },
-                        ),
-                      ],
-                    );
-                  },
-                );
-              }
+              onPressed: _onBackPressed
             ),
             title: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -769,7 +743,7 @@ class AddPuppyState extends State<AddPuppy> {
                                           style: style,
                                           decoration: InputDecoration(
                                               contentPadding: EdgeInsets.all(20),
-                                              labelText: 'Weight*',
+                                              labelText: 'Weight (lbs)*',
                                               labelStyle: labelStyle,
                                               focusedBorder: OutlineInputBorder(
                                                 borderSide: BorderSide(color: dividerColor, width: 3.0),
@@ -822,7 +796,7 @@ class AddPuppyState extends State<AddPuppy> {
                                           style: style,
                                           decoration: InputDecoration(
                                               contentPadding: EdgeInsets.all(20),
-                                              labelText: "Dad's Weight*",
+                                              labelText: "Dad's Weight (lbs)*",
                                               labelStyle: labelStyle,
                                               focusedBorder: OutlineInputBorder(
                                                 borderSide: BorderSide(color: dividerColor, width: 3.0),
@@ -863,7 +837,7 @@ class AddPuppyState extends State<AddPuppy> {
                                           style: style,
                                           decoration: InputDecoration(
                                               contentPadding: EdgeInsets.all(20),
-                                              labelText: "Mom's Weight*",
+                                              labelText: "Mom's Weight (lbs)*",
                                               labelStyle: labelStyle,
                                               focusedBorder: OutlineInputBorder(
                                                 borderSide: BorderSide(color: dividerColor, width: 3.0),
@@ -910,7 +884,7 @@ class AddPuppyState extends State<AddPuppy> {
                                     style: style,
                                     decoration: InputDecoration(
                                         contentPadding: EdgeInsets.all(20),
-                                        labelText: 'Asking Price*',
+                                        labelText: 'Asking Price \$*',
                                         labelStyle: labelStyle,
                                         focusedBorder: OutlineInputBorder(
                                           borderSide: BorderSide(color: dividerColor, width: 3.0),
@@ -954,7 +928,7 @@ class AddPuppyState extends State<AddPuppy> {
                                     style: style,
                                     decoration: InputDecoration(
                                         contentPadding: EdgeInsets.all(20),
-                                        labelText: 'Shipping Cost*',
+                                        labelText: 'Shipping Cost \$*',
                                         labelStyle: labelStyle,
                                         focusedBorder: OutlineInputBorder(
                                           borderSide: BorderSide(color: dividerColor, width: 3.0),
@@ -1317,32 +1291,58 @@ class AddPuppyState extends State<AddPuppy> {
     return ((DateTime.now().difference(dateOfBirth).inDays)/7).round();
   }
 
+
   Future<bool> _onBackPressed() {
-    return  showDialog<void>(
-      context: context,
-      barrierDismissible: false, // user must tap button!
-      builder: (BuildContext context) {
-        return CupertinoAlertDialog(
-          title: Text('Are you sure?'),
-          content: Text("\nAny entries in the form would be lost. Do you want to exit this page?"),
-          actions: <Widget>[
-            CupertinoDialogAction(
-              child: Text('No', style: TextStyle(color:dividerColor),),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-            CupertinoDialogAction(
-              child: Text('Yes', style: TextStyle(color:dividerColor),),
-              onPressed: (){
-                Navigator.of(context).pop();
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
-    ) ??
-        false;
+    if(isAnyFieldChanged()){
+      return  showDialog<void>(
+        context: context,
+        barrierDismissible: false, // user must tap button!
+        builder: (BuildContext context) {
+          return CupertinoAlertDialog(
+            title: Text('Are you sure?'),
+            content: Text("\nWe see that you have made some inputs which will be lost if you decide to go back.\n\nDo you still want to exit this page?"),
+            actions: <Widget>[
+              CupertinoDialogAction(
+                child: Text('No', style: TextStyle(color:dividerColor),),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+              CupertinoDialogAction(
+                child: Text('Yes', style: TextStyle(color:dividerColor),),
+                onPressed: (){
+                  Navigator.of(context).pop();
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        },
+      );
+    }
+    else
+      Navigator.of(context).pop();
   }
+
+  bool isAnyFieldChanged() {
+    return images.length != 0 ||
+        _chooseBreed != '' ||
+        puppyNameText.text.trim() != '' ||
+        dateOfBirthString != '' ||
+        isFemale != false ||
+        puppyDescriptionText.text.trim() != '' ||
+        puppyColorText.text.trim() != '' ||
+        puppyWeightText.text.trim() != '' ||
+        puppyDadWeightText.text.trim() != '' ||
+        puppyMomWeightText.text.trim() != '' ||
+        askingPriceText.text.trim() != '' ||
+        shippingCostText.text.trim() != '' ||
+        registryText.text.trim() != '' ||
+        isChampionBloodline != false ||
+        isFamilyRaised != false ||
+        isKidFriendly != false ||
+        isMicrochipped != false ||
+        isSocialized != false;
+  }
+
 }
