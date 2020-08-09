@@ -58,6 +58,7 @@ class MainActivityState extends State<MainActivity>{
         primarySwatch: Colors.lightGreen,
 
       ),
+      debugShowCheckedModeBanner: false,
       home: isLoggedIn?HomePage():LoginPage(),
     );
   }
