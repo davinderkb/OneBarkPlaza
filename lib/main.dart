@@ -176,7 +176,7 @@ class MainNavigationDrawerState extends State<MainNavigationDrawer>{
                                       Center(
                                         child: InkWell(
                                           onTap:(){
-                                            Navigator.push(context, MaterialPageRoute(builder: (context) => UpdateProfile(profilePic:data["profilePic"], gender:data["gender"], name:data["name"])))  ;
+                                            Navigator.push(context, MaterialPageRoute(builder: (context) => UpdateProfile(profilePic:data["profilePic"], gender:data["gender"], name:data["name"],firstName: data["firstName"],lastName: data["lastName"])))  ;
                                           },
                                           child: Container(
                                             height: 100,
@@ -209,7 +209,7 @@ class MainNavigationDrawerState extends State<MainNavigationDrawer>{
                                         top: _height>_width?_width * 0.18 : _height * 0.18 ,
                                         child: InkWell(
                                           onTap:(){
-                                            Navigator.push(context, MaterialPageRoute(builder: (context) => UpdateProfile(profilePic:data["profilePic"], gender:data["gender"], name:data["name"])))  ;
+                                            Navigator.push(context, MaterialPageRoute(builder: (context) => UpdateProfile(profilePic:data["profilePic"], gender:data["gender"], name:data["name"], firstName: data["first_name"],lastName: data["last_Name"],)))  ;
                                           },
                                           child: Container(
                                               height: 25,
@@ -319,6 +319,8 @@ class MainNavigationDrawerState extends State<MainNavigationDrawer>{
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setBool(Constants.SHARED_PREF_IS_LOGGED_IN, false);
     prefs.setString(Constants.SHARED_PREF_USER_NAME, null);
+    prefs.setString(Constants.SHARED_PREF_USER_FIRST_NAME, null);
+    prefs.setString(Constants.SHARED_PREF_USER_LAST_NAME, null);
     prefs.setString(Constants.SHARED_PREF_GENDER, null);
     prefs.setString(Constants.SHARED_PREF_PROFILE_IMAGE, null);
     prefs.setString(Constants.SHARED_PREF_PASSWORD, null);
@@ -331,11 +333,13 @@ class MainNavigationDrawerState extends State<MainNavigationDrawer>{
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String email =  prefs.getString(Constants.SHARED_PREF_USER_NAME);
     String name = prefs.getString(Constants.SHARED_PREF_NAME);
+    String firstName = prefs.getString(Constants.SHARED_PREF_USER_FIRST_NAME);
+    String lastName = prefs.getString(Constants.SHARED_PREF_USER_LAST_NAME);
     String gender = prefs.getString(Constants.SHARED_PREF_GENDER);
     String profilePic = prefs.getString(Constants.SHARED_PREF_PROFILE_IMAGE);
 
    try{
-      Map<dynamic,dynamic> user = {"email": email,"name": name, "gender": gender,"profilePic": profilePic};
+      Map<dynamic,dynamic> user = {"email": email,"name": name, "gender": gender,"profilePic": profilePic, "firstName": firstName, "lastName": lastName};
       return user;
     }catch(e) {
       Toast.show("Error while loading navigation header, Try again", context,

@@ -20,8 +20,8 @@ final customColor = Color(0XFF3DB6C6);
 var updateProfileUrl = 'https://onebarkplaza.com/wp-json/obp/v1/profile';
 
 class UpdateProfile extends StatefulWidget {
-  String profilePic, gender, name;
-  UpdateProfile({Key key, this.profilePic,this.gender, this.name}) : super(key: key);
+  String profilePic, gender, name, firstName, lastName;
+  UpdateProfile({Key key, this.profilePic,this.gender, this.name, this.firstName, this.lastName}) : super(key: key);
 
   @override
   UpdateProfileState createState() {
@@ -30,8 +30,8 @@ class UpdateProfile extends StatefulWidget {
 }
 
 class UpdateProfileState extends State<UpdateProfile> with TickerProviderStateMixin,ImagePickerListener{
-  var lastName;
-  var firstName;
+  var lastName="";
+  var firstName="";
   File _image ;
   AnimationController _controller;
   ImagePickerHandler imagePicker;
@@ -47,8 +47,8 @@ class UpdateProfileState extends State<UpdateProfile> with TickerProviderStateMi
   @override
   void initState() {
     super.initState();
-     lastName = widget.name.substring(widget.name.lastIndexOf(" ")+1);
-     firstName = widget.name.substring(0, widget.name.lastIndexOf(" "));
+     lastName = widget.lastName;
+     firstName = widget.firstName;
     _controller = new AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 500),
@@ -311,12 +311,13 @@ class UpdateProfileState extends State<UpdateProfile> with TickerProviderStateMi
                                 width: _width-60,
                                 child: CupertinoButton(
                                   color: customColor,
+                                  disabledColor: Color(0xffD3D3D3),
                                   borderRadius: BorderRadius.circular(30),
                                   padding: EdgeInsets.fromLTRB(0.0, 24.0, 0.0,24.0),
-                                  onPressed: () {
+                                  onPressed: isSaveEnable()?() {
                                     FocusScope.of(context).unfocus();
                                     onFinishClick(context);
-                                  },
+                                  }:null,
                                   child: Text("Save",
                                     textAlign: TextAlign.center,
                                     style: style.copyWith(fontWeight: FontWeight.bold,color: Colors.white, fontSize: 14),
@@ -379,10 +380,12 @@ class UpdateProfileState extends State<UpdateProfile> with TickerProviderStateMi
         dynamic responseList = jsonDecode(response.toString());
         prefs.setString(Constants.SHARED_PREF_PROFILE_IMAGE, responseList["success"]["profile_image"]);
         prefs.setString(Constants.SHARED_PREF_NAME, responseList["success"]["first_name"] +" "+ responseList["success"]["last_name"]);
+        prefs.setString(Constants.SHARED_PREF_PROFILE_IMAGE, responseList["success"]["profile_image"]);
+        prefs.setString(Constants.SHARED_PREF_USER_FIRST_NAME, responseList["success"]["first_name"]);
         Toast.show("Profile Updated Successfully" , context,duration: Toast.LENGTH_LONG,backgroundColor: Colors.black87, textColor: Color(0xffFFFd19));
           Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (BuildContext context) => HomePage()));
       } else {
-        Toast.show("Profile Updation Failed "+response.toString(), context,duration: Toast.LENGTH_LONG,backgroundColor: Colors.black87, textColor: Color(0xffFFFd19));
+        Toast.show("Profile Updation Failed ", context,duration: Toast.LENGTH_LONG,backgroundColor: Colors.black87, textColor: Color(0xffFFFd19));
       }
       setState(() {
         _isLoading = false;
@@ -431,8 +434,14 @@ class UpdateProfileState extends State<UpdateProfile> with TickerProviderStateMi
 
   bool isAnyFieldChanged() {
    return _image != null ||
-       lastName != widget.name.substring(widget.name.lastIndexOf(" ")+1) ||
-       firstName != widget.name.substring(0, widget.name.lastIndexOf(" "));
+       lastName != widget.lastName||
+       firstName != widget.firstName;
   }
 
+  bool isSaveEnable() {
+   if(lastName.trim()=="" || firstName.trim()=="")
+     return false;
+
+    return isAnyFieldChanged();
+  }
 }

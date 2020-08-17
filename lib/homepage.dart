@@ -154,8 +154,8 @@ class HomePageState extends State<HomePage> {
                       style: TextStyle(fontSize: 14, color: Colors.white),
                     ),
                     onPressed: () {
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => AddPuppy()));
-                    },
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => AddPuppy()));
+                  },
                     disabledColor: customColor,
                     color: customColor,
                     shape: RoundedRectangleBorder(
@@ -550,7 +550,8 @@ class HomePageState extends State<HomePage> {
                                                                 );
                                                               },
                                                             );
-                                                          } else {
+                                                          }
+                                                          if(value == "Edit") {
                                                             showDialog(
                                                               context: context,
                                                               child:  BackdropFilter(
@@ -558,6 +559,9 @@ class HomePageState extends State<HomePage> {
                                                                 child: EditPuppyReason(data[index]),
                                                               ),
                                                             );
+                                                          }
+                                                          if(value == "Add a Littermate") {
+                                                            Navigator.push(context, MaterialPageRoute(builder: (context) => AddPuppy.littermate(data[index].categoryName, data[index].categoryId, data[index].puppyDadWeight, data[index].puppyMomWeight)));
                                                           }
                                                           setState(() {
                                                             //_selection = value;
@@ -598,6 +602,18 @@ class HomePageState extends State<HomePage> {
                                                                   Icon(Icons.unarchive, color:Colors.deepOrangeAccent, size: 16),
                                                                   SizedBox(width: 12,),
                                                                   Text('Sold by Breeder', style: const TextStyle(fontFamily: "Lato", fontSize: 12, color: Color(0xff3db6c6),fontWeight: FontWeight.bold)),
+                                                                ]
+                                                            ),
+                                                          ),
+                                                          PopupMenuDivider(),
+                                                          PopupMenuItem<String>(
+                                                            height: 24,
+                                                            value: 'Add a Littermate',
+                                                            child: Row(
+                                                                children: <Widget>[
+                                                                  Icon(Icons.pets, color:Colors.lightGreen, size: 16),
+                                                                  SizedBox(width: 12,),
+                                                                  Text('Add a Littermate', style: const TextStyle(fontFamily: "Lato", fontSize: 12, color: Color(0xff3db6c6),fontWeight: FontWeight.bold)),
                                                                 ]
                                                             ),
                                                           ),

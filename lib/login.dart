@@ -257,13 +257,13 @@ class LoginPageState extends State<LoginPage>{
           await saveUserDetailsInSharedPref(user);
           Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (BuildContext context) => HomePage()));
         } else {
-          Toast.show("Authentication Failed. " +response.toString(), context,
+          Toast.show("Authentication Failed, " +response.toString(), context,
               duration: Toast.LENGTH_LONG,
               gravity: Toast.BOTTOM,
               backgroundRadius: 16,backgroundColor: Colors.black87, textColor: Color(0xffFFFd19));
         }
       } else {
-        Toast.show("Authentication Failed "+response.toString(), context,
+        Toast.show("Authentication Failed, "+response.toString(), context,
             duration: Toast.LENGTH_LONG,
             gravity: Toast.BOTTOM,
             backgroundRadius: 16,backgroundColor: Colors.black87, textColor: Color(0xffFFFd19));
@@ -272,7 +272,7 @@ class LoginPageState extends State<LoginPage>{
         _isLoading = false;
       });
     }catch(exception){
-      Toast.show("Request Failed. "+exception.toString(), context,
+      Toast.show("Request Failed", context,
           duration: Toast.LENGTH_LONG,
           gravity: Toast.BOTTOM,backgroundColor: Colors.black87, textColor: Color(0xffFFFd19),
           backgroundRadius: 16);
@@ -291,6 +291,8 @@ class LoginPageState extends State<LoginPage>{
     prefs.setString(Constants.SHARED_PREF_GENDER, user.gender);
     prefs.setString(Constants.SHARED_PREF_PROFILE_IMAGE, user.profileImage);
     prefs.setString(Constants.SHARED_PREF_NAME, user.name);
+    prefs.setString(Constants.SHARED_PREF_USER_FIRST_NAME, user.firstName);
+    prefs.setString(Constants.SHARED_PREF_USER_LAST_NAME, user.lastName);
     prefs.setString(Constants.SHARED_PREF_USER_ID, user.id);
   }
 }
