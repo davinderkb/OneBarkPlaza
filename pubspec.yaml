@@ -1,6 +1,6 @@
 name: one_bark_plaza
 description: One Bark Plaza
-version: 1.0.0+3
+version: 1.0.0+4
 environment:
   sdk: ">=2.6.0 <3.0.0"
 
