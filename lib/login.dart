@@ -248,8 +248,9 @@ class LoginPageState extends State<LoginPage>{
       "username": userNameController.text.trim(),
       "password": passwordController.text
     });
+    dynamic response;
     try{
-      dynamic response = await dio.post(loginUrl, data: formData);
+      response = await dio.post(loginUrl, data: formData);
       if (response.toString() != '[]') {
         dynamic responseList = jsonDecode(response.toString());
         if (responseList["data"] != null) {
@@ -272,7 +273,10 @@ class LoginPageState extends State<LoginPage>{
         _isLoading = false;
       });
     }catch(exception){
-      Toast.show("Request Failed", context,
+      String message = "";
+      if(response!=null)
+        message = response.toString();
+      Toast.show("Authentication Failed, "+message, context,
           duration: Toast.LENGTH_LONG,
           gravity: Toast.BOTTOM,backgroundColor: Colors.black87, textColor: Color(0xffFFFd19),
           backgroundRadius: 16);
